@@ -1,0 +1,33 @@
+---
+title: "Bienvenidos"
+description: |
+ La Bitácora de Turismo es un espacio virutal de la Dirección Nacional de Mercados y Estadísticas en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina. 
+author:
+  - name: Juan Pablo Ruiz Nicolini 
+    affiliation: Dirección Nacional de Mercados y Estadísticas
+date: 08-26-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
+```
+
+
+La Bitácora de Turismo es un nuevo paso de un plan de trabajo en el que nos planteamos una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento que pudiera ser útil tanto para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, como al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.
+
+En este sentido, desde hace ya un tiempo nos hemos abocado a:
+
+* el procesamiento de un basto acervo de información y su paulatina apertura en el [Portal de Datos Abiertos de Turismo](http://datos.yvera.gob.ar/);
+
+* la sistematización en la confección de [reportes y la generación de tableros](https://tableros.yvera.tur.ar/) con el objetivo de acercar la información de un modo más intuitivo a usuaries no expertes en procesamiento de bases de datos; 
+
+* el lanzamiento de un proyecto de [_Armonización de las Estadísticas Provinciales de Turismo_](https://armonizacion.yvera.tur.ar/) que contempla una serie de actividades (diagnóstico; desarrollo de materiales; capacitaciones; foro de intercambio; generación de una herramienta de gestión de datos) con el objetivo de econtribuir al fortalecimiento de los sistemas de estadística provinciales en post de generar información robusta y confiable de la actividad turística de nuestro país.
+
+Les damos la bivenvenida entonces a _la Bitácora_, con la expectativa de que este espacio sea de utilidad para acercar el trabajo de la DNMyE. 

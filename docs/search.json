@@ -1,0 +1,12 @@
+{
+  "articles": [
+    {
+      "path": "index.html",
+      "title": "Bitácora",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2021-09-02T16:57:01-03:00"
+    }
+  ],
+  "collections": ["posts/posts.json"]
+}
