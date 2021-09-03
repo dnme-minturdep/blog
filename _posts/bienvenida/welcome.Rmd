@@ -1,7 +1,7 @@
 ---
 title: "Bienvenidos"
 description: |
- La Bitácora de Turismo es un espacio virutal de la Dirección Nacional de Mercados y Estadísticas en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina. 
+ La Bitácora de Turismo es un espacio virtual de la Dirección Nacional de Mercados y Estadísticas (DNMyE) en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina. 
 author:
   - name: Juan Pablo Ruiz Nicolini 
     affiliation: Dirección Nacional de Mercados y Estadísticas
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-La Bitácora de Turismo es un nuevo paso de un plan de trabajo en el que nos planteamos una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento que pudiera ser útil tanto para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, como al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.
+_La Bitácora de Turismo_ es un nuevo paso de un plan de trabajo en el que nos planteamos una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento que pudiera ser útil tanto para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, como al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.
 
 En este sentido, desde hace ya un tiempo nos hemos abocado a:
 
