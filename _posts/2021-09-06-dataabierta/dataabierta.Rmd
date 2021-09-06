@@ -1,0 +1,41 @@
+---
+title: "Datos Abiertos de Turismo"
+description: |
+ El portal de datos de Yverá es el espacio en el que compartimos información abierta sobre el sector Turismo de Argentina. Los datos son tuyos. Usalos, modificalos, compartilos.
+author:
+  - name: Dirección Nacional de Mercados y Estadísticas
+    url:
+      https://www.yvera.tur.ar/estadistica/: {}
+date: 09-06-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+La Dirección Nacional de Mercados y Estadísticas (DNMyE) forma parte del Sistema Estadístico Nacional (SEN) y, por ello, tenemos la responsabilidad de la medición de la actividad turística en el país. Por tal motivo, producimos información del sector de manera continua, brindando datos todos los meses y trimestres del año. Todas las metodologías utilizadas y criterios adoptados en cada una de las estadísticas que producimos se basan en las recomendaciones internacionales de la Organización Mundial de Turismo (OMT).
+
+El portal de [Datos Abiertos de Turismo](http://datos.yvera.gob.ar/) incluye conjuntos de datos de:
+
+-   Turismo Internacional;
+
+-   Turismo Interno;
+
+-   Ocupación Hotelera;
+
+-   Parques Nacionales;
+
+-   Inversiones Turísticas;
+
+-   Calidad Turística y Agencia de Viajes.
+
+Los mismos se nutren de operativos estadísticos propios (*Encuesta de Viajes y Turismo de los Hogares* - EVYTH); otros en conjunto con el Instituto Nacional de Estadísticas y Censos (*Encuesta de Turismo Internacional* - ETI - y la *Encuesta de Ocupación Hotelera* - EOH)[^1]; y de registros administrativos de otros organismos (Dirección Nacional de Migraciones del Ministerio del Interior), entre otros[^2].
+
+[^1]: Para conocer con más detalles estos operativos estadísticos pueden acceder a un resumen de los mismos en el [Capítulo 2](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html) del Documeto Técnico \#1 del proyecto de Armonización: ***"Conceptos y Elementos Básicos para la Medición Provincial de los Turistas"***
+
+[^2]: El *Documento Técnico \#3* del proyecto de Armonziación está dedicado a la [Descripción, Análisis y Utilización de los Registros Administrativos para la medición del Turismo](https://dnme-minturdep.github.io/DT3_registros_adminsitrativos/)
+
+Te invitamos que conozcas nuestro portal, explores la información disponible y nos consultes cualquier duda que tengas.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```

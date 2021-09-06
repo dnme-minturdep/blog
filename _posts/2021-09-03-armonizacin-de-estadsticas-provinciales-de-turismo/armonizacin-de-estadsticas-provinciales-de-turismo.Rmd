@@ -25,7 +25,7 @@ El proyecto [*Armonización de las Estadísticas de Turismo en las Provincias*](
 
 **(iv)** espacios de colaboración e intercambio de experiencias.
 
-### Actualización Metodológica 
+### Actualización Metodológica
 
 En primer lugar, el proyecto contempla la reedición y revisión periódica de una serie de documentos técnicos que abordan otras problemáticas vinculadas a la producción de estadística de turismo:
 
@@ -43,13 +43,13 @@ Documento Técnico \#6: Ciencia de Datos para el Turismo (en proceso)
 
 Los documentos metodológicos buscarán abordar las principales problemáticas a la hora de producir estadísticas de turismo sub-nacionales como también reforzar las definiciones y conceptos de turismo según las recomendaciones internacionales.
 
-### Capacitaciones 
+### Capacitaciones
 
 En una segunda instancia, se prevé la capacitación de puntos focales de los gobiernos sub nacionales que tengan a cargo la administración, generación y/o análisis de estadísticas de turismo en sus respectivos distritos.
 
 Las capacitaciones pretenden nutrir y fortalecer a los referentes técnicos provinciales para poder mejorar la producción de estadísticas locales derivadas de los operativos de encuesta, explotación de registros administrativos y otras fuentes de información utilizadas.
 
-### Sistema Federal de Gestión de Datos de Turismo 
+### Sistema Federal de Gestión de Datos de Turismo
 
 En paralelo, se procura desarrollar un sistema informático que permita ordenar, homogeneizar, jerarquizar y facilitar la administración de registros, operativos estadísticos y demás datos relativos al sector turísticos de las distintas unidades administrativas.
 
