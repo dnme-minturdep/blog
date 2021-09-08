@@ -3,7 +3,7 @@ title: "Datos Abiertos de Turismo"
 description: |
  El portal de datos de Yverá es el espacio en el que compartimos información abierta sobre el sector Turismo de Argentina. Los datos son tuyos. Usalos, modificalos, compartilos.
 author:
-  - name: Dirección Nacional de Mercados y Estadísticas
+  - name: Dirección Nacional de Mercados y Estadística
     url:
       https://www.yvera.tur.ar/estadistica/: {}
 date: 09-06-2021
@@ -12,7 +12,7 @@ output:
     self_contained: false
 ---
 
-La Dirección Nacional de Mercados y Estadísticas (DNMyE) forma parte del Sistema Estadístico Nacional (SEN) y, por ello, tenemos la responsabilidad de la medición de la actividad turística en el país. Por tal motivo, producimos información del sector de manera continua, brindando datos todos los meses y trimestres del año. Todas las metodologías utilizadas y criterios adoptados en cada una de las estadísticas que producimos se basan en las recomendaciones internacionales de la Organización Mundial de Turismo (OMT).
+La Dirección Nacional de Mercados y Estadística (DNMyE) forma parte del Sistema Estadístico Nacional (SEN) y, por ello, tenemos la responsabilidad de la medición de la actividad turística en el país. Por tal motivo, producimos información del sector de manera continua, brindando datos todos los meses y trimestres del año. Todas las metodologías utilizadas y criterios adoptados en cada una de las estadísticas que producimos se basan en las recomendaciones internacionales de la Organización Mundial de Turismo (OMT).
 
 El portal de [Datos Abiertos de Turismo](http://datos.yvera.gob.ar/) incluye conjuntos de datos de:
 

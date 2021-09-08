@@ -1,9 +1,9 @@
 ---
-title: "Facilitando el acceso a datos mediante reportes y tableros interactivos"
+title: "Facilitando el acceso mediante reportes y tableros interactivos"
 description: |
-  Lorem Ipsum
+  Micrositio con recursos y datos actualizados de Turismo en Argentina. 
 author:
-  - name: Dirección Nacional de Mercados y Estadísticas
+  - name: Dirección Nacional de Mercados y Estadística
     url:
       https://www.yvera.tur.ar/estadistica/: {}
 date: 09-03-2021
@@ -16,6 +16,21 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+El micrositio [TABLEROS y REPORTES](https://tableros.yvera.tur.ar/) reune una serie de recursos que tienen como objetivo facilitar el acceso a los últimos datos disponibles de una multiplicidad de indicadores del turismo en Argentina. 
+
+## REPORTES
+
+1. **Turismo Internacional**: presenta la última información de turismo receptivo, emisivo y balanza turística por todas las vías (aéreo, terrestre y fluvial / marítimo).
+
+1. **Ocupación Hotelera**: presenta los últimos datos disponibles de la _Encuesta de Ocupación Hotelera_ (EOH).
+
+1. **Naturaleza**: presente información de visitas a Parques Nacionales  del país en base al _Registro Nacional de Autorizaciones, Recaudaciones e Infracciones_ (RENARI) de la Administración de Parques Nacionales. 
+
+1. **Turismo Interno**: Reporte de los últimos datos  estimados por la _Encuesta de Viajes y Turismo de los Hogares_ (EVyTH).
+
+
+
 ## TABLERO DE TURISMO INTERNACIONAL
 
 El tablero presenta las estimaciones mensuales del turismo internacional -receptivo y emisivo- de la totalidad de los pasos fronterizos del país, desde el año 2016 hasta la actualidad. La información estadística que se presenta, basada en los registros migratorios provistos por la Dirección Nacional de Migraciones (DNM) y en la Encuesta de Turismo Internacional (ETI), se refiere al flujo de turistas no residentes que visitaron el país y de los turistas residentes que viajaron al exterior, por todos los medios de transporte (aéreo, fluvial/marítimo y terrestre).
