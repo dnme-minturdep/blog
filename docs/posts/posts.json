@@ -1,5 +1,24 @@
 [
   {
+    "path": "posts/2021-09-03-facilitando-el-acceso-a-datos-mediante-reportes-y-tableros-interactivos/",
+    "title": "Facilitando el acceso mediante reportes y tableros interactivos",
+    "description": "Micrositio con recursos y datos actualizados de Turismo en Argentina.",
+    "author": [
+      {
+        "name": "Dirección Nacional de Mercados y Estadística",
+        "url": {
+          "https://www.yvera.tur.ar/estadistica/": {}
+        }
+      }
+    ],
+    "date": "2021-09-09",
+    "categories": [],
+    "contents": "\nEl micrositio TABLEROS y REPORTES reune una serie de recursos que tienen como objetivo facilitar el acceso a los últimos datos disponibles de una multiplicidad de indicadores del turismo en Argentina.\nReportes\nTurismo Internacional: presenta la última información de turismo receptivo, emisivo y balanza turística por todas las vías (aéreo, terrestre y fluvial / marítimo).\nOcupación Hotelera: presenta los últimos datos disponibles de la Encuesta de Ocupación Hotelera (EOH)1.\nNaturaleza: presente información de visitas a Parques Nacionales del país en base al Registro Nacional de Autorizaciones, Recaudaciones e Infracciones (RENARI) de la Administración de Parques Nacionales.\nTurismo Interno: Reporte de los últimos datos estimados por la Encuesta de Viajes y Turismo de los Hogares (EVyTH)2.\nTableros\nPUNA\nEl Padrón Único Nacional de Alojamiento (PUNA) reúne todos los establecimientos de alojamiento turístico de la Argentina, en el que se detallan las principales variables de cada uno, nutrido a partir de diferentes fuentes de información:\nlos organismos provinciales y municipales de turismo que a través de su área de fiscalización de servicios turísticos elabora el padrón de alojamiento de su provincia o localidad;\nel INDEC a través de la Encuesta de Ocupación Hotelera (EOH);\nfuentes secundarias especializadas en turismo relevadas desde la DNMYE - MINTURDEP.\nEl tablero PUNA disponibiliza información histórica (2014 - 2019) que da cuenta de: cantidades de (a) Establecimientos; (b) Unidades; (c) Habitaciones y (d) Plazas registradas a distintos niveles de agregación (Ruta, Región, Provincia, Departamentoo Localidad) y según Clasificación y Tipo de establecimiento (hotelero, parahotelero, privadosy otros colectivos)\nTURISMO INTERNACIONAL\nEl tablero presenta las estimaciones mensuales del turismo internacional -receptivo y emisivo- de la totalidad de los pasos fronterizos del país, desde el año 2016 hasta la actualidad. La información estadística que se presenta, basada en los registros migratorios provistos por la Dirección Nacional de Migraciones (DNM) y en la Encuesta de Turismo Internacional (ETI)3, se refiere al flujo de turistas no residentes que visitaron el país y de los turistas residentes que viajaron al exterior, por todos los medios de transporte (aéreo, fluvial/marítimo y terrestre).\nEl mismo permite visualizar y descargar información detallada por año, mes, medio de transporte, paso fronterizo (con el detalle de la provincia y del país con el que limita el mismo), país de residencia para el turismo receptivo y destino principal para turismo emisivo. De esta manera, el tablero constituye una herramienta amigable para el manejo de los datos estadísticos de turismo internacional de nuestro país. Actualmente se encuentra disponible información actualizada hasta mayo 2021.\n\n\nEncuesta de Ocupación Hotelera (EOH) es un relevamiento realizado en forma continua desde el 2004, bajo la coordinación del MINTURDEP y el Instituto Nacional de Estadísticas y Censos (INDEC).↩︎\nLa Encuesta de Viajes y Turismo de los Hogares (EVyTH) es un operativo realizado por el MINTURDEP, cuyo objetivo principal es proporcionar información sobre los viajes turísticos de los residentes de Argentina hacia dentro y fuera del país: cuándo viajan, a dónde van, qué medios de transporte utilizan, dónde se alojan, cuáles son los motivos por los que viajan, cómo organizan sus viajes, qué actividades turísticas realizan, cuánto gastan, etc.↩︎\nLa Encuesta de Turismo Internacional (ETI) es otro operativo realizado en forma continua desde el año 2004, coordinado conjuntamente por el MINTURDEP y el INDEC.↩︎\n",
+    "preview": {},
+    "last_modified": "2021-09-10T11:03:53-03:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-09-06-dataabierta/",
     "title": "Datos Abiertos de Turismo",
     "description": "El portal de datos de Yverá es el espacio en el que compartimos información abierta sobre el sector Turismo de Argentina. Los datos son tuyos. Usalos, modificalos, compartilos.",
@@ -16,7 +35,7 @@
     "contents": "\nLa Dirección Nacional de Mercados y Estadística (DNMyE) forma parte del Sistema Estadístico Nacional (SEN) y, por ello, tenemos la responsabilidad de la medición de la actividad turística en el país. Por tal motivo, producimos información del sector de manera continua, brindando datos todos los meses y trimestres del año. Todas las metodologías utilizadas y criterios adoptados en cada una de las estadísticas que producimos se basan en las recomendaciones internacionales de la Organización Mundial de Turismo (OMT).\nEl portal de Datos Abiertos de Turismo incluye conjuntos de datos de:\nTurismo Internacional;\nTurismo Interno;\nOcupación Hotelera;\nParques Nacionales;\nInversiones Turísticas;\nCalidad Turística y Agencia de Viajes.\nLos mismos se nutren de operativos estadísticos propios (Encuesta de Viajes y Turismo de los Hogares - EVYTH); otros en conjunto con el Instituto Nacional de Estadísticas y Censos (Encuesta de Turismo Internacional - ETI - y la Encuesta de Ocupación Hotelera - EOH)1; y de registros administrativos de otros organismos (Dirección Nacional de Migraciones del Ministerio del Interior), entre otros2.\nTe invitamos que conozcas nuestro portal, explores la información disponible y nos consultes cualquier duda que tengas.\n\nPara conocer con más detalles estos operativos estadísticos pueden acceder a un resumen de los mismos en el Capítulo 2 del Documeto Técnico #1 del proyecto de Armonización: “Conceptos y Elementos Básicos para la Medición Provincial de los Turistas”↩︎\nEl Documento Técnico #3 del proyecto de Armonziación está dedicado a la Descripción, Análisis y Utilización de los Registros Administrativos para la medición del Turismo↩︎\n",
     "preview": {},
     "last_modified": "2021-09-08T16:20:55-03:00",
-    "input_file": "dataabierta.knit.md"
+    "input_file": {}
   },
   {
     "path": "posts/2021-09-03-armonizacin-de-estadsticas-provinciales-de-turismo/",
@@ -34,27 +53,8 @@
     "categories": [],
     "contents": "\nEl proyecto Armonización de las Estadísticas de Turismo en las Provincias se propone la elaboración de propuestas y herramientas accesibles que permitan producir indicadores provinciales básicos y comparables en cuatro ejes:\n(i) actualización metodológica;\n(ii) capacitaciones;\n(iii) coordinación y gestión de datos; y\n(iv) espacios de colaboración e intercambio de experiencias.\nActualización Metodológica\nEn primer lugar, el proyecto contempla la reedición y revisión periódica de una serie de documentos técnicos que abordan otras problemáticas vinculadas a la producción de estadística de turismo:\nDocumento Técnico #1: Conceptos y elementos básicos para la medición provincial de los turistas\nDocumento Técnico #2: Propuestas metodológicas para las encuestas de ocupación en alojamientos turísticos\nDocumento Técnico #3: Descripción, análisis y utilización de los Registros Administrativos para la medición del Turismo\nDocumento Técnico #4: Propuestas Metodológicas para las Encuestas de Perfil del Visitante\nDocumento Técnico #5: Medición de la contribución económica del turismo: actividad y empleo\nDocumento Técnico #6: Ciencia de Datos para el Turismo (en proceso)\nLos documentos metodológicos buscarán abordar las principales problemáticas a la hora de producir estadísticas de turismo subnacionales como también reforzar las definiciones y conceptos de turismo según las recomendaciones internacionales.\nCapacitaciones\nEn una segunda instancia, se prevé la capacitación de puntos focales de los gobiernos subnacionales que tengan a cargo la administración, generación y/o análisis de estadísticas de turismo en sus respectivos distritos.\nLas capacitaciones pretenden nutrir y fortalecer a los referentes técnicos provinciales para poder mejorar la producción de estadísticas locales derivadas de los operativos de encuesta, explotación de registros administrativos y otras fuentes de información utilizadas.\nSistema Federal de Gestión de Datos de Turismo\nEn paralelo, se procura desarrollar un sistema informático que permita ordenar, homogeneizar, jerarquizar y facilitar la administración de registros, operativos estadísticos y demás datos relativos al sector turísticos de las distintas unidades administrativas.\nPara ello, se trabajará para la construcción de un Sistema Federal de Gestión de Datos de Turismo, herramienta que facilitará el acopio y gestión de datos producidos por los diferentes organismos de turismo subnacionales.\nEspacios de colaboración e intercambio\nCon el fin de generar espacios de colaboración entre los distintos actores vinculados a la producción y explotación de las estadísticas de turismo, se gestionará un foro permanente en donde se habilitarán distintos canales temáticos que acompañarán el contenido de este micrositio: documentos técnicos, bibliografía y trabajos de interés común.\nDe esta manera, el proyecto de Armonización contribuirá a fortalecer las capacidades técnicas, robustecer la producción de estadísticas de turismo y una mayor sociabilización de la información producida por las distintas unidades administrativas de turismo.\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-09-08T16:19:41-03:00",
-    "input_file": "armonizacin-de-estadsticas-provinciales-de-turismo.knit.md"
-  },
-  {
-    "path": "posts/2021-09-03-facilitando-el-acceso-a-datos-mediante-reportes-y-tableros-interactivos/",
-    "title": "Facilitando el acceso mediante reportes y tableros interactivos",
-    "description": "Micrositio con recursos y datos actualizados de Turismo en Argentina.",
-    "author": [
-      {
-        "name": "Dirección Nacional de Mercados y Estadística",
-        "url": {
-          "https://www.yvera.tur.ar/estadistica/": {}
-        }
-      }
-    ],
-    "date": "2021-09-03",
-    "categories": [],
-    "contents": "\nEl micrositio TABLEROS y REPORTES reune una serie de recursos que tienen como objetivo facilitar el acceso a los últimos datos disponibles de una multiplicidad de indicadores del turismo en Argentina.\nREPORTES\nTurismo Internacional: presenta la última información de turismo receptivo, emisivo y balanza turística por todas las vías (aéreo, terrestre y fluvial / marítimo).\nOcupación Hotelera: presenta los últimos datos disponibles de la Encuesta de Ocupación Hotelera (EOH).\nNaturaleza: presente información de visitas a Parques Nacionales del país en base al Registro Nacional de Autorizaciones, Recaudaciones e Infracciones (RENARI) de la Administración de Parques Nacionales.\nTurismo Interno: Reporte de los últimos datos estimados por la Encuesta de Viajes y Turismo de los Hogares (EVyTH).\nTABLERO DE TURISMO INTERNACIONAL\nEl tablero presenta las estimaciones mensuales del turismo internacional -receptivo y emisivo- de la totalidad de los pasos fronterizos del país, desde el año 2016 hasta la actualidad. La información estadística que se presenta, basada en los registros migratorios provistos por la Dirección Nacional de Migraciones (DNM) y en la Encuesta de Turismo Internacional (ETI), se refiere al flujo de turistas no residentes que visitaron el país y de los turistas residentes que viajaron al exterior, por todos los medios de transporte (aéreo, fluvial/marítimo y terrestre).\nEl mismo permite visualizar y descargar información detallada por año, mes, medio de transporte, paso fronterizo (con el detalle de la provincia y del país con el que limita el mismo), país de residencia para el turismo receptivo y destino principal para turismo emisivo. De esta manera, el tablero constituye una herramienta amigable para el manejo de los datos estadísticos de turismo internacional de nuestro país. Actualmente se encuentra disponible información actualizada hasta mayo 2021.\n\n\n\n",
-    "preview": {},
-    "last_modified": "2021-09-08T16:29:59-03:00",
-    "input_file": "facilitando-el-acceso-a-datos-mediante-reportes-y-tableros-interactivos.knit.md"
+    "last_modified": "2021-09-08T16:19:42-03:00",
+    "input_file": {}
   },
   {
     "path": "posts/bienvenida/",
@@ -71,6 +71,6 @@
     "contents": "\nLa Bitácora de Turismo es un nuevo paso de un plan de trabajo en el que nos planteamos una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento que pudiera ser útil tanto para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, como al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.\nEn este sentido, desde hace ya un tiempo nos hemos abocado a:\nel procesamiento de un basto acervo de información y su paulatina apertura en el Portal de Datos Abiertos de Turismo;\nla sistematización en la confección de reportes y la generación de tableros con el objetivo de acercar la información de un modo más intuitivo a usuaries no expertes en procesamiento de bases de datos;\nel lanzamiento de un proyecto de Armonización de las Estadísticas Provinciales de Turismo que contempla una serie de actividades (diagnóstico; desarrollo de materiales; capacitaciones; foro de intercambio; generación de una herramienta de gestión de datos) con el objetivo de contribuir al fortalecimiento de los sistemas de estadística provinciales en pos de generar información robusta y confiable de la actividad turística de nuestro país.\nLes damos la bivenvenida entonces a la Bitácora, con la expectativa de que este espacio sea de utilidad para acercar el trabajo de la DNMyE.\n\n\n\n",
     "preview": {},
     "last_modified": "2021-09-08T16:20:10-03:00",
-    "input_file": "welcome.knit.md"
+    "input_file": {}
   }
 ]
