@@ -20,14 +20,14 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-_La Bitácora de Turismo_ es un nuevo paso de un plan de trabajo en el que nos planteamos una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento que pudiera ser útil tanto para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, como al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.
+_La Bitácora de Turismo_ es un nuevo paso de un plan de trabajo en el que se plantean una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento útil para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, y también al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.
 
-En este sentido, desde hace ya un tiempo nos hemos abocado a:
+En este sentido, se trabajan las siguientes iniciativas:
 
-* el procesamiento de un basto acervo de información y su paulatina apertura en el [Portal de Datos Abiertos de Turismo](http://datos.yvera.gob.ar/);
+* El procesamiento de un vasto acervo de información (de operativos estadísticos y registros administrativos, entre otros) y su paulatina apertura en el [Portal de Datos Abiertos de Turismo](http://datos.yvera.gob.ar/).
 
-* la sistematización en la confección de [reportes y la generación de tableros](https://tableros.yvera.tur.ar/) con el objetivo de acercar la información de un modo más intuitivo a usuaries no expertes en procesamiento de bases de datos; 
+* La sistematización en la confección de [reportes y la generación de tableros](https://tableros.yvera.tur.ar/), con el objetivo de acercar la información de un modo más intuitivo a usuarias y usuarios que no cuenten con experiencia en procesamiento de bases de datos. 
 
-* el lanzamiento de un proyecto de [_Armonización de las Estadísticas Provinciales de Turismo_](https://armonizacion.yvera.tur.ar/) que contempla una serie de actividades (diagnóstico; desarrollo de materiales; capacitaciones; foro de intercambio; generación de una herramienta de gestión de datos) con el objetivo de contribuir al fortalecimiento de los sistemas de estadística provinciales en pos de generar información robusta y confiable de la actividad turística de nuestro país.
+* El lanzamiento de un proyecto de [_Armonización de las Estadísticas Provinciales de Turismo_](https://armonizacion.yvera.tur.ar/) que contempla una serie de actividades (diagnóstico, desarrollo de materiales, capacitaciones, foro de intercambio, generación de una herramienta de gestión de datos), con el objetivo de contribuir al fortalecimiento de los sistemas de estadística provinciales para generar información robusta y confiable de la actividad turística de nuestro país.
 
-Les damos la bivenvenida entonces a _la Bitácora_, con la expectativa de que este espacio sea de utilidad para acercar el trabajo de la DNMyE. 
+Les damos la bienvenida a _la Bitácora_, con la expectativa de que este espacio sea de utilidad para acercar el trabajo que se está llevando adelante desde el Ministerio de Turismo y Deportes de la Nación. 
