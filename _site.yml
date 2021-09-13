@@ -9,7 +9,7 @@ navbar:
     - text: "Datos Abiertos"
       href: http://datos.yvera.gob.ar/
     - text: "Informes"
-      href: https://www.yvera.tur.ar/estadistica/
+      href: https://www.yvera.tur.ar/estadistica/informe
     - text: "Tableros"
       href: https://tableros.yvera.tur.ar
     - text: "Armonización"
