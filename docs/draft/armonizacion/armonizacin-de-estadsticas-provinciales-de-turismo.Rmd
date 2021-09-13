@@ -1,0 +1,62 @@
+---
+title: "Armonización de Estadísticas Provinciales de Turismo"
+description: |
+  El proyecto tiene como finalidad  contribuir al fortalecimiento de los sistemas de estadística provinciales en post de generar información robusta y confiable de la actividad turística de nuestro país.
+author:
+  - name: Dirección Nacional de Mercados y Estadística
+    url: {https://www.yvera.tur.ar/estadistica/}
+date: 09-03-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+El proyecto [*Armonización de las Estadísticas de Turismo en las Provincias*](https://armonizacion.yvera.tur.ar/) se propone la elaboración de propuestas y herramientas accesibles que permitan producir indicadores provinciales básicos y comparables en cuatro ejes:
+
+**(i)** actualización metodológica;
+
+**(ii)** capacitaciones;
+
+**(iii)** coordinación y gestión de datos; y
+
+**(iv)** espacios de colaboración e intercambio de experiencias.
+
+### Actualización Metodológica
+
+En primer lugar, el proyecto contempla la reedición y revisión periódica de una serie de documentos técnicos que abordan otras problemáticas vinculadas a la producción de estadística de turismo:
+
+[Documento Técnico \#1](https://dnme-minturdep.github.io/DT1_medicion_turismo/): Conceptos y elementos básicos para la medición provincial de los turistas
+
+[Documento Técnico \#2](https://dnme-minturdep.github.io/DT2_encuestas/): Propuestas metodológicas para las encuestas de ocupación en alojamientos turísticos
+
+[Documento Técnico \#3](https://dnme-minturdep.github.io/DT3_registros_adminsitrativos/): Descripción, análisis y utilización de los Registros Administrativos para la medición del Turismo
+
+[Documento Técnico \#4](https://dnme-minturdep.github.io/DT4_perfiles/): Propuestas Metodológicas para las Encuestas de Perfil del Visitante
+
+[Documento Técnico \#5](https://dnme-minturdep.github.io/DT5_actividad_empleo/): Medición de la contribución económica del turismo: actividad y empleo
+
+Documento Técnico \#6: Ciencia de Datos para el Turismo (en proceso)
+
+Los documentos metodológicos buscarán abordar las principales problemáticas a la hora de producir estadísticas de turismo subnacionales como también reforzar las definiciones y conceptos de turismo según las recomendaciones internacionales.
+
+### Capacitaciones
+
+En una segunda instancia, se prevé la capacitación de puntos focales de los gobiernos subnacionales que tengan a cargo la administración, generación y/o análisis de estadísticas de turismo en sus respectivos distritos.
+
+Las capacitaciones pretenden nutrir y fortalecer a los referentes técnicos provinciales para poder mejorar la producción de estadísticas locales derivadas de los operativos de encuesta, explotación de registros administrativos y otras fuentes de información utilizadas.
+
+### Sistema Federal de Gestión de Datos de Turismo
+
+En paralelo, se procura desarrollar un sistema informático que permita ordenar, homogeneizar, jerarquizar y facilitar la administración de registros, operativos estadísticos y demás datos relativos al sector turísticos de las distintas unidades administrativas.
+
+Para ello, se trabajará para la construcción de un Sistema Federal de Gestión de Datos de Turismo, herramienta que facilitará el acopio y gestión de datos producidos por los diferentes organismos de turismo subnacionales.
+
+### Espacios de colaboración e intercambio
+
+Con el fin de generar espacios de colaboración entre los distintos actores vinculados a la producción y explotación de las estadísticas de turismo, se gestionará un foro permanente en donde se habilitarán distintos canales temáticos que acompañarán el contenido de este micrositio: documentos técnicos, bibliografía y trabajos de interés común.
+
+De esta manera, el proyecto de Armonización contribuirá a fortalecer las capacidades técnicas, robustecer la producción de estadísticas de turismo y una mayor sociabilización de la información producida por las distintas unidades administrativas de turismo.
