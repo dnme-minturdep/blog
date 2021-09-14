@@ -6,6 +6,7 @@ navbar:
   logo:
     image: logo.png
     href: http://turismo.gob.ar/
+  search: false
   right:
     - text: "Datos Abiertos"
       href: http://datos.yvera.gob.ar/
