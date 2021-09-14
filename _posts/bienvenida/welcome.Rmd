@@ -2,10 +2,7 @@
 title: "Te damos la bienvenida a la Bitácora de Turismo"
 description: |
  Un espacio virtual de la Dirección Nacional de Mercados y Estadística (DNMyE) en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina. 
-author:
-  - name: Juan Pablo Ruiz Nicolini 
-    affiliation: Dirección Nacional de Mercados y Estadística
-date: 09-14-2021
+
 output:
   distill::distill_article:
     self_contained: false
