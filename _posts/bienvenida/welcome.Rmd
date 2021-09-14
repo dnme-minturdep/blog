@@ -1,14 +1,16 @@
 ---
-title: "Bienvenides"
+title: "Te damos la bienvenida a la Bitácora de Turismo"
 description: |
- La Bitácora de Turismo es un espacio virtual de la Dirección Nacional de Mercados y Estadística (DNMyE) en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina. 
+ Un espacio virtual de la Dirección Nacional de Mercados y Estadística (DNMyE) en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina. 
 author:
   - name: Juan Pablo Ruiz Nicolini 
     affiliation: Dirección Nacional de Mercados y Estadística
-date: 08-26-2021
+date: 09-14-2021
 output:
   distill::distill_article:
     self_contained: false
+    toc: true
+    toc_floate: true
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
-*La Bitácora de Turismo* es un nuevo paso de un plan de trabajo en el que se plantean una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento útil para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, y también al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.
+La **Bitácora de Turismo** es un nuevo paso de un plan de trabajo en el que se plantea una serie de objetivos alrededor de la producción, generación y acumulación de conocimiento útil para la toma de decisiones y el diseño de políticas públicas más y mejor informadas, y también al amplio abanico de actores del sector turístico: cámaras empresarias, la industria o la academia.
 
 En este sentido, se trabajan las siguientes iniciativas:
 
@@ -27,7 +29,7 @@ En este sentido, se trabajan las siguientes iniciativas:
 
 -   La sistematización en la confección de [reportes y la generación de tableros](https://tableros.yvera.tur.ar/), con el objetivo de acercar la información de un modo más intuitivo a usuarias y usuarios que no cuenten con experiencia en procesamiento de bases de datos.
 
--   El proyecto de [*Armonización de las Estadísticas Provinciales de Turismo*](https://armonizacion.yvera.tur.ar/) que tiene comoobjetivo contribuir al fortalecimiento de los sistemas de estadística provinciales para generar información robusta y confiable de la actividad turística de nuestro país.
+-   El proyecto de [*Armonización de las Estadísticas Provinciales de Turismo*](https://armonizacion.yvera.tur.ar/) que tiene como objetivo contribuir al fortalecimiento de los sistemas de estadística provinciales para generar información robusta y confiable de la actividad turística de nuestro país.
 
 ## Datos Abiertos
 
@@ -59,11 +61,11 @@ El micrositio [TABLEROS y REPORTES](https://tableros.yvera.tur.ar/) reune una se
 
 ### Reportes
 
-1.  **Turismo Internacional**: presenta la última información de turismo receptivo, emisivo y balanza turística por todas las vías (aéreo, terrestre y fluvial / marítimo).
+1.  **Turismo Internacional**: presenta la última información de turismo receptivo y emisivo y balanza turística por todas las vías (aéreo, terrestre y fluvial / marítimo)..
 
 2.  **Ocupación Hotelera**: presenta los últimos datos disponibles de la *Encuesta de Ocupación Hotelera* (EOH).
 
-3.  **Naturaleza**: presente información de visitas a Parques Nacionales del país [en base al *Registro Nacional de Autorizaciones, Recaudaciones e Infracciones* (RENARI)](http://datos.yvera.gob.ar/dataset/parques-nacionales) de la Administración de Parques Nacionales.
+3.  **Naturaleza**: presenta información de visitas a Parques Nacionales del país [en base al *Registro Nacional de Autorizaciones, Recaudaciones e Infracciones* (RENARI)](http://datos.yvera.gob.ar/dataset/parques-nacionales) de la Administración de Parques Nacionales.
 
 4.  **Turismo Interno**: Reporte de los últimos datos estimados por la *Encuesta de Viajes y Turismo de los Hogares* (EVyTH).
 
@@ -73,25 +75,25 @@ El micrositio [TABLEROS y REPORTES](https://tableros.yvera.tur.ar/) reune una se
 
 El **Padrón Único Nacional de Alojamiento (PUNA)** reúne todos los establecimientos de alojamiento turístico de la Argentina, en el que se detallan las principales variables de cada uno, nutrido a partir de diferentes fuentes de información:
 
--   los organismos provinciales y municipales de turismo que a través de su área de fiscalización de servicios turísticos elabora el padrón de alojamiento de su provincia o localidad;
+-   los organismos provinciales y municipales de turismo, que a través de su área de fiscalización de servicios turísticos elaboran el padrón de alojamiento de su provincia o localidad;
 
--   el INDEC a través de la *Encuesta de Ocupación Hotelera (EOH)*;
+-   el INDEC, a través de la *Encuesta de Ocupación Hotelera (EOH)*;
 
 -   fuentes secundarias especializadas en turismo relevadas desde la DNMYE - MINTURDEP.
 
-El [tablero PUNA](https://tableros.yvera.tur.ar/puna/) disponibiliza información histórica (2014 - 2019) que da cuenta de: cantidades de *(a) Establecimientos*; *(b) Unidades*; *(c) Habitaciones* y *(d) Plazas* registradas a distintos niveles de agregación (`Ruta`, `Región`, `Provincia`, `Departamento` o `Localidad`), según *Clasificación* y *Tipo de establecimiento* (`hotelero`, `parahotelero`, `privados` y `otros colectivos`)[^4].\
+El [tablero PUNA](https://tableros.yvera.tur.ar/puna/) pone a disposición información histórica (2014 - 2019) que da cuenta de: cantidades de *(a) Establecimientos*; *(b) Unidades*; *(c) Habitaciones* y *(d) Plazas* registradas a distintos niveles de agregación (`Ruta`, `Región`, `Provincia`, `Departamento` o `Localidad`), según *Clasificación* y *Tipo de establecimiento* (`hotelero`, `parahotelero`, `privados` y `otros colectivos`)[^4].\
 
 [^4]: Los datos publicados en el tablero PUNA, por su propia naturaleza, se encuentran en revisión continua y deben ser tomados como provisorios.
 
 #### TURISMO INTERNACIONAL
 
-El [tablero](https://tableros.yvera.tur.ar/turismo_internacional/) presenta las estimaciones mensuales del turismo internacional -receptivo y emisivo- de la totalidad de los pasos fronterizos del país, desde el año 2016 hasta la actualidad. La información estadística que se presenta, basada en los registros migratorios provistos por la Dirección Nacional de Migraciones (DNM) y en la *Encuesta de Turismo Internacional (ETI)*, se refiere al flujo de turistas no residentes que visitaron el país y de los turistas residentes que viajaron al exterior, por todos los medios de transporte (aéreo, fluvial/marítimo y terrestre).
+El [tablero](https://tableros.yvera.tur.ar/turismo_internacional/) presenta las estimaciones mensuales del turismo internacional -receptivo y emisivo- de la totalidad de los pasos fronterizos del país, desde el año 2016 hasta la actualidad. La información estadística que se presenta, basada en los registros migratorios provistos por la Dirección Nacional de Migraciones (DNM) y en la *Encuesta de Turismo Internacional (ETI)*, se refiere al flujo de turistas no residentes que visitaron el país y de los y las turistas residentes que viajaron al exterior, por todos los medios de transporte (aéreo, fluvial/marítimo y terrestre).
 
-El mismo permite visualizar y descargar información detallada por año, mes, medio de transporte, paso fronterizo (con el detalle de la provincia y del país con el que limita el mismo), país de residencia para el turismo receptivo y destino principal para turismo emisivo. De esta manera, el tablero constituye una herramienta amigable para el manejo de los datos estadísticos de turismo internacional de nuestro país. Actualmente se encuentra disponible información actualizada hasta julio de 2021.
+Permite visualizar y descargar información detallada por año, mes, medio de transporte, paso fronterizo (con el detalle de la provincia y del país con el que limita el mismo), país de residencia para el turismo receptivo y destino principal para turismo emisivo. De esta manera, el tablero constituye una herramienta amigable para el manejo de los datos estadísticos de turismo internacional de nuestro país. Actualmente se encuentra disponible información actualizada hasta julio de 2021.
 
 ## Armonización
 
-El proyecto contempla una serie de actividades que incluyen: diagnóstico de funcionamiento y capacidades de las oficinas a cargo de las estadísticas de turismo en el país; el desarrollo de materiales con propuestas teóricas y metodológicas para el trabajo estadístico de turismo a nivel subnacional; capacitaciones teóricas y prácticas a referentes técnicos de estadísticas; la creación de un foro de intercambio permamenente entre referntes técnicos de los distintos niveles de gobierno; y la generación de una herramienta de gestión de datos federal.
+El proyecto contempla una serie de actividades que incluye: diagnóstico de funcionamiento y capacidades de las oficinas a cargo de las estadísticas de turismo en el país; el desarrollo de materiales con propuestas teóricas y metodológicas para el trabajo estadístico de turismo a nivel subnacional; capacitaciones teóricas y prácticas a referentes técnicos de estadísticas; la creación de un foro de intercambio permanente entre referntes técnicos de los distintos niveles de gobierno; y la generación de una herramienta de gestión de datos federal.
 
 ### Actualización Metodológica
 
@@ -127,8 +129,8 @@ Para ello, se trabajará para la construcción de un Sistema Federal de Gestión
 
 Con el fin de generar espacios de colaboración entre los distintos actores vinculados a la producción y explotación de las estadísticas de turismo, se gestionará un foro permanente en donde se habilitarán distintos canales temáticos que acompañarán el contenido de este micrositio: documentos técnicos, bibliografía y trabajos de interés común.
 
-De esta manera, el proyecto de Armonización contribuirá a fortalecer las capacidades técnicas, robustecer la producción de estadísticas de turismo y una mayor sociabilización de la información producida por las distintas unidades administrativas de turismo.
+De esta manera, el proyecto de Armonización contribuirá a fortalecer las capacidades técnicas, robustecer la producción de estadísticas de turismo y promover una mayor sociabilización de la información producida por las distintas unidades administrativas de turismo.
 
 ------------------------------------------------------------------------
 
-Les damos la bienvenida a *la Bitácora*, con la expectativa de que este espacio sea de utilidad para acercar el trabajo que se está llevando adelante desde el Ministerio de Turismo y Deportes de la Nación.
+Les damos la bienvenida a *la Bitácora*, con la expectativa de que este espacio sea de utilidad para acercar el trabajo que se está llevando adelante desde el Ministerio de Turismo y Deportes.
