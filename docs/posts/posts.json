@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2021-10-04-microdatosevyth/",
+    "title": "Microdatos EVYTH",
+    "description": "Descripcion Microdatos.......",
+    "author": [],
+    "date": "2021-10-04",
+    "categories": [],
+    "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-10-04T18:20:37-03:00",
+    "input_file": "microdatosevyth.knit.md"
+  },
+  {
     "path": "posts/bienvenida/",
     "title": "Te damos la bienvenida a la Bitácora de Turismo",
     "description": "Un espacio virtual de la Dirección Nacional de Mercados y Estadística (DNMyE) en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina.",
