@@ -1,7 +1,7 @@
 ---
 title: "Microdatos EVYTH"
 description: |
- Descripcion Microdatos....... 
+ La [Dirección Nacional de Mercados y Estadísticas](https://www.yvera.tur.ar/estadistica/) pone a disposición de las y los usuarios la base de microdatos de la __Encuesta de Viajes y Turismo de los Hogares (EVyTH).__
 
 output:
   distill::distill_article:
@@ -11,22 +11,43 @@ output:
 draft: true    
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-
-
-La [Dirección Nacional de Mercados y Estadísticas](https://www.yvera.tur.ar/estadistica/) pone a disposición de las y los usuarios la base de microdatos de la __Encuesta de Viajes y Turismo de los Hogares (EVyTH)__, cuyo objetivo principal es la caracterización de los viajes que realizan y/o realizarán los miembros de los hogares residentes en los grandes aglomerados de Argentina. 
+La Encuesta de Viajes y Turismo de los Hogares (EVyTH) tiene como principal objetivo medir la evolución de los viajes realizados por los hogares argentinos, sus características y computar aspectos socio-demográficos que permitan caracterizar a los turistas residentes. Dicho operativo brinda información contínua del turismo nacional de la Argentina, tanto de los viajes turísticos de los residentes dentro de nuestro territorio nacional como los realizados en el exterior.
 
 Este inédito producto, disponible a partir de hoy, será actualizado de forma trimestral y permitirá profundizar el análisis del turismo interno permitiendo a usuarios y usuarias procesar los datos a su medida.
 
+Disponer de la base de microdatos abre las puertas para realizar procesamientos que excedan a la información ya publicada tanto a través de los [informes](https://www.yvera.tur.ar/estadistica/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth) como por el [set de recursos procesados](http://datos.yvera.gob.ar/dataset/encuesta-viajes-turismo-hogares-evyth) y ofrecidos en el portal de datos abiertos. De ahora en adelante, usuarios y usuaris podrán construir variables en función de los marcos conceptuales propios, como así también segmentar subpoblaciones en función del objeto de estudio particular que tengan entre manos.
 
+## Recursos
+
+A partir de esta publicación se encontrara disponible en el [portal de datos abiertos](http://datos.yvera.gob.ar/) la base de **microdatos** correspondiente a los años 2019, 2020 y hasta el primer trimestre de 2021 inclusive, y su respectivo **diseño de registro**, a través del cual se podrá identificar el nombre de las variables (columnas), las categorías de respuesta y sus respectivas etiquetas.
+
+Con el objetivo de facilitar el acceso de las y los usuarios con diferentes niveles de experiencia en el procesamiento de datos, se publicará la base en los siguientes formatos, permitiendo así disponibilizar la información a través de diversos programas:
+
+-   *.txt*
+
+-   *.csv*
+
+-   *.xlsx (Excel)*
+
+-   *.sav (SPSS)*
+
+-   *.dta (STATA)*
+
+De la misma forma, el diseño de registro se publicará en los formatos:
+
+-   *.txt*
+
+-   *.csv*
+
+-   *.xlsx*
 
 ## Indicadores
 
-Entre los principales indicadores que se pueden producir con este nuevo recurso, se encuentran:
+Con la base de microdatos de la EVyTH se pueden construir los principales indicadores que refieren a la caracterización del turismo interno. Entre ellos:
 
 -   La evolución de la cantidad de viajes realizados en el período de referencia.
 
@@ -41,36 +62,6 @@ Entre los principales indicadores que se pueden producir con este nuevo recurso,
 -   Cantidad de personas y características de los viajes que realizarán o probablemente realizaron los turistas durante los fines de semana largo.
 
 -   Flujo turístico esperado para fechas especiales (temporada de invierno y verano) en función de las expectativas de viaje.
-
-
-
-## Recursos
-
-A partir de esta publicación se encontrara disponible en el [portal de datos abiertos](http://datos.yvera.gob.ar/) la base de microdatos correspondiente a los años 2019, 2020 y hasta el primer trimestre de 2021 inclusive, y su respectivo diseño de registro, a través del cual se podrá identificar el nombre de las variables (columnas), las categorías de respuesta y sus respectivas etiquetas.
-
-Con el objetivo de facilitar el acceso de las y los usuarios con diferentes niveles de experiencia en el procesamiento de datos, se publicará la base en archivos en formatos a ser abiertos tanto por software libre como propietario: 
-
--   _.txt_
-
--   _.csv_
-
--   _.xlsx (Excel)_
-
--   _.sav (SPSS)_
-
--   _.dta (STATA)_
-    
-
-De la misma forma, el diseño de registro se publicará en los formatos:
-
--   _.txt_
-
--   _.csv_
-
--   _.xlsx_
-
-
-
 
 ## Cómo sigue
 
