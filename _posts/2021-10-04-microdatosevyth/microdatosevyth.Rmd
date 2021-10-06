@@ -16,8 +16,62 @@ draft: true
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web.
-
-Learn more about using Distill at <https://rstudio.github.io/distill>.
 
 
+La [Dirección Nacional de Mercados y Estadísticas](https://www.yvera.tur.ar/estadistica/) pone a disposición de las y los usuarios la base de microdatos de la __Encuesta de Viajes y Turismo de los Hogares (EVyTH)__, cuyo objetivo principal es la caracterización de los viajes que realizan y/o realizarán los miembros de los hogares residentes en los grandes aglomerados de Argentina. 
+
+Este inédito producto, disponible a partir de hoy, será actualizado de forma trimestral y permitirá profundizar el análisis del turismo interno permitiendo a usuarios y usuarias procesar los datos a su medida.
+
+
+
+## Indicadores
+
+Entre los principales indicadores que se pueden producir con este nuevo recurso, se encuentran:
+
+-   La evolución de la cantidad de viajes realizados en el período de referencia.
+
+-   Las características de los recorridos turísticos durante el período de referencia (lugares visitados, forma de alojamiento, estadías, utilización de paquete turístico, medios de transporte, etc.).
+
+-   El uso de segundas viviendas y las características de los viajes realizados a ellas durante el período de referencia.
+
+-   El gasto de cada uno de los viajes realizados en Argentina y en el exterior durante el período de referencia.
+
+-   Las características sociodemográficas de las personas que realizan y no realizan viajes durante el periodo (edad, sexo, nivel educativo, condición de actividad) y de los hogares que ellas integran (lugar de residencia, nivel de ingreso, tamaño del hogar, sexo, edad, nivel educativo y condición de actividad del jefe).
+
+-   Cantidad de personas y características de los viajes que realizarán o probablemente realizaron los turistas durante los fines de semana largo.
+
+-   Flujo turístico esperado para fechas especiales (temporada de invierno y verano) en función de las expectativas de viaje.
+
+
+
+## Recursos
+
+A partir de esta publicación se encontrara disponible en el [portal de datos abiertos](http://datos.yvera.gob.ar/) la base de microdatos correspondiente a los años 2019, 2020 y hasta el primer trimestre de 2021 inclusive, y su respectivo diseño de registro, a través del cual se podrá identificar el nombre de las variables (columnas), las categorías de respuesta y sus respectivas etiquetas.
+
+Con el objetivo de facilitar el acceso de las y los usuarios con diferentes niveles de experiencia en el procesamiento de datos, se publicará la base en archivos en formatos a ser abiertos tanto por software libre como propietario: 
+
+-   _.txt_
+
+-   _.csv_
+
+-   _.xlsx (Excel)_
+
+-   _.sav (SPSS)_
+
+-   _.dta (STATA)_
+    
+
+De la misma forma, el diseño de registro se publicará en los formatos:
+
+-   _.txt_
+
+-   _.csv_
+
+-   _.xlsx_
+
+
+
+
+## Cómo sigue
+
+El proyecto de apertura de datos continuará con la publicación de los datos correspondientes hasta el año 2012, documentación metodológica y manual de usuario para el procesamiento de la base de microdatos.
