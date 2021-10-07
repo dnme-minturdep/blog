@@ -1,31 +1,34 @@
 ---
-title: "Microdatos EVYTH"
+title: "Publicación de microdatos de la Encuesta de Viajes y Turismo de los Hogares (EVyTH)"
 description: |
- La [Dirección Nacional de Mercados y Estadísticas](https://www.yvera.tur.ar/estadistica/) pone a disposición de las y los usuarios la base de microdatos de la __Encuesta de Viajes y Turismo de los Hogares (EVyTH).__
+ Siguiendo con la política de apertura de datos, la Dirección Nacional de Mercados y Estadísticas pone a disposición la base de microdatos de la EVyTH.
 
 output:
   distill::distill_article:
     self_contained: false
     toc: true
     toc_floate: true
-draft: true    
+draft: false    
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-La Encuesta de Viajes y Turismo de los Hogares (EVyTH) tiene como principal objetivo medir la evolución de los viajes realizados por los hogares argentinos, sus características y computar aspectos socio-demográficos que permitan caracterizar a los turistas residentes. Dicho operativo brinda información contínua del turismo nacional de la Argentina, tanto de los viajes turísticos de los residentes dentro de nuestro territorio nacional como los realizados en el exterior.
+La Encuesta de Viajes y Turismo de los Hogares (EVyTH)[^1] tiene como principal objetivo medir la evolución de los viajes realizados por los hogares argentinos, sus características y computar aspectos socio-demográficos que permitan caracterizar a los turistas residentes. Dicho operativo brinda información contínua del turismo nacional de la Argentina, tanto de los viajes turísticos de los residentes dentro de nuestro territorio nacional como los realizados en el exterior.
+
+
+[^1]: Más información disponible en el [**Documento Técnico #1**](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html#evyth) del proyecto de Armonización. 
 
 Este inédito producto, disponible a partir de hoy, será actualizado de forma trimestral y permitirá profundizar el análisis del turismo interno permitiendo a usuarios y usuarias procesar los datos a su medida.
 
-Disponer de la base de microdatos abre las puertas para realizar procesamientos que excedan a la información ya publicada tanto a través de los [informes](https://www.yvera.tur.ar/estadistica/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth) como por el [set de recursos procesados](http://datos.yvera.gob.ar/dataset/encuesta-viajes-turismo-hogares-evyth) y ofrecidos en el portal de datos abiertos. De ahora en adelante, usuarios y usuaris podrán construir variables en función de los marcos conceptuales propios, como así también segmentar subpoblaciones en función del objeto de estudio particular que tengan entre manos.
+Disponer de la base de microdatos abre las puertas para realizar procesamientos que excedan a la información ya publicada tanto a través de los [informes](https://www.yvera.tur.ar/estadistica/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth) como por el [set de recursos procesados](http://datos.yvera.gob.ar/dataset/encuesta-viajes-turismo-hogares-evyth) y ofrecidos en el portal de datos abiertos. De ahora en adelante, se podrán construir variables en función de los marcos conceptuales propios, como así también segmentar subpoblaciones en función del objeto de estudio particular que se tengan entre manos.
 
 ## Recursos
 
-A partir de esta publicación se encontrara disponible en el [portal de datos abiertos](http://datos.yvera.gob.ar/) la base de **microdatos** correspondiente a los años 2019, 2020 y hasta el primer trimestre de 2021 inclusive, y su respectivo **diseño de registro**, a través del cual se podrá identificar el nombre de las variables (columnas), las categorías de respuesta y sus respectivas etiquetas.
+A partir de esta publicación se encontrará disponible en el [portal de datos abiertos](http://datos.yvera.gob.ar/) la base de **microdatos** correspondiente a los años 2019, 2020 y hasta el primer trimestre de 2021 inclusive, y su respectivo **diseño de registro**, a través del cual se podrá identificar el nombre de las variables (columnas), las categorías de respuesta y sus respectivas etiquetas.
 
-Con el objetivo de facilitar el acceso de las y los usuarios con diferentes niveles de experiencia en el procesamiento de datos, se publicará la base en los siguientes formatos, permitiendo así disponibilizar la información a través de diversos programas:
+Con el objetivo de facilitar el acceso a usuarios con diferentes experiencia en el procesamiento de datos, se publicará la base en los siguientes formatos, permitiendo así disponibilizar la información a través de diversos programas:
 
 -   *.txt*
 
@@ -37,7 +40,7 @@ Con el objetivo de facilitar el acceso de las y los usuarios con diferentes nive
 
 -   *.dta (STATA)*
 
-De la misma forma, el diseño de registro se publicará en los formatos:
+De la misma forma, el diseño de registro se publicará en formatos diverseros:
 
 -   *.txt*
 
@@ -47,7 +50,7 @@ De la misma forma, el diseño de registro se publicará en los formatos:
 
 ## Indicadores
 
-Con la base de microdatos de la EVyTH se pueden construir los principales indicadores que refieren a la caracterización del turismo interno. Entre ellos:
+Con este nuevo recurso se pueden construir los principales indicadores que refieren a la caracterización del turismo interno. Entre ellos:
 
 -   La evolución de la cantidad de viajes realizados en el período de referencia.
 
@@ -55,13 +58,11 @@ Con la base de microdatos de la EVyTH se pueden construir los principales indica
 
 -   El uso de segundas viviendas y las características de los viajes realizados a ellas durante el período de referencia.
 
--   El gasto de cada uno de los viajes realizados en Argentina y en el exterior durante el período de referencia.
+-   El gasto de cada uno de los viajes realizados en la Argentina durante el período de referencia.
 
--   Las características sociodemográficas de las personas que realizan y no realizan viajes durante el periodo (edad, sexo, nivel educativo, condición de actividad) y de los hogares que ellas integran (lugar de residencia, nivel de ingreso, tamaño del hogar, sexo, edad, nivel educativo y condición de actividad del jefe).
+-   Las características sociodemográficas de los visitantes: edad, sexo, nivel educativo, condición de actividad, lugar de residencia, nivel de ingreso, sexo, edad, nivel educativo y características del jefe del hogar.
 
--   Cantidad de personas y características de los viajes que realizarán o probablemente realizaron los turistas durante los fines de semana largo.
 
--   Flujo turístico esperado para fechas especiales (temporada de invierno y verano) en función de las expectativas de viaje.
 
 ## Cómo sigue
 
