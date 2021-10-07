@@ -15,7 +15,7 @@ draft: false
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-La Encuesta de Viajes y Turismo de los Hogares (EVyTH)[^1] tiene como principal objetivo medir la evolución de los viajes realizados por los hogares argentinos, sus características y computar aspectos socio-demográficos que permitan caracterizar a los turistas residentes. Dicho operativo brinda información contínua del turismo nacional de la Argentina, tanto de los viajes turísticos de los residentes dentro de nuestro territorio nacional como los realizados en el exterior.
+La Encuesta de Viajes y Turismo de los Hogares (EVyTH) tiene como principal objetivo medir la evolución de los viajes realizados por los hogares argentinos, sus características y computar aspectos socio-demográficos que permitan caracterizar a los turistas residentes. Dicho operativo brinda información contínua del turismo nacional de la Argentina, tanto de los viajes turísticos de los residentes dentro de nuestro territorio nacional como los realizados en el exterior[^1].
 
 
 [^1]: Más información disponible en el [**Documento Técnico #1**](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html#evyth) del proyecto de Armonización. 
@@ -26,7 +26,7 @@ Disponer de la base de microdatos abre las puertas para realizar procesamientos 
 
 ## Recursos
 
-A partir de esta publicación se encontrará disponible en el [portal de datos abiertos](http://datos.yvera.gob.ar/) la base de **microdatos** correspondiente a los años 2019, 2020 y hasta el primer trimestre de 2021 inclusive, y su respectivo **diseño de registro**, a través del cual se podrá identificar el nombre de las variables (columnas), las categorías de respuesta y sus respectivas etiquetas.
+A partir de esta publicación se encontrará disponible en el [portal de datos abiertos](http://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos) la base de **microdatos** correspondiente a los años 2019, 2020 y hasta el primer trimestre de 2021 inclusive, y su respectivo **diseño de registro**, a través del cual se podrá identificar el nombre de las variables (columnas), las categorías de respuesta y sus respectivas etiquetas.
 
 Con el objetivo de facilitar el acceso a usuarios con diferentes experiencia en el procesamiento de datos, se publicará la base en los siguientes formatos, permitiendo así disponibilizar la información a través de diversos programas:
 
