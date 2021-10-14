@@ -1,0 +1,35 @@
+---
+title: "Turismo en el MULC"
+description: |
+ Siguiendo con la política de apertura de datos, la Dirección Nacional de Mercados y Estadísticas pone a disposición los informes que analizan la participación del turismo dentro del Mercado Único y Libre de Cambios.
+
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_floate: true
+draft: true    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+El informe "Turismo en el MULC" presenta información de las transacciones en divisas realizadas a través del Mercado Único y Libre de Cambios (MULC) originadas en rubros de servicios, y con más detalle en aquellos vinculados al turismo. Estas transacciones incluyen tanto salidas de divisas (pagos) como entradas (cobros). La fuente de información es de periodicidad mensual y es publicada por el Banco Central de la República Argentina. 
+
+Los rubros vinculados al turismo son: 
+
++   **Viajes y otros pagos con tarjeta**, que incluye todos las transacciones internacionales realizadas por operadores turísticos locales, la compra/venta de divisas en billetes por parte de personas no residentes, los ingresos de divisas por compras realizadas por personas no residentes con tarjetas de crédito dentro de Argentina y los egresos de divisas por compras realizadas por residentes con tarjeta de crédito en el exterior. Aquí cabe aclarar que no todas las transacciones con tarjeta de crédito corresponden a compras realizadas durante un viaje turístico, sino que pueden corresponder, por ejemplo, a compras con envío internacional o compras de servicios de streaming. Es importante tener en cuenta esta digresión, dado que durante este informe nos referiremos a turismo y estos pagos estarán incluidos dentro de ese concepto. 
+
++   **Servicios de transporte de pasajeros**, que incluye los ingresos de divisas por la compra de pasajes internacionales por parte de no residentes a empresas de transporte residentes y los egresos de divisas por la compra de pasajes internacionales por parte de residentes a empresas de transporte no residentes. 
+
+El informe realiza un análisis de la evolución mensual de los ingresos y egresos de divisas por turismo, así como un análisis de la participación del turismo en el total de servicios como generador y gastador de divisas. A su vez, se presenta la evolución mensual de los conceptos que componen el rubro "Viajes y otros pagos con tarjeta".
+
+## MULC vs Balanza de Pagos (actualización trimestral)
+
+La Balanza de Pagos ("BP") contiene, dentro de la cuenta corriente, dos cuentas vinculadas al turismo: "cuenta viajes" y "cuenta transporte de pasajeros". La cuenta viajes estima, en el crédito, el total de los ingresos monetarios debido al turismo receptivo y, en el débito, el total de los egresos monetarios producidos por el turismo emisivo. Por su lado, la cuenta transporte de pasajeros estima, en el crédito, los ingresos monetarios por las compras de pasajes internacionales que realizaron personas no residentes a empresas residentes en Argentina y, en el débito, los egresos monetarios por la compra de pasajes internacionales por parte de personas residentes en Argentina a empresas residentes en el exterior.
+
+Dado que el MULC registra los ingresos/egresos de divisas vía el mercado oficial de cambios, en esta sección del informe se realiza una comparación entre las transacciones registradas por el MULC y el total estimado por la BP, a fin de conocer qué parte del turismo está generando divisas en el mercado formal, y qué parte se está volcando al mercado informal de cambios (mercado "negro" o "blue").
+
+Dado que la información de la BP se presenta una vez por trimestre, esta sección del informe se actualizará también con esa periodicidad. 
+
