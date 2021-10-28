@@ -2,7 +2,7 @@
 title: "Te damos la bienvenida a la Bitácora de Turismo"
 description: |
  Un espacio virtual de la Dirección Nacional de Mercados y Estadística (DNMyE) en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina. 
-
+date: Sep 14, 2021
 output:
   distill::distill_article:
     self_contained: false
@@ -27,6 +27,17 @@ En este sentido, se trabajan las siguientes iniciativas:
 -   La sistematización en la confección de [reportes y la generación de tableros](https://tableros.yvera.tur.ar/), con el objetivo de acercar la información de un modo más intuitivo a usuarias y usuarios que no cuenten con experiencia en procesamiento de bases de datos.
 
 -   El proyecto de [*Armonización de las Estadísticas Provinciales de Turismo*](https://armonizacion.yvera.tur.ar/) que tiene como objetivo contribuir al fortalecimiento de los sistemas de estadística provinciales para generar información robusta y confiable de la actividad turística de nuestro país.
+
+Estas herramientas, en conjunto, conforman el [**Sistema de Información Turística de la Argentina (SINTA)**](https://www.yvera.tur.ar/estadistica/)
+
+```{r, fig.align='center'}
+
+knitr::include_graphics("sinta.png")
+
+
+```
+
+
 
 ## Datos Abiertos
 
