@@ -7,7 +7,7 @@ output:
     self_contained: true
     toc: true
     toc_floate: true
-draft: true    
+draft: false    
 ---
 
 ```{r setup, include=FALSE}
@@ -774,6 +774,6 @@ ramas %>%
 ```
 ## Recurso - Actividad y Empleo en Turismo
 
-[**Reporte**](https://tableros.yvera.tur.ar/informe_empleo.html)
+[**Reporte**](https://tableros.yvera.tur.ar/reportes/informe_empleo.html)
 
 [**Documento Técnico #5: Medición de la contribución económica del turismo**](https://dnme-minturdep.github.io/DT5_actividad_empleo/)
