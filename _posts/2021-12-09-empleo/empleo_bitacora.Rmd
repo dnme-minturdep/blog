@@ -58,11 +58,11 @@ puestos.genero <- read.csv("/srv/DataDNMYE/empleo/share_mujer_total_empresas_men
 # 562091: Servicios de cantinas con atención exclusiva  a los empleados o estudiantes dentro de empresas o establecimientos educativos.
 # 
 # POR EL MOMENTO LAS SACAMOS
-ramas_turismo_6d <- openxlsx::read.xlsx("Entradas/ramas turismo 6 D.xlsx") %>% 
+ramas_turismo_6d <- openxlsx::read.xlsx("/srv/DataDNMYE/empleo/ramas turismo 6 D.xlsx") %>% 
   filter(!COD_ACTIVIDAD_F883 %in% c(473000,681098,681099,780000,562091)) %>% 
   pull(COD_ACTIVIDAD_F883)
 
-clae_diccionario <- read.csv("Entradas/clae_diccionario.csv") %>% select(clae6,clae6_desc)
+clae_diccionario <- read.csv("/srv/DataDNMYE/empleo/clae_diccionario.csv") %>% select(clae6,clae6_desc)
 ```
 
 ```{r}
