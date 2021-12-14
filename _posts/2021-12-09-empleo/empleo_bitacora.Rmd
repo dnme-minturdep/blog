@@ -1,0 +1,779 @@
+---
+title: "Empleo registrado en Turismo"
+description: |
+ Puestos de trabajo, empleo por género y empresas en ramas turísticas
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: true    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message = F, warning = F, 
+                      fig.align = 'left', fig.width = 10,fig.height = 6)
+library(tidyverse)
+library(lubridate)
+library(openxlsx)
+library(ggtext)
+library(treemapify)
+library(DT)
+
+Sys.setlocale(locale = "es_AR.UTF-8")
+
+# PALETAS Y FUENTES ---------------------------------------------------------
+# Paleta colores Presidencia
+cols_arg <- "#37BBED" # Celeste Institucional
+
+#Secundarios
+cols_arg2 <- c("#EE3D8F", # "ROJO"
+               "#50B8B1", # "VERDE"
+               "#F7941E","#FFD100","#D7DF23", "#9283BE")
+
+#Fuente
+
+familia_fuente <- "Encode Sans Normal"
+
+```
+
+```{r}
+#INSUMOS: VER CÓMO AUTOMATIZAR LA DESCARGA DESDE DATOS ABIERTOS 
+empleo <- read.csv("/srv/DataDNMYE/empleo/puestos_total_empresas_mensual_por_clae6_21102021.csv")
+#salario.prom <- read.csv("Entradas/w_mean_total_empresas_mensual_por_clae6_21102021.csv")
+#salario.median <- read.csv("Entradas/w_median_total_empresas_mensual_por_clae6_21102021.csv")
+empleadores <- read.csv("/srv/DataDNMYE/empleo/empleadoras_total_empresas_por_clae6_21102021.csv")
+puestos.genero <- read.csv("/srv/DataDNMYE/empleo/share_mujer_total_empresas_mensual_por_clae6_21102021.csv")
+# Selección de ramas turísticas
+#ATENCIÓN: 
+#la rama 473000 "Venta al por menor de combustible para vehículos automotores y motocicletas" representa
+# ~73% de la facturación de transporte. Como en la CST se toma solo el margen de comercialización, deberíamos
+# replicar ese ratio o sacarla.
+# la rama 681098 "Servicios inmobiliarios realizados por cuenta propia, con bienes urbanos propios o arrendados n.c.p."
+# y 681099 "Servicios inmobiliarios realizados por cuenta propia, con bienes rurales propios o arrendados n.c.p."
+#lo turísitco solo es el alquiler de segundas viviendas para uso turístico en la cst del total de esa rama tomábamos el 3% aprox nada más
+# replicar ese ratio o sacarla
+# Asimismo, se exluyen algunas ramas que eran parte de la clasifiación de RCT según CLANAE 2004 pero no corresponde:
+# 780000: Obtención y dotación de personal,
+# 562091: Servicios de cantinas con atención exclusiva  a los empleados o estudiantes dentro de empresas o establecimientos educativos.
+# 
+# POR EL MOMENTO LAS SACAMOS
+ramas_turismo_6d <- openxlsx::read.xlsx("Entradas/ramas turismo 6 D.xlsx") %>% 
+  filter(!COD_ACTIVIDAD_F883 %in% c(473000,681098,681099,780000,562091)) %>% 
+  pull(COD_ACTIVIDAD_F883)
+
+clae_diccionario <- read.csv("Entradas/clae_diccionario.csv") %>% select(clae6,clae6_desc)
+```
+
+```{r}
+puestos <- empleo %>% 
+  left_join(clae_diccionario) %>% 
+  left_join(puestos.genero, by=c("clae6","fecha")) %>% 
+  left_join(empleadores,by=c("clae6","fecha")) %>% 
+  mutate(rct = ifelse(clae6 %in% ramas_turismo_6d, "RCT","NO RCT"),
+         cat.rct = case_when(substr(clae6,1,3) %in% c(473,491,492,501,502,511,524,771) & rct == "RCT"~ "Transporte",
+                             substr(clae6,1,3) %in% c(551,552) & rct == "RCT"~ "Alojamiento",
+                             substr(clae6,1,3) %in% c(561,562) & rct == "RCT" ~ "Gastronomía",
+                             substr(clae6,1,3) == 791 & rct == "RCT"~ "Agencias de Viaje",
+                             substr(clae6,1,3) %in% c(591,592,681,780,854,900,910,920,931,939) & rct == "RCT"~ "Otros Servicios Turísticos",
+                             TRUE ~ "NO RCT"),
+         puestos = ifelse(puestos == -99,NA,puestos), #PONGO NA A LOS -99
+         empresas = ifelse(empresas == -99, NA,empresas),
+         puestos_mujeres = round(puestos * share_mujer,0),
+         puestos_varones = round(puestos * (1-share_mujer),0)) 
+
+
+```
+
+```{r}
+indice.empleo <- puestos %>% 
+  group_by(fecha,rct) %>%
+  summarise(puestos = sum(puestos,na.rm = T)) %>%
+  group_by(rct) %>% 
+  mutate(indice = puestos/first(puestos),
+         var.i.a. = puestos/lag(puestos,12)-1,
+         var.a.2.anios = puestos/lag(puestos,24)-1)
+ult.datos.empleo <- puestos %>% 
+  filter(fecha == max(fecha))
+
+# indice.empleo.total <- puestos %>% 
+#   group_by(fecha) %>%
+#   summarise(puestos = sum(puestos,na.rm = T)) %>%
+#   mutate(indice = puestos/first(puestos),
+#          var.i.a. = puestos/lag(puestos,12)-1,
+#          var.a.2.anios = puestos/lag(puestos,24)-1,
+#          rct = "TOTAL")
+#indice.empleo.bind <- bind_rows(indice.empleo,indice.empleo.total)
+ult.datos.empleo <- puestos %>% 
+  filter(fecha == max(fecha))
+
+ramas <- puestos %>%
+  filter(fecha == max(fecha) & rct == "RCT") 
+```
+
+El presente documento expone información de puestos de trabajo registrados en ramas turísticas, participación por género y empleadores, a partir de datos mensuales para el período 2007-2021. Se podrá seguir periódicamente estos indicadores [aquí](https://tableros.yvera.tur.ar/reportes/informe_empleo.html), con el agregado de gráficos interactivos.
+
+<br>
+
+
+## Introducción
+
+La reciente publicación de nuevos datasets por parte del Ministerio de Desarrollo Productivo (MDP) en su [portal](https://datos.produccion.gob.ar/) de datos abiertos permite profundizar el análisis del sector turístico en Argentina en términos de empleo registrado, ya que cuenta con información de puestos de trabajo, puestos por género, empleadores, entre otros, con la máxima apertura de rama de actividad de la clasificación de AFIP. Este último aspecto resulta clave a la hora de seleccionar las Ramas Características del Turismo de acuerdo a las recomendaciones de la Organización Mundial del Turismo (OMT). En sus [Recomendaciones internacionales para estadísticas de turismo 2008](https://unstats.un.org/unsd/publication/seriesm/seriesm_83rev1s.pdf), señala que las actividades características del turismo son aquellas que producen productos característicos del turismo, siendo estos aquellos que cumplen uno o ambos de los siguientes criterios:
+
++ *El gasto turístico en el producto debería representar una parte importante del gasto total turístico (condición de la proporción que corresponde al gasto/demanda)*
+
++ *El gasto turístico en el producto debería representar una parte importante de la oferta del producto en la economía (condición de la proporción que corresponde a la oferta). Este criterio supone que la oferta de un producto característico del turismo se reduciría considerablemente si no hubiera visitantes."*
+
+Una adecuada selección de las ramas características requiere, por un lado, de un análisis del gasto turístico en términos de productos y su contrastación con la oferta generada. Por otro lado, la desagregación de las ramas es fundamental para excluir actividades que, tomadas de manera agregada, pueden contener en su interior ramas turísticas y ramas no turísticas. El caso del transporte sirve como ejemplo. La actividad *Transporte automotor* incluye tanto el servicio de cargas como el de pasajeros, por lo que no sería preciso incluirla completamente entre las RCT. A su vez, el *Transporte automotor de pasajeros* incluye, entre otros, los servicios urbano e interurbano, mientras que solo el segundo es considerado turístico. Por lo tanto, debería excluirse el *Servicio de transporte automotor urbano de pasajeros*. Para que esto sea posible es necesario contar con las ramas de actividad abiertas a 5 dígitos del clasificador de AFIP. Es por esto que la nueva publicación a 6 dígitos es de gran valor para el análisis del sector.
+
+Esta perspectiva implica analizar al sector desde el punto de vista de la oferta. Esto es, la selección de las RCT que cumplen con los criterios anteriores no tiene en cuenta si una parte de la producción no es consumida por visitantes. El caso de los servicios de provisión de alimentos y bebidas es un ejemplo de esta limitación.
+
+En este sentido, se pude consultar el [Documénto Técnico #5](https://dnme-minturdep.github.io/DT5_actividad_empleo/) elaborado por la Dirección, en el que, en el marco del *Proyecto de Armonización de las Estadísticas Provinciales de Turismo*, se abordan propuestas metodológicas para la medición de la actividad económica del turismo desde la perspectiva de la oferta.
+
+La metodología de las series elaboradas por el MDP se encuentra [aquí](https://datos.produccion.gob.ar/dataset/15211f62-04dc-42ed-acdd-ff2bbcaf4779/resource/0ee975c9-8241-4d29-9013-7e190644faad/download/metodologia-da.pdf).[^1]
+
+[^1]: Las series publicadas por el MDP pueden diferir de otras fuentes que tengan como insumo el Sistema Integrado Previsional Argentino (SIPA), como la Cuenta de Generación del Ingreso (INDEC) o las publicaciones del Observatorio de Empleo y la Dinámica Empresarial (Ministerio de Trabajo) debido a los ajustes que realiza cada organismo de la información cruda proveniente de AFIP.
+
+## Ramas seleccionadas
+
+Para el presente documento se seleccionaron `r length(ramas_turismo_6d)` ramas de actividad a 6 dígitos de CLAE (ver Anexo), agrupándolas en 5 categorías:
+
+- <span style="color: #EE3D8F;">**Agencias de Viaje:**</span> `r length(unique(puestos[puestos$cat.rct == "Agencias de Viaje","clae6"]))` ramas.
+- <span style="color: #50B8B1;">**Alojamiento:**</span> `r length(unique(puestos[puestos$cat.rct == "Alojamiento","clae6"]))` ramas.
+- <span style="color: #F7941E;">**Gastronomía:**</span> `r length(unique(puestos[puestos$cat.rct == "Gastronomía","clae6"]))` ramas.
+- <span style="color: #D7DF23;">**Transporte:**</span> `r length(unique(puestos[puestos$cat.rct == "Transporte","clae6"]))` ramas.
+- <span style="color: #FFD100;">**Otros Servicios Turísticos:**</span> `r length(unique(puestos[puestos$cat.rct == "Otros Servicios Turísticos","clae6"]))` ramas.
+
+*Aclaración:* Debido a la preservación del secreto estadístico, las ramas con 2 o menos empleadores no contienen información. Actualmente, entonces, no se incluye información sobre: 
+
++ `r ult.datos.empleo %>% filter(is.na(puestos) & rct == "RCT") %>% pull(clae6_desc)`
+
+
+<br>
+
+```{r}
+ramas.treemap <- ult.datos.empleo %>% 
+  filter(rct == "RCT") %>% 
+  ggplot(.,aes(area=puestos,
+               fill = cat.rct,
+               subgroup2 = clae6_desc,
+               subgroup = cat.rct))+
+   geom_treemap()+
+  scale_fill_manual(values = cols_arg2)+
+ geom_treemap_text(aes(label=clae6_desc) ,colour = "black", place = "topleft",
+                    grow = T, reflow = T, size = 9,
+                    family=familia_fuente,
+                    layout = "squarified") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = familia_fuente), 
+    legend.position = "none",
+    plot.title    = element_text(size = 12, face = "bold"),
+    plot.subtitle = element_text(size = 8, face = "bold"),
+    plot.caption  = element_text(size = 4),
+    strip.text.y  = element_text(size = 3, face = "bold"),
+    axis.text.x   = element_text(size = 3),
+    axis.text.y   = element_text(size = 3),
+    legend.text   = element_text(size = 5),
+    legend.title  = element_blank()
+  ) +
+  labs(title="Actividades turísticas seleccionadas",
+       subtitle=paste0("Los tamaños dependen del nivel de empleo de ",format(as.Date(max(puestos$fecha)),"%B %Y")))
+ramas.treemap
+```
+
+<br>
+
+## Puestos de trabajo
+
+A continuación se muestra la evolución de los puestos de trabajo registrados en ramas turísticas desde enero 2007 hasta junio 2021. En ella se puede observar el fuerte componente estacional del sector. Por otro lado, se observa una tendencia creciente desde inicios de la serie hasta el año 2018. En ese período los puestos de trabajo inician en valores cercanos a **330.000** hasta llegar al máximo de **492.000** puestos en enero de 2018. La tendencia es decreciente a partir del año 2019 y se profundiza desde el inicio de la pandemia, llegando actualmente a niveles similares a los del inicio de la serie. A su vez, los puestos de trabajo en el total de la economía tuvieron una evolución similar en su participación, representando alrededor del 6% en el año 2007 para llegar a máximos en torno al 7% y actualmente retroceder por debajo del 6%.
+
+```{r}
+indice.empleo <- puestos %>% 
+  group_by(fecha,rct) %>%
+  summarise(puestos = sum(puestos,na.rm = T)) %>%
+  group_by(rct) %>% 
+  mutate(indice = puestos/first(puestos),
+         var.i.a. = puestos/lag(puestos,12)-1,
+         var.a.2.anios = puestos/lag(puestos,24)-1)
+ult.datos.empleo <- puestos %>% 
+  filter(fecha == max(fecha))
+
+# indice.empleo.total <- puestos %>% 
+#   group_by(fecha) %>%
+#   summarise(puestos = sum(puestos,na.rm = T)) %>%
+#   mutate(indice = puestos/first(puestos),
+#          var.i.a. = puestos/lag(puestos,12)-1,
+#          var.a.2.anios = puestos/lag(puestos,24)-1,
+#          rct = "TOTAL")
+#indice.empleo.bind <- bind_rows(indice.empleo,indice.empleo.total)
+ult.datos.empleo <- puestos %>% 
+  filter(fecha == max(fecha))
+
+ramas <- puestos %>%
+  filter(fecha == max(fecha) & rct == "RCT") 
+```
+
+```{r}
+grafico_empleo_puestos_rct <- indice.empleo %>% 
+  filter(rct == "RCT") %>% 
+  ggplot(.,aes(x=as.Date(fecha),y=puestos))+
+  geom_line(color = cols_arg2[1])+
+  #geom_point()+
+  scale_y_continuous(labels=scales::number_format(big.mark=".",decimal.mark = ","))+
+  scale_x_date(#limits = c(as.Date(min(indice.empleo$fecha)),as.Date(max(indice.empleo$fecha)) + months(15)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(.05,.1))+
+  # ggrepel::geom_label_repel(data=filter(indice.empleo,fecha==max(indice.empleo$fecha)),
+  #                                       aes(label = rct),
+  #                  nudge_x = 1,
+  #                  na.rm = TRUE,
+  #                  xlim = c(as.Date(max(indice.empleo$fecha)), as.Date(max(indice.empleo$fecha)) + months(6)),
+  #                  size=3,
+  #                  segment.colour = "black")+
+  theme_minimal()+
+  labs(title="Ramas Características del Turismo. Evolución de los puestos de trabajo registrados ",x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 10,angle=90),
+    axis.text.y   = element_text(size = 10),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "right",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")
+grafico_empleo_puestos_rct
+```
+
+```{r}
+participacion.rct <- indice.empleo %>% 
+  group_by(fecha) %>% 
+  mutate(puestos.tot = sum(puestos),
+            participacion = puestos/puestos.tot) %>% 
+  ungroup()
+
+participacion.rct %>% 
+  mutate(fecha = as.Date(fecha)) %>% 
+  filter(rct == "RCT") %>% 
+  ggplot(aes(x=fecha,y=participacion))+
+  geom_line(color=cols_arg2[1])+
+  scale_y_continuous(limits=c(0.05,0.08),labels=scales::percent_format(big.mark = ".",decimal.mark = ","))+
+  scale_x_date(#limits = c(as.Date(min(indice.empleo$fecha)),as.Date(max(indice.empleo$fecha)) + months(15)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(.04,.08))+
+  theme_minimal()+
+  labs(title="Participación de los puestos de RCT en el total de la economía",x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 10,angle=90),
+    axis.text.y   = element_text(size = 10),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "right",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")
+
+```
+
+### Categorías
+
+Como se mencionó anteriormente, puede agruparse a las ramas turísticas en 5 categorías (<span style="color: #EE3D8F;">**Agencias de Viaje**</span>, <span style="color: #50B8B1;">**Alojamiento**</span>, <span style="color: #F7941E;">**Gastronomía**</span>, <span style="color: #D7DF23;">**Transporte**</span>, <span style="color: #FFD100;">**Otros Servicios Turísticos**</span>) y observar la evolucón comparada. Allí vemos que la Gastronomía gana participación en el total, pasando -aproximadamente- del 36% al 40%. La categoría transporte, a su vez, toma valores de decrecientes desde valores cercanos al 22% y al 19% a lo largo de la serie. La categoría Otros Servicios Turísticos, a su vez, mantiene valores en torno al 22% de participación. La categoría Alojamiento, por su parte, reduce su participación desde el 14-15% al 13%. Las Agencias de Viaje tienen una participación minoritaria en el empleo del sector, en torno al 4%
+
+```{r}
+indice.cat.rct <- puestos %>%  
+  group_by(fecha,cat.rct) %>%
+  summarise(puestos = sum(puestos,na.rm = T)) %>%
+  group_by(cat.rct) %>% 
+  mutate(indice = puestos/first(puestos),
+         var.i.a. = puestos/lag(puestos,12)-1,
+         var.a.2.anios = puestos/lag(puestos,24)-1) %>% 
+  filter(cat.rct != "NO RCT") %>% 
+  group_by(fecha) %>% 
+  mutate(participacion = puestos/sum(puestos))
+
+indice.cat.rct %>% 
+  mutate(fecha = as.Date(fecha)) %>% 
+  ggplot(aes(x=fecha,y=participacion,group=cat.rct,color=cat.rct))+
+  geom_line()+
+  scale_y_continuous(breaks = seq(0,1,by=.1),labels=scales::percent_format(accuracy = 2,big.mark = ".",decimal.mark = ","))+
+  scale_x_date(date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(.04,.08))+
+  scale_color_manual(values = cols_arg2)+
+  theme_minimal()+
+  labs(title="Puestos de trabajo: participación de las categorías en el total RCT",x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 10,angle=90),
+    axis.text.y   = element_text(size = 10),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "bottom",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")
+```
+
+### Todas las RCT
+
+Puede observarse, a su vez, la evolución de los puestos de trabajo tomando cada rama a 6 dígitos individualmente, para observar al interior de las categorías turísticas. Cada línea gris es una rama a 6 dígitos y el **grosor** de cada una depende del peso que tiene el empleo promedio de todo el período en esa rama sobre el total.
+
+```{r}
+indice_empleo_todas <- puestos %>% 
+   group_by(clae6,cat.rct) %>% 
+  mutate(indice = 100*round(puestos/first(puestos),2), 
+         var.i.a. = puestos/lag(puestos,12)-1,
+         var.a.2.anios = puestos/lag(puestos,24)-1)
+```
+
+```{r}
+data_grafico_empleo_todas <- indice.cat.rct %>% 
+  select(fecha,cat.rct,indice.cat = indice,empleo.cat = puestos) %>%
+  right_join(indice_empleo_todas) %>% 
+  group_by(clae6_desc,clae6) %>% 
+  mutate(empleo.prom = mean(puestos,na.rm=T)) %>% 
+  ungroup() %>% 
+  mutate(fecha = as.Date(fecha),
+         indice.cat = 100*indice.cat) %>% 
+  filter(rct == "RCT")
+
+grafico_empleo_series_2 <- ggplot(data_grafico_empleo_todas)+
+  geom_line(aes(x=fecha,y=indice,group=clae6,size=empleo.prom,
+                text = paste('fecha:', format(fecha,"%b-%y"),
+                                              '<br>CLAE:', clae6, 
+                                              '<br>puestos:', format(puestos,big.mark="."),
+                                              '<br>indice:', indice)),
+            alpha=.1)+ 
+  geom_point(aes(x=fecha,y=indice.cat,color=cat.rct,
+                text = paste('fecha:', format(fecha,"%b-%y"),
+                                              '<br>categoría:', cat.rct,
+                                              '<br>puestos:', format(empleo.cat,big.mark="."),
+                                              '<br>indice:', round(indice.cat,0))
+                ),size=.1)+
+  geom_line(aes(x=fecha,y=indice.cat,color=cat.rct#,
+                # text = paste('fecha:', format(fecha,"%b-%y"),
+                #                               '<br>categoría:', cat.rct, 
+                #                               '<br>puestos:', format(empleo.cat,big.mark="."),
+                #                               '<br>indice:', indice.cat)
+                ))+
+  # geom_point(aes(x=fecha,y=indice.cat,color=cat.rct,
+  #                text = paste('fecha:', format(fecha,"%b-%y"),
+  #                                             '<br>categoria:', cat.rct, 
+  #                                             glue('<br>puestos:'), format(empleo.cat,big.mark="."),
+  #                                             '<br>indice:', indice)),size=.8)+
+  scale_y_continuous(labels=scales::number_format(decimal.mark = ","),limits = c(90,200))+
+  scale_x_date(#limits = c(as.Date("2019-01-01"),as.Date(mes.empleo)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(0,10))+
+  scale_color_manual(values=cols_arg2)+
+   scale_size_continuous(range = c(.1,2))+
+  theme_minimal()+
+  labs(title="Evolución del empleo en ramas turísticas",subtitle = "Indice ene 2007=100. El grosor de la línea depende del peso de cada rama en el empleo",
+    x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 10),
+    plot.subtitle = element_markdown(size = 8),
+    plot.caption  = element_markdown(size = 6),
+    strip.text.y  = element_text(size = 8, face = "bold"),
+    axis.text.x   = element_text(size = 6,angle=90),
+    axis.text.y   = element_text(size = 8),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside",
+    strip.text = element_text(face ="bold")
+  )+
+  coord_cartesian(clip = "off")+
+  facet_wrap(~cat.rct)
+# ggsave(plot=grafico_empleo_series_2,"empleo_categorias_facet.png",
+#         width = 9,height = 5)
+grafico_empleo_series_2
+```
+
+
+
+## Puestos por género
+
+Los datos abiertos por el MDP incluyen la apertura por género de los puestos de trabajo registrados en todas las ramas a 6 dígitos, lo que permite ver la participación de las mujeres/varones en las ramas turísticas en comparación con el resto de las ramas.
+
+### RCT vs NO RCT
+
+Se observa en primer lugar, que las ramas turísticas, tomadas en su conjunto, tienen un porcentaje mayor de mujeres en el total de puestos de trabajo. A su vez, la participación femenina es creciente (al menos hasta el inicio de la pandemia), pasando del 36% al 39% a lo largo de la serie.
+
+```{r}
+genero.rct.vs.no.rct <- puestos %>% 
+  group_by(rct,fecha) %>% 
+  summarise(puestos = sum(puestos,na.rm = T),
+            puestos_varones = sum(puestos_varones,na.rm = T),
+            puestos_mujeres = sum(puestos_mujeres,na.rm=T)) %>% 
+  ungroup() %>% 
+  mutate(share_mujeres = puestos_mujeres/puestos)
+genero.total <- puestos %>% 
+  group_by(fecha) %>% 
+  summarise(puestos = sum(puestos,na.rm = T),
+            puestos_varones = sum(puestos_varones,na.rm = T),
+            puestos_mujeres = sum(puestos_mujeres,na.rm=T)) %>% 
+  ungroup() %>% 
+  mutate(share_mujeres = puestos_mujeres/puestos)
+```
+
+
+```{r}
+grafico_genero_series <- ggplot(genero.rct.vs.no.rct,aes(x=as.Date(fecha),y=share_mujeres,color=rct,group=rct,
+                                                  text=paste0('fecha: ', format(as.Date(fecha),"%b-%y"),
+                                             '<br> categoría: ' ,rct,
+                                             '<br> puestos totales: ',format(round(puestos,1),big.mark=".",decimal.mark=","),
+                                             '<br> % de mujeres: ',format(round(100*share_mujeres,1)),"%")))+
+  geom_line()+
+  #geom_point()+
+  scale_y_continuous(labels=scales::number_format(decimal.mark = ",",scale = 100,accuracy = 2))+
+  scale_x_date(#limits = c(as.Date(min(indice.empleo$fecha)),as.Date(max(indice.empleo$fecha)) + months(15)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(0,0))+
+  # ggrepel::geom_label_repel(data=filter(indice.empleo,fecha==max(indice.empleo$fecha)),
+  #                                       aes(label = rct),
+  #                  nudge_x = 1,
+  #                  na.rm = TRUE,
+  #                  xlim = c(as.Date(max(indice.empleo$fecha)), as.Date(max(indice.empleo$fecha)) + months(6)),
+  #                  size=3,
+  #                  segment.colour = "black")+
+  scale_color_manual(values=c(cols_arg2[2],cols_arg2[1]))+
+  theme_minimal()+
+  labs(title="Evolución del porcentaje de mujeres sobre el total de puestos de trabajo",x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 10,angle=90),
+    axis.text.y   = element_text(size = 10),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "right",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")
+grafico_genero_series 
+```
+
+### Categorías
+
+Observando al interior de las ramas turísticas, se observa una gran heterogeneidad en la participación femenina en los puestos de trabajo registrados. Mientras que las categorías Alojamiento y Agencias de Viaje presentan una participación mayor al 50%, Gastronomía y Otros Servicios Turísticos están en torno al 40%, por encima de las ramas no turísticas. Por último, la categoría Transporte presenta una muy baja participación femenina.
+
+```{r}
+genero.categorias <- puestos %>% 
+  group_by(cat.rct,fecha) %>% 
+  summarise(puestos = sum(puestos,na.rm = T),
+            puestos_varones = sum(puestos_varones,na.rm = T),
+            puestos_mujeres = sum(puestos_mujeres,na.rm=T)) %>% 
+  ungroup() %>% 
+  mutate(share_mujeres = puestos_mujeres/puestos)
+```
+
+
+```{r}
+grafico_genero_categorias <- ggplot(genero.categorias,aes(x=as.Date(fecha),y=share_mujeres,color=cat.rct,group=cat.rct,
+                                                  text=paste0('fecha: ', format(as.Date(fecha),"%b-%y"),
+                                             '<br> categoría: ' ,cat.rct,
+                                             '<br> puestos totales: ',format(round(puestos,1),big.mark=".",decimal.mark=","),
+                                             '<br> % de mujeres: ',format(round(100*share_mujeres,1)),"%")))+
+  geom_line()+
+  #geom_point()+
+  scale_y_continuous(breaks=seq(0,.6,by=.1),limits=c(0,.65),labels=scales::percent_format(decimal.mark = ",",accuracy = 2))+
+  scale_x_date(#limits = c(as.Date(min(indice.empleo$fecha)),as.Date(max(indice.empleo$fecha)) + months(15)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(0,0))+
+  # ggrepel::geom_label_repel(data=filter(indice.empleo,fecha==max(indice.empleo$fecha)),
+  #                                       aes(label = rct),
+  #                  nudge_x = 1,
+  #                  na.rm = TRUE,
+  #                  xlim = c(as.Date(max(indice.empleo$fecha)), as.Date(max(indice.empleo$fecha)) + months(6)),
+  #                  size=3,
+  #                  segment.colour = "black")+
+  scale_color_manual(values=cols_arg2)+
+  theme_minimal()+
+  labs(title="Evolución del porcentaje de mujeres sobre el total de puestos de trabajo",x="",y="",
+       subtitle = "Categorías turísticas",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 10,angle=90),
+    axis.text.y   = element_text(size = 10),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "bottom",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")
+grafico_genero_categorias
+```
+
+### Todas las ramas
+
+La disparidad en la participación de las mujeres en RCT puede verse incluso al interior de las categorías.
+A continuación se presenta la evolución de la tasa de feminización de los puestos trabajo en todas las ramas turísticas, agrupadas por categorías. Cada línea gris es una rama a 6 dígitos y el **grosor** de cada una depende del peso que tiene el empleo promedio de todo el período en esa rama sobre el total.
+
+```{r}
+data_grafico_genero_todas <- genero.categorias %>% 
+  select(fecha,cat.rct,share.cat = share_mujeres,empleo.cat = puestos) %>%
+  right_join(puestos) %>% 
+  group_by(clae6_desc,clae6) %>% 
+  mutate(empleo.prom = mean(puestos,na.rm=T)) %>% 
+  ungroup() %>% 
+  mutate(fecha = as.Date(fecha)) %>% 
+  filter(rct == "RCT")
+
+grafico_genero_series_2 <- ggplot(data_grafico_genero_todas)+
+  geom_line(aes(x=fecha,y=share_mujer,group=clae6,size=empleo.prom,
+                text = paste('fecha:', format(fecha,"%b-%y"),
+                                              '<br>CLAE:', clae6, 
+                                              '<br>puestos totales:', format(puestos,big.mark="."),
+                                              '<br>% mujeres:', format(round(100*share_mujer,1),decimal.mark=","),"%")),
+            alpha=.1)+ 
+  geom_point(aes(x=fecha,y=share.cat,color=cat.rct,
+                text = paste('fecha:', format(fecha,"%b-%y"),
+                                              '<br>categoría:', cat.rct,
+                                              '<br>puestos totales:', format(empleo.cat,big.mark="."),
+                                              '<br>% mujeres:', format(round(100*share.cat,1),decimal.mark=","),"%")
+                ),size=.1)+
+  geom_line(aes(x=fecha,y=share.cat,color=cat.rct))+
+  scale_y_continuous(labels=scales::percent_format(decimal.mark = ","),limits = c(0,.8))+
+  scale_x_date(#limits = c(as.Date("2019-01-01"),as.Date(mes.empleo)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(0,10))+
+  scale_color_manual(values=cols_arg2)+
+   scale_size_continuous(range = c(.1,2))+
+  theme_minimal()+
+  labs(title="Evolución del porcentaje de mujeres en puestos de trabajo",x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 10),
+    plot.subtitle = element_markdown(size = 8),
+    plot.caption  = element_markdown(size = 6),
+    strip.text.y  = element_text(size = 8, face = "bold"),
+    axis.text.x   = element_text(size = 6,angle=90),
+    axis.text.y   = element_text(size = 8),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside",
+    strip.text = element_text(face ="bold")
+  )+
+  coord_cartesian(clip = "off")+
+  facet_wrap(~cat.rct)
+
+grafico_genero_series_2
+```
+
+## Empresas
+
+La información del MDP incluye, además, a las empresas que declararon trabajadores en el mes de referencia, agrupadas también en ramas a 6 dígitos. A continuación se presenta, entonces, la evolución de este indicador en ramas turísticas. 
+En línea con la evolución de los puestos de trabajo, se observa un fuerte crecimiento al inicio de la serie, que comienza con alrededor de 40.000 empresas, llegando a máximos de más de 52.000 en las temporadas altas del período 2014-2018, para luego retroceder a valores cercanos al inicio de la serie.
+
+```{r}
+indice.empresas <- puestos %>% 
+  group_by(fecha,rct) %>%
+  summarise(empresas = sum(empresas,na.rm = T)) %>%
+  group_by(rct) %>% 
+  mutate(indice = empresas/first(empresas),
+         var.i.a. = empresas/lag(empresas,12)-1,
+         var.a.2.anios = empresas/lag(empresas,24)-1)
+```
+
+```{r}
+grafico_empresas_puestos_rct <- indice.empresas %>% 
+  filter(rct == "RCT") %>% 
+  ggplot(.,aes(x=as.Date(fecha),y=empresas))+
+  geom_line(color = cols_arg2[1])+
+  #geom_point()+
+  scale_y_continuous(labels=scales::number_format(big.mark=".",decimal.mark = ","))+
+  scale_x_date(#limits = c(as.Date(min(indice.empleo$fecha)),as.Date(max(indice.empleo$fecha)) + months(15)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(.05,.1))+
+  theme_minimal()+
+  labs(title="Ramas Características del Turismo. Evolución de los empleadores que declararon trabajadores ",x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 10,angle=90),
+    axis.text.y   = element_text(size = 10),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "right",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")
+grafico_empresas_puestos_rct
+```
+
+### Empresas por categoría
+
+Ingresando al interior de las RCT, puede observarse la creciente participación de las empresas gastronómicas, en detrimento de la categoría Transporte. 
+
+```{r}
+indice.empresas.cat.rct <- puestos %>%  
+  group_by(fecha,cat.rct) %>%
+  summarise(empresas = sum(empresas,na.rm = T)) %>%
+  group_by(cat.rct) %>% 
+  mutate(indice = empresas/first(empresas),
+         var.i.a. = empresas/lag(empresas,12)-1,
+         var.a.2.anios = empresas/lag(empresas,24)-1) %>% 
+  filter(cat.rct != "NO RCT") %>% 
+  group_by(fecha) %>% 
+  mutate(participacion=empresas/sum(empresas))
+```
+
+```{r}
+indice.empresas.cat.rct %>% 
+  mutate(fecha = as.Date(fecha)) %>% 
+  ggplot(aes(x=fecha,y=participacion,group=cat.rct,color=cat.rct))+
+  geom_line()+
+  scale_y_continuous(breaks = seq(0,1,by=.1),labels=scales::percent_format(accuracy = 2,big.mark = ".",decimal.mark = ","))+
+  scale_x_date(date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(.04,.08))+
+  scale_color_manual(values = cols_arg2)+
+  theme_minimal()+
+  labs(title="Empleadores: participación de las categorías en el total RCT",x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 10,angle=90),
+    axis.text.y   = element_text(size = 10),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "bottom",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")
+```
+
+### Todas las ramas
+
+Al igual que con los puestos de trabajo y la participación por género, la cantidad de empresas puede observarse para todas las ramas turísticas a 6 dígitos.
+
+```{r}
+indice_empresas_todas <- puestos %>% 
+   group_by(clae6,cat.rct) %>% 
+  mutate(indice = 100*round(empresas/first(empresas),2), 
+         var.i.a. = empresas/lag(empresas,12)-1,
+         var.a.2.anios = empresas/lag(empresas,24)-1)
+```
+
+```{r}
+data_grafico_empresas_todas <- indice.empresas.cat.rct %>% 
+  select(fecha,cat.rct,indice.cat = indice,empresas.cat = empresas) %>%
+  right_join(indice_empresas_todas) %>% 
+  group_by(clae6_desc,clae6) %>% 
+  mutate(empresas.prom = mean(empresas,na.rm=T)) %>% 
+  ungroup() %>% 
+  mutate(fecha = as.Date(fecha),
+         indice.cat = 100*indice.cat) %>% 
+  filter(rct == "RCT")
+
+grafico_empresas_series_2 <- ggplot(data_grafico_empresas_todas)+
+  geom_line(aes(x=fecha,y=indice,group=clae6,size=empresas.prom,
+                text = paste('fecha:', format(fecha,"%b-%y"),
+                                              '<br>CLAE:', clae6, 
+                                              '<br>empresas:', format(empresas,big.mark="."),
+                                              '<br>indice:', indice)),
+            alpha=.1)+ 
+  geom_point(aes(x=fecha,y=indice.cat,color=cat.rct,
+                text = paste('fecha:', format(fecha,"%b-%y"),
+                                              '<br>categoría:', cat.rct,
+                                              '<br>empresas:', format(empresas.cat,big.mark="."),
+                                              '<br>indice:', round(indice.cat,0))
+                ),size=.1)+
+  geom_line(aes(x=fecha,y=indice.cat,color=cat.rct))+
+  scale_y_continuous(labels=scales::number_format(decimal.mark = ","),
+                     limits = c(90,200)
+                     )+
+  scale_x_date(#limits = c(as.Date("2019-01-01"),as.Date(mes.empleo)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(0,10))+
+  scale_color_manual(values=cols_arg2)+
+   scale_size_continuous(range = c(.1,2))+
+  theme_minimal()+
+  labs(title="Evolución de las empresas en ramas turísticas",subtitle = "Indice ene 2007=100",
+    x="",y="",
+       caption="DNMyE en base a MDP")+
+  theme(
+    text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 10),
+    plot.subtitle = element_markdown(size = 8),
+    plot.caption  = element_markdown(size = 6),
+    strip.text.y  = element_text(size = 8, face = "bold"),
+    axis.text.x   = element_text(size = 6,angle=90),
+    axis.text.y   = element_text(size = 8),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside",
+    strip.text = element_text(face ="bold")
+  )+
+  coord_cartesian(clip = "off")+
+  facet_wrap(~cat.rct)
+grafico_empresas_series_2
+```
+
+## Consideraciones finales
+
+Como se intentó mostrar en el presente documento, los datos recientemente publicados permiten un  enriquecedor análisis del sector turístico en términos de empleo registrado, ya que la apertura a 6 dígitos permite seleccionar adecuadamente las ramas caracterísicas. A su vez, la posiblidad de ver la participación por género en los puestos de trabajo es un dato novedoso para esta fuente de datos (SIPA) y la cantidad de empresas provee otro indicador para seguir el nivel de actividad del sector.
+A las posibles extensiones de este análisis con los datos presentados se agrega la disponibilidad de datos sobre salarios medios y medianos por rama a 6 dígitos que serán analizados en posteriores entregas.
+
+## Anexo
+
+### Ramas seleccionadas
+
+```{r}
+ramas %>% 
+  arrange(clae6) %>% 
+  mutate(share_mujer = round(100*share_mujer,1)) %>% 
+  select("CLAE"=clae6,"Descripción" = clae6_desc,"Categoría" = cat.rct,"Puestos"=puestos,
+         "% de mujeres" = share_mujer, "Empleadores" = empresas) %>% 
+  datatable(caption=paste0("Ramas seleccionadas y valores de",format(as.Date(max(puestos$fecha)),"%B %Y")))
+```
+## Recurso - Actividad y Empleo en Turismo
+
+[**Reporte**](https://tableros.yvera.tur.ar/informe_empleo.html)
+
+[**Documento Técnico #5: Medición de la contribución económica del turismo**](https://dnme-minturdep.github.io/DT5_actividad_empleo/)
