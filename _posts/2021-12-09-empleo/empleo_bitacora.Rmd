@@ -62,7 +62,9 @@ ramas_turismo_6d <- openxlsx::read.xlsx("/srv/DataDNMYE/empleo/ramas turismo 6 D
   filter(!COD_ACTIVIDAD_F883 %in% c(473000,681098,681099,780000,562091)) %>% 
   pull(COD_ACTIVIDAD_F883)
 
-clae_diccionario <- read.csv("/srv/DataDNMYE/empleo/clae_diccionario.csv") %>% select(clae6,clae6_desc)
+clae_diccionario <- read.csv("/srv/DataDNMYE/empleo/clae_diccionario.csv") %>%
+  select(clae6,clae6_desc) %>% 
+  mutate(clae6_desc = ifelse(clae6 == 492150,"Servicio de transporte automotor interurbano regular de pasajeros, excepto transporte internacional (Incluye los llamados servicios de larga distancia)",clae6_desc))
 ```
 
 ```{r}
@@ -111,7 +113,7 @@ ramas <- puestos %>%
   filter(fecha == max(fecha) & rct == "RCT") 
 ```
 
-El presente documento expone información de puestos de trabajo registrados en ramas turísticas, participación por género y empleadores, a partir de datos mensuales para el período 2007-2021. Se podrá seguir periódicamente estos indicadores [aquí](https://tableros.yvera.tur.ar/reportes/informe_empleo.html), con el agregado de gráficos interactivos.
+El presente documento expone información mensual de puestos de trabajo registrados en ramas características del turismo, la participación por género y la cantidad de empleadores para el período 2007-2021 a partir de la información publicada por el Ministerio de Desarrollo Productivo. Se podrá seguir periódicamente estos indicadores [aquí](https://tableros.yvera.tur.ar/reportes/informe_empleo.html), con el agregado de gráficos interactivos.
 
 <br>
 
@@ -122,9 +124,9 @@ La reciente publicación de nuevos datasets por parte del Ministerio de Desarrol
 
 + *El gasto turístico en el producto debería representar una parte importante del gasto total turístico (condición de la proporción que corresponde al gasto/demanda)*
 
-+ *El gasto turístico en el producto debería representar una parte importante de la oferta del producto en la economía (condición de la proporción que corresponde a la oferta). Este criterio supone que la oferta de un producto característico del turismo se reduciría considerablemente si no hubiera visitantes."*
++ *El gasto turístico en el producto debería representar una parte importante de la oferta del producto en la economía (condición de la proporción que corresponde a la oferta). Este criterio supone que la oferta de un producto característico del turismo se reduciría considerablemente si no hubiera visitantes.*
 
-Una adecuada selección de las ramas características requiere, por un lado, de un análisis del gasto turístico en términos de productos y su contrastación con la oferta generada. Por otro lado, la desagregación de las ramas es fundamental para excluir actividades que, tomadas de manera agregada, pueden contener en su interior ramas turísticas y ramas no turísticas. El caso del transporte sirve como ejemplo. La actividad *Transporte automotor* incluye tanto el servicio de cargas como el de pasajeros, por lo que no sería preciso incluirla completamente entre las RCT. A su vez, el *Transporte automotor de pasajeros* incluye, entre otros, los servicios urbano e interurbano, mientras que solo el segundo es considerado turístico. Por lo tanto, debería excluirse el *Servicio de transporte automotor urbano de pasajeros*. Para que esto sea posible es necesario contar con las ramas de actividad abiertas a 5 dígitos del clasificador de AFIP. Es por esto que la nueva publicación a 6 dígitos es de gran valor para el análisis del sector.
+Una adecuada selección de las ramas características requiere, por un lado, de un análisis del gasto turístico en términos de productos y su contrastación con la oferta generada. Por otro lado, la desagregación de las ramas es fundamental para excluir actividades que, tomadas de manera agregada, pueden contener en su interior ramas turísticas y ramas no turísticas. El caso del transporte sirve como ejemplo. La actividad *Transporte automotor* incluye tanto el servicio de cargas como el de pasajeros, por lo que no sería preciso incluirla completamente entre las RCT. A su vez, el *Transporte automotor de pasajeros* incluye, entre otros, los servicios urbano e interurbano, mientras que sólo el segundo es considerado turístico. Por lo tanto, debería excluirse el *Servicio de transporte automotor urbano de pasajeros*. Para que esto sea posible es necesario contar con las ramas de actividad abiertas a 5 dígitos del clasificador de AFIP. Es por esto que la nueva publicación a 6 dígitos es de gran valor para el análisis del sector.
 
 Esta perspectiva implica analizar al sector desde el punto de vista de la oferta. Esto es, la selección de las RCT que cumplen con los criterios anteriores no tiene en cuenta si una parte de la producción no es consumida por visitantes. El caso de los servicios de provisión de alimentos y bebidas es un ejemplo de esta limitación.
 
@@ -291,7 +293,7 @@ participacion.rct %>%
 
 ### Categorías
 
-Como se mencionó anteriormente, puede agruparse a las ramas turísticas en 5 categorías (<span style="color: #EE3D8F;">**Agencias de Viaje**</span>, <span style="color: #50B8B1;">**Alojamiento**</span>, <span style="color: #F7941E;">**Gastronomía**</span>, <span style="color: #D7DF23;">**Transporte**</span>, <span style="color: #FFD100;">**Otros Servicios Turísticos**</span>) y observar la evolucón comparada. Allí vemos que la Gastronomía gana participación en el total, pasando -aproximadamente- del 36% al 40%. La categoría transporte, a su vez, toma valores de decrecientes desde valores cercanos al 22% y al 19% a lo largo de la serie. La categoría Otros Servicios Turísticos, a su vez, mantiene valores en torno al 22% de participación. La categoría Alojamiento, por su parte, reduce su participación desde el 14-15% al 13%. Las Agencias de Viaje tienen una participación minoritaria en el empleo del sector, en torno al 4%
+Como se mencionó anteriormente, puede agruparse a las ramas turísticas en 5 categorías (<span style="color: #EE3D8F;">**Agencias de Viaje**</span>, <span style="color: #50B8B1;">**Alojamiento**</span>, <span style="color: #F7941E;">**Gastronomía**</span>, <span style="color: #D7DF23;">**Transporte**</span>, <span style="color: #FFD100;">**Otros Servicios Turísticos**</span>) y observar la evolucón comparada. Allí vemos que la Gastronomía gana participación en el total, pasando -aproximadamente- del 36% al 40%. La categoría transporte, a su vez, toma valores decrecientes desde valores cercanos al 22% y al 19% a lo largo de la serie. La categoría Otros Servicios Turísticos, a su vez, mantiene valores en torno al 22% de participación. La categoría Alojamiento, por su parte, reduce su participación desde el 14-15% al 13%. Las Agencias de Viaje tienen una participación minoritaria en el empleo del sector, en torno al 4%
 
 ```{r}
 indice.cat.rct <- puestos %>%  
@@ -540,7 +542,7 @@ grafico_genero_categorias
 ### Todas las ramas
 
 La disparidad en la participación de las mujeres en RCT puede verse incluso al interior de las categorías.
-A continuación se presenta la evolución de la tasa de feminización de los puestos trabajo en todas las ramas turísticas, agrupadas por categorías. Cada línea gris es una rama a 6 dígitos y el **grosor** de cada una depende del peso que tiene el empleo promedio de todo el período en esa rama sobre el total.
+A continuación se presenta la evolución de la tasa de feminización de los puestos de trabajo en todas las ramas turísticas, agrupadas por categorías. Cada línea gris es una rama a 6 dígitos y el **grosor** de cada una depende del peso que tiene el empleo promedio de todo el período en esa rama sobre el total.
 
 ```{r}
 data_grafico_genero_todas <- genero.categorias %>% 
@@ -597,7 +599,7 @@ grafico_genero_series_2
 
 ## Empresas
 
-La información del MDP incluye, además, a las empresas que declararon trabajadores en el mes de referencia, agrupadas también en ramas a 6 dígitos. A continuación se presenta, entonces, la evolución de este indicador en ramas turísticas. 
+La información del MDP incluye, además, a las empresas que declararon trabajadores en el mes de referencia, agrupadas también en ramas a 6 dígitos. A continuación se presenta la evolución de este indicador en ramas turísticas. 
 En línea con la evolución de los puestos de trabajo, se observa un fuerte crecimiento al inicio de la serie, que comienza con alrededor de 40.000 empresas, llegando a máximos de más de 52.000 en las temporadas altas del período 2014-2018, para luego retroceder a valores cercanos al inicio de la serie.
 
 ```{r}
