@@ -1,0 +1,281 @@
+---
+title: "Actualización de microdatos de la Encuesta de Viajes y Turismo de los Hogares (EVyTH)"
+description: |
+ Siguiendo con la política de apertura de datos, la Dirección Nacional de Mercados y Estadísticas (DNMyE) actualiza la base de microdatos de la EVyTH.
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_floate: true
+draft: true    
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+La Encuesta de Viajes y Turismo de los Hogares (EVyTH) tiene como principal objetivo medir la evolución de los viajes realizados por los hogares argentinos, sus características y computar aspectos socio-demográficos que permitan caracterizar a los turistas residentes. Dicho operativo brinda información contínua del turismo nacional de la Argentina, tanto de los viajes turísticos de los residentes dentro de nuestro territorio nacional como los realizados en el exterior[^1].
+
+
+[^1]: Más información disponible en el [**Documento Técnico #1**](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html#evyth) del proyecto de Armonización. 
+
+Ya se cuenta con la última información disponible para generar los principales indicadores referidos al Turismo Interno. La base completa comprende información trimestral que va desde el 1er trimestre de 2019 hasta el 3er trimestre de 2021, inclusive.
+
+Una de las principales ventajas de contar con base de microdatos es poder obtener información que responda a objetivos específicos por parte del o la usuaria y que no esté necesariamente incluída en los informes publicados por la Dirección de Mercados y Estadísticas. 
+
+A continuación, mostraremos algunos ejemplos para obtener una visualización a partir de la base de microdatos provista por la DNMyE. El lenguaje de programación utilizado será R, principalmente por su condición de ser software libre, su potencia para el procesamiento de datos y accesibilidad.
+
+
+***
+
+### Paquetes de funciones necesarios.
+
+Los siguientes paquetes son necesarios para reproducir los resultados aquí presentados:
+
+- [tidyverse](https://www.tidyverse.org/): Conjunto de herramientas para la importación, tratamiento y visualización de datos.
+
+- [glue](https://glue.tidyverse.org/): Función para interpretar código de R dentro de un texto.
+
+- [ggbump](https://github.com/davidsjoberg/ggbump): Visualización de rankings en el tiempo
+
+- [colorspace](https://colorspace.r-forge.r-project.org/): Herramientas para trabajar con paleta de colores
+
+- [ggtext](https://wilkelab.org/ggtext/): Renderizado de formato de texto para visualizaciones con `ggplot2`
+
+- [ggforce](https://ggforce.data-imaginist.com/): Herramientas para generar gráficos de flujo (_alluvial_)
+
+- [ggthemes](https://jrnold.github.io/ggthemes/): Herramienta para sumar opciones estéticas de visualización
+
+
+```{r echo=TRUE, warnings=FALSE, message=FALSE}
+# Carga de librerías
+library(tidyverse)
+library(glue)
+library(ggbump)
+library(colorspace)
+library(ggtext)
+library(ggforce)
+library(ggthemes)
+```
+
+
+```{r include=FALSE}
+### Estética
+options(scipen = 99)
+
+# Paleta colores Presidencia
+cols_arg <- "#37BBED" # Celeste Institucional
+
+cols_arg2 <- c("#EE3D8F", # "ROJO"
+               "#50B8B1", # "VERDE"
+               "#F7941E","#FFD100","#D7DF23", "#9283BE")
+
+getPalette = colorRampPalette(cols_arg2)
+
+theme_titulos <- function() {
+  theme(plot.title = element_text(size = 20, color = "grey", face = "bold"),
+        plot.subtitle = element_text(size = 16, face = "bold"),
+        plot.caption = element_text(size = 12))
+}
+```
+
+
+```{r include=FALSE}
+### Descargo base del portal
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/8c663c32-fee2-4a57-a918-7ab0f3819624/download/evyth_2019_2021t1.txt"
+evyth <- read.table(file = url, sep = ",", header = T)
+
+### Descargo diccionario de registro
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/20e2c018-a2ee-4d97-9c67-a4303f669255/download/evyth_diccionario_registro.txt"
+diccionario <- read.table(file = url, sep = ",", header = T)
+
+### Armo diccionario de aglomerados
+aglomerados <- diccionario %>% 
+  filter(variable == "aglomerado_origen", !is.na(opcion)) %>% 
+  select("aglomerado_cod" = opcion, "aglomerado_etiq" = descripcion)
+
+### Armo diccionario de provincias destino
+provincias <- diccionario %>% 
+  filter(variable == "provincia_destino", !is.na(opcion)) %>% 
+  select("provincia_dest_cod" = opcion, "provincia_dest_etiq" = descripcion)
+
+### Pego etiqueta de aglomerados
+evyth <- evyth %>% 
+  left_join(aglomerados, by = c("aglomerado_origen" = "aglomerado_cod")) %>% 
+  left_join(provincias,  by = c("provincia_destino" = "provincia_dest_cod"))
+
+rm(aglomerados, provincias)
+```
+
+
+
+
+## RANKING PROVINCIAL
+
+```{r fig.height=7, fig.width=10}
+# Defino paleta de colores
+colourCount <- length(unique(evyth$provincia_dest_etiq))
+getPalette <- colorRampPalette(c("#EE3D8F", "#F79420", "#A8922E", "#939A47", "#50B8B1", "#9283BE",
+                                "#32BBED", "#50535C", "#ABABAB", "#CD749D", "#D1A066", "#D5BE56",
+                                "#C1C56E", "#7EB2AE", "#9F97B4", "#83B0C1", "#9F4876", "#A3743E"))
+
+# Armo tabla de datos
+tabla_rank_prov_destino <- evyth %>%
+  filter(anio %in% c(2019, 2020, 2021) & trimestre == 1) %>% 
+  group_by(provincia_dest_etiq, anio) %>% 
+  summarise(personas = sum(pondera)) %>% 
+  arrange(-personas, .by_group = T) %>% ungroup() %>% 
+  group_by(anio) %>% 
+  mutate(rank = rank(-personas, ties.method = "random"),
+         anio = as.numeric(anio)) %>% 
+  ungroup()
+
+# Armo visualización
+ggplot(data = tabla_rank_prov_destino, aes(anio, rank, color = provincia_dest_etiq)) +
+  geom_point(size = 5) +
+  geom_text(data = tabla_rank_prov_destino %>% filter(anio == min(anio)),
+            aes(x = anio - .1,  label = paste0(provincia_dest_etiq, " (", format(personas, big.mark = ".", decimal.mark = ",", digits = 1), ")")),
+            size = 3, hjust = 1) +
+  geom_text(data = tabla_rank_prov_destino %>% filter(anio == max(anio)),
+            aes(x = anio + .1,  label = paste0(provincia_dest_etiq, " (",  format(personas, big.mark = ".", decimal.mark = ",", digits = 1), ")")), 
+            size = 3, hjust = 0) +
+  geom_bump(size = 2, smooth = 4, alpha = 0.9) +
+  scale_x_continuous(limits = c(2018.1, 2021.9),
+                     breaks = c(2019,2020, 2021)) +
+  scale_y_reverse(breaks = seq(0, max(tabla_rank_prov_destino$rank), by = 1)) +
+  labs(
+    #title = "RANKING PROVINCIAL",
+    subtitle = "Cantidad de personas que eligieron a la provincia como destino turístico. Años 2019 y 2021, trimestre 1",
+    y = "",
+    x = NULL,
+    caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - DNMyE") +
+  scale_color_manual(values = darken(getPalette(colourCount), amount = 0.1, space = "combined")) +
+  theme_minimal() +
+  theme_titulos() +
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        # plot.title = element_markdown(size = 15, color = "grey", face = "bold"),
+        # plot.subtitle = element_text(size = 12, face = "bold"),
+        # plot.caption = element_markdown(size = 8),
+        axis.text.x = element_text(size = 12, vjust = 5),
+        axis.text.y = element_blank())
+```
+
+
+## Procedencia del turismo en Salta
+
+### Aglomerado de orígen de los viajeros que ingresaron a la Provincia de Salta
+
+```{r fig.height=7, fig.width=10}
+# Armo paleta de colores
+paleta <- c("#F7941E","#D65151", "#FFD100", "#50B8B1", "#EE3D8F",
+            "#83BEA3", "#D6D089", "#AF83CC", "#C7799B","#D7DF23")
+
+
+# Armo tabla de datos
+evyth_salta <- evyth %>% 
+  filter(anio %in% c(2021) & trimestre == 1 & provincia_destino==66)
+
+# Armo visualización
+evyth_salta %>%
+  group_by(aglomerado_etiq, provincia_dest_etiq) %>% 
+  summarise(personas = sum(pondera)) %>%
+  ungroup() %>% 
+  arrange(-personas, .by_group = T) %>% 
+  mutate(part = personas/sum(personas),
+         part.acum = cumsum(personas)/sum(personas)) %>%
+  mutate(aglomerado_etiq = case_when(part < 0.01 ~ "Resto de aglomerados",
+                                TRUE ~ aglomerado_etiq)) %>%
+  group_by(aglomerado_etiq, provincia_dest_etiq) %>% 
+  summarise(personas = sum(personas),
+            part = sum(part)) %>% 
+  mutate(provincia_dest_etiq = "Salta") %>%
+  rename(Origen = aglomerado_etiq,
+         Destino = provincia_dest_etiq) %>%
+  gather_set_data(1:2) %>%
+  mutate(x = fct_relevel(x, "Origen", "Destino")) %>% 
+  ggplot(aes(x, id = id, split = ifelse(x == "Destino", 
+                                        paste0(y, "\n", glue("({str_trim(format(round(sum(evyth_salta$pondera),-2), big.mark = '.', decimal.mark = ','))})")), 
+                                        paste0(y, glue(" ({str_trim(format(part *100, big.mark = '.', decimal.mark = ',', digits = 1))}%)"))), value = personas)) +
+  geom_parallel_sets(aes(fill = as.factor(Origen)), alpha = 0.7, axis.width = 0.1) +
+  geom_parallel_sets_axes(axis.width = 0.1, color = "lightgrey", fill = "white") +
+  geom_parallel_sets_labels(colour = 'black', 
+                            angle = 0,
+                            #family = familia_fuente, 
+                            hjust = "outward",
+                            size = 4) +
+  scale_fill_manual(values = paleta) +
+  theme_fivethirtyeight() +
+  theme_titulos() +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 7),
+        legend.position = "none",
+        panel.grid.major = element_blank()) +
+  labs(
+    #title = str_wrap("Aglomerado de orígen de los viajeros que ingresaron a la Provincia de Salta", width = 40),
+    subtitle = "1° Trimestre 2021",
+    x="",y="", fill = "",
+    caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - DNMyE")
+```
+
+
+## Procedencia del turismo en San Carlos de Bariloche
+
+### "Aglomerado de orígen de los viajeros que ingresaron a San Carlos de Bariloche"
+
+```{r fig.height=7, fig.width=10}
+# Armo paleta de colores
+paleta <- c("#F7941E","#D65151", "#FFD100", "#50B8B1", "#EE3D8F",
+            "#83BEA3", "#D6D089", "#AF83CC", "#C7799B","#D7DF23")
+
+
+# Armo tabla de datos
+evyth_bariloche <- evyth %>% 
+  filter(anio %in% c(2021) & trimestre == 1 & localidad_destino == "San Carlos de Bariloche")
+
+# Armo visualización
+evyth_bariloche %>%
+  group_by(aglomerado_etiq, localidad_destino) %>% 
+  summarise(personas = sum(pondera)) %>%
+  ungroup() %>% 
+  arrange(-personas, .by_group = T) %>% 
+  mutate(part = personas/sum(personas),
+         part.acum = cumsum(personas)/sum(personas)) %>%
+  mutate(aglomerado_etiq = case_when(part < 0.01 ~ "Resto de aglomerados",
+                                TRUE ~ aglomerado_etiq)) %>%
+  group_by(aglomerado_etiq, localidad_destino) %>% 
+  summarise(personas = sum(personas),
+            part = sum(part)) %>% 
+  mutate(provincia_dest_etiq = "S.C de Bariloche") %>%
+  rename(Origen = aglomerado_etiq,
+         Destino = localidad_destino) %>%
+  gather_set_data(1:2) %>%
+  mutate(x = fct_relevel(x, "Origen", "Destino")) %>% 
+  ggplot(aes(x, id = id, split = ifelse(x == "Destino", 
+                                        paste0(y, "\n", glue("({str_trim(format(round(sum(evyth_bariloche$pondera),-2), big.mark = '.', decimal.mark = ','))})")), 
+                                        paste0(y, glue(" ({str_trim(format(part *100, big.mark = '.', decimal.mark = ',', digits = 1))}%)"))), value = personas)) +
+  geom_parallel_sets(aes(fill = as.factor(Origen)), alpha = 0.7, axis.width = 0.1) +
+  geom_parallel_sets_axes(axis.width = 0.1, color = "lightgrey", fill = "white") +
+  geom_parallel_sets_labels(colour = 'black', 
+                            angle = 0,
+                            #family = familia_fuente, 
+                            hjust = "outward",
+                            size = 4) +
+  scale_fill_manual(values = paleta) +
+  labs(
+    #title = str_wrap("Aglomerado de orígen de los viajeros que ingresaron a San Carlos de Bariloche", width = 40),
+    subtitle = "1° Trimestre 2021",
+    x="",y="", fill = "",
+    caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - DNMyE") +
+  theme_fivethirtyeight() +
+  theme_titulos() +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 7),
+        legend.position = "none",
+        panel.grid.major = element_blank())
+
+```
+
+
+
