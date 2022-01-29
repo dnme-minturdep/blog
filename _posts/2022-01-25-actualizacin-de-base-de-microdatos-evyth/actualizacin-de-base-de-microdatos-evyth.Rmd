@@ -1,0 +1,276 @@
+---
+title: "Actualización de microdatos de la Encuesta de Viajes y Turismo de los Hogares (EVyTH)"
+description: |
+ Siguiendo con la política de apertura de datos, la Dirección Nacional de Mercados y Estadísticas (DNMyE) actualiza la base de microdatos de la EVyTH.
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_floate: true
+draft: true    
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warnings = FALSE, message = FALSE)
+```
+
+La _Encuesta de Viajes y Turismo de los Hogares (EVyTH)_ tiene como principal objetivo medir la evolución de los viajes realizados por los hogares argentinos, sus características y computar aspectos socio-demográficos que permitan caracterizar a los turistas residentes. Dicho operativo brinda información contínua del turismo nacional de la Argentina, tanto de los viajes turísticos de los residentes dentro de nuestro territorio nacional como los realizados en el exterior[^1].
+
+[^1]: Más información disponible en el [**Documento Técnico #1**](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html#evyth) del proyecto de Armonización. 
+
+En esta instancia ya contamos con la actualización de los datos hasta la última información disponible, que permiten generar los principales indicadores referidos al Turismo Interno. Hasta ahora La base completa comprende información trimestral que va desde el 1er trimestre de 2019 hasta el 3er trimestre de 2021, inclusive. El próximo paso será completar la serie desde el inicio de la EVyTH como operativo continuo. 
+
+Una de las principales ventajas de contar con base de microdatos es poder obtener información que responda a objetivos específicos por parte del o la usuaria y que no esté necesariamente incluída en los [informes publicados](https://www.yvera.tur.ar/estadistica/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth) por la Dirección de Mercados y Estadísticas. 
+
+
+```{r}
+# Carga de librerías
+library(tidyverse)
+library(glue)
+library(ggbump)
+library(colorspace)
+library(ggtext)
+library(ggforce)
+library(ggthemes)
+library(dnmye)
+```
+
+## Indicadores.
+
+Para conocer las características principales de la **Encuesta de Viajes y Turismo de los Hogares** se puede acceder a la [ficha técnica](http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/1b5d26f1-0ab9-4908-a44f-9ac5bd685f1b/download/2021.01.05_evyth-data.pdf), también publicada en el portal.
+
+Los ejercicios propuestos fueron procesados mediante el [lenguaje de programación R](https://www.r-project.org/). Entre las principales razones por las cuales se opta por esta alternativa se encuentran la de ser software libre y de código abierto, su potencia para el procesamiento sistemático de datos y capacidad para desarrollar visualizaciónes a medida [^2]. 
+
+[^2]: El código fuente para reproducir el ejercicio aquí propuesto se puede acceder a través del [repositorio de la Dirección Nacional de Mercados y Estadísticas - MINTURyDEP]().
+
+Al mismo tiempo, los resultaros se obtuvieron a través del procesamiento de la base de microdatos disponible en el [Portal de Datos Abiertos](http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/8c663c32-fee2-4a57-a918-7ab0f3819624/download/evyth_microdatos.txt) donde también se accede a un [diccionario de registro](http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/20e2c018-a2ee-4d97-9c67-a4303f669255/download/evyth_diccionario_registro.txt), de donde podemos obtener el conjunto de etiquetas para cada una de las variables y sus respectivas categorías. 
+
+A continuación, presentaremos algunas visualizaciones que funcionan como ejemplo del tipo de ejercicios que se puede realizar a partir de la base de microdatos. 
+
+
+```{r}
+### Descargo base del portal
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/8c663c32-fee2-4a57-a918-7ab0f3819624/download/evythmicrodatos.txt"
+
+evyth <- read.table(file = url, sep = ",", header = T)
+
+
+### Descargo diccionario de registro
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/20e2c018-a2ee-4d97-9c67-a4303f669255/download/evyth_diccionario_registro.txt"
+
+diccionario <- read.table(file = url, sep = ",", header = T)
+
+
+### Armo diccionario de aglomerados
+diccionario <- diccionario %>% 
+  filter(variable %in% c("aglomerado_origen", "provincia_destino") & !is.na(opcion))
+
+
+### Pego etiqueta de aglomerados en base de microdatos
+evyth <- evyth %>% 
+  left_join(diccionario %>% 
+              filter(variable == "aglomerado_origen") %>% 
+              select("aglomerado_cod" = opcion, "aglomerado_etiq" = descripcion), 
+            by = c("aglomerado_origen" = "aglomerado_cod")) %>% 
+  left_join(diccionario %>% 
+              filter(variable == "provincia_destino") %>% 
+              select("provincia_dest_cod" = opcion, "provincia_dest_etiq" = descripcion),
+            by = c("provincia_destino" = "provincia_dest_cod"))
+
+
+# Defino el trimestre como el último disponible del último año disponible
+ano <- max(evyth$anio)
+trim <- max(evyth$trimestre[evyth$anio == ano])
+```
+
+## Ranking provincial según la cantidad de **viajeros** que recibieron.
+
+Se propone en este ejercicio analizar el turismo interno a través del conteo de visitantes que recibieron las provincias y comparar cómo se modifica la posición relativa de cada una de ellas a lo largo de los años 2019, 2020 y 2021. 
+
+
+```{r fig.height=7, fig.width=10}
+# Seteo tamaño de títulos / subtítulos / nota al pie
+theme_titulos <- function() {
+  theme(plot.title = element_text(size = 20, color = "grey", face = "bold"),
+        plot.subtitle = element_text(size = 16, face = "bold"),
+        plot.caption = element_text(size = 12))
+}
+
+
+# Defino paleta de colores
+categorias_cant <- length(unique(evyth$provincia_dest_etiq))
+armo_paleta <- colorRampPalette(unname(dnmye_col()))
+
+
+# Armo tabla de datos
+tabla_rank_prov_destino <- evyth %>%
+  #filter(anio %in% c(2019, 2020, 2021) & trimestre == trim) %>% 
+  filter(anio %in% unique(.$anio) & trimestre == trim) %>% 
+  group_by(provincia_dest_etiq, anio) %>% 
+  summarise(personas = sum(pondera)) %>% 
+  arrange(-personas, .by_group = T) %>% ungroup() %>% 
+  group_by(anio) %>% 
+  mutate(rank = rank(-personas, ties.method = "random"),
+         anio = as.numeric(anio)) %>% 
+  ungroup()
+
+# Armo visualización
+ggplot(data = tabla_rank_prov_destino, aes(anio, rank, color = provincia_dest_etiq)) +
+  geom_point(size = 5) +
+  geom_text(data = tabla_rank_prov_destino %>% filter(anio == min(anio)),
+            aes(x = anio - .1,  label = paste0(provincia_dest_etiq, " (", format(personas, big.mark = ".", decimal.mark = ",", digits = 1), ")")),
+            size = 3, hjust = 1) +
+  geom_text(data = tabla_rank_prov_destino %>% filter(anio == max(anio)),
+            aes(x = anio + .1,  label = paste0(provincia_dest_etiq, " (",  format(personas, big.mark = ".", decimal.mark = ",", digits = 1), ")")), 
+            size = 3, hjust = 0) +
+  geom_bump(size = 2, smooth = 4, alpha = 0.9) +
+  scale_x_continuous(limits = c(2018.1, 2021.9),
+                     breaks = unique(evyth$anio)) +
+  scale_y_reverse(breaks = seq(0, max(tabla_rank_prov_destino$rank), by = 1)) +
+  labs(
+    #title = "RANKING PROVINCIAL",
+    subtitle = glue::glue("Trimestre {trim}, años {min(evyth$anio)} a {max(evyth$anio)}"),
+    y = "",
+    x = NULL,
+    caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - DNMyE") +
+  scale_color_manual(values = darken(armo_paleta(categorias_cant), amount = 0.1, space = "combined")) +
+  theme_minimal() +
+  theme_titulos() +
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        axis.text.x = element_text(size = 12, vjust = 5),
+        axis.text.y = element_blank())
+```
+
+
+El primer paso para obtener el ranking fue elegir los años de los cuales se cuenta información y un trimestre particular (el último disponible) para poder hacer una comparación sin tener en cuenta el efecto estacionalidad. Luego se realizó un conteo de personas en función de la provincia de destino del viaje. Luego de este procesamiento se utilizó el [paquete de R `{ggbump}`](https://github.com/davidsjoberg/ggbump), con el que se pueden crear gráficos de clasificación (_bump chart_), lque nos permiten mostrar la posición relativa de ciertos elementos a lo largo del tiempo. Con ello se logran tres ejes, con los años analizados y la posición de asume cada una de las provincias a lo largo del tiempo.
+
+
+## Aglomerado de orígen de los viajeros que ingresaron a la Provincia de Salta
+
+Para un segundo ejemplo, se eligó a la provincia de Salta como destino y se realizó un conteo de la **cantidad de personas que visitaron dicha provincia, por un lado, en función del aglomerado de orígen de dichos visitantes**. De esta forma, en el gráfico se podrán visualizar dos ejes: a la derecha, la provincia de destino con el conteo de la cantidad de personas que recibió. A la izquiera, el aglomerado de orígen de las personas que viajaron al destino en cuestión, con el peso relativo de cada uno respecto al total.
+
+```{r fig.height=7, fig.width=11}
+# Armo tabla de datos
+evyth_salta <- evyth %>% 
+  filter(anio == max(.$anio) & trimestre == trim & provincia_destino == 66)
+
+# Armo visualización
+evyth_salta %>%
+  group_by(aglomerado_etiq, provincia_dest_etiq) %>% 
+  summarise(personas = sum(pondera)) %>%
+  ungroup() %>% 
+  arrange(-personas, .by_group = T) %>% 
+  mutate(part = personas/sum(personas),
+         part.acum = cumsum(personas)/sum(personas)) %>%
+  mutate(aglomerado_etiq = case_when(part < 0.01 ~ "Resto de aglomerados",
+                                TRUE ~ aglomerado_etiq)) %>%
+  group_by(aglomerado_etiq, provincia_dest_etiq) %>% 
+  summarise(personas = sum(personas),
+            part = sum(part)) %>% 
+  mutate(provincia_dest_etiq = "Salta") %>%
+  rename(Origen = aglomerado_etiq,
+         Destino = provincia_dest_etiq) %>%
+  gather_set_data(1:2) %>%
+  mutate(x = fct_relevel(x, "Origen", "Destino")) %>% 
+  ggplot(aes(x, id = id, split = ifelse(x == "Destino", 
+                                        paste0(y, "\n", glue("({str_trim(format(round(sum(evyth_salta$pondera),-2), big.mark = '.', decimal.mark = ','))})")), 
+                                        paste0(y, glue(" ({str_trim(format(part *100, big.mark = '.', decimal.mark = ',', digits = 1))}%)"))), value = personas)) +
+  geom_parallel_sets(aes(fill = as.factor(Origen)), alpha = 0.7, axis.width = 0.1) +
+  geom_parallel_sets_axes(axis.width = 0.1, color = "lightgrey", fill = "white") +
+  geom_parallel_sets_labels(colour = 'black', 
+                            angle = 0,
+                            #family = familia_fuente, 
+                            hjust = "outward",
+                            size = 4) +
+  dnmye::scale_fill_dnmye() +
+  theme_fivethirtyeight() +
+  theme_titulos() +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 10),
+        legend.position = "none",
+        panel.grid.major = element_blank()) +
+  labs(
+    #title = str_wrap("Aglomerado de orígen de los viajeros que ingresaron a la Provincia de Salta", width = 40),
+    subtitle = glue("{max(evyth_salta$trimestre[evyth_salta$anio == max(evyth_salta$anio)])} Trimestre de {max(evyth_salta$anio)}"),
+    x="",y="", fill = "",
+    caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - DNMyE")
+```
+
+El resultado de esta visualización permite ver cuáles son los principales aglomerados que contribuyen al turismo de una provincia determinada. En particular, vemos como en la Provincia de Salta, para el 3er trimestre de 2021, cerca del 75% de sus visitantes provienen del aglomerado Salta. Muy por detràs, en un segundo lugar se ubica el aglomerado Gran Tucumán - Tafí Viejo, representando un 7% del total de viajeros en el periódo de referencia. 
+
+## Aglomerado de orígen de los viajeros que ingresaron a la ciudad San Carlos de Bariloche
+
+Por último, el siguiente ejemplo se muestra cómo, además de una provincia, **se puede elegir como destino a una localidad**. En este caso, se tomó a la ciudad San Carlos de Bariloche para enteder cuáles son los principales aglomerados de orígen de los visitantes que deciden viajar a la ciudad.
+
+```{r fig.height=7, fig.width=11}
+
+# Armo tabla de datos
+evyth_bariloche <- evyth %>% 
+  filter(anio == max(.$anio) & trimestre == trim & localidad_destino == "San Carlos de Bariloche")
+
+# Armo visualización
+evyth_bariloche %>%
+  group_by(aglomerado_etiq, localidad_destino) %>% 
+  summarise(personas = sum(pondera)) %>%
+  ungroup() %>% 
+  arrange(-personas, .by_group = T) %>% 
+  mutate(part = personas/sum(personas),
+         part.acum = cumsum(personas)/sum(personas)) %>%
+  mutate(aglomerado_etiq = case_when(part < 0.01 ~ "Resto de aglomerados",
+                                TRUE ~ aglomerado_etiq)) %>%
+  group_by(aglomerado_etiq, localidad_destino) %>% 
+  summarise(personas = sum(personas),
+            part = sum(part)) %>% 
+  mutate(provincia_dest_etiq = "S.C de Bariloche") %>%
+  rename(Origen = aglomerado_etiq,
+         Destino = localidad_destino) %>%
+  gather_set_data(1:2) %>%
+  mutate(x = fct_relevel(x, "Origen", "Destino")) %>% 
+  ggplot(aes(x, id = id, 
+             split = ifelse(x == "Destino", 
+                            paste0(y, "\n", glue("({str_trim(format(round(sum(evyth_bariloche$pondera),-2), big.mark = '.', decimal.mark = ','))})")), 
+                            paste0(y, glue(" ({str_trim(format(part *100, big.mark = '.', decimal.mark = ',', digits = 1))}%)"))), value = personas)) +
+  geom_parallel_sets(aes(fill = as.factor(Origen)), alpha = 0.7, axis.width = 0.1) +
+  geom_parallel_sets_axes(axis.width = 0.1, color = "lightgrey", fill = "white") +
+  geom_parallel_sets_labels(colour = 'black', 
+                            angle = 0,
+                            #family = familia_fuente, 
+                            hjust = "outward",
+                            size = 4) +
+  dnmye::scale_fill_dnmye() +
+  labs(
+    #title = str_wrap("Aglomerado de orígen de los viajeros que ingresaron a San Carlos de Bariloche", width = 40),
+    subtitle = glue("{max(evyth_salta$trimestre[evyth_salta$anio == max(evyth_salta$anio)])} Trimestre de {max(evyth_salta$anio)}"),
+    x="",y="", fill = "",
+    caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - DNMyE") +
+  theme_fivethirtyeight() +
+  theme_titulos() +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 10),
+        legend.position = "none",
+        panel.grid.major = element_blank())
+
+```
+
+El resultado evidencia una diversidad de aglomerados de orígen de los viajeros. En primer lugar, separado del resto, se observa a los Partidos del GBA, con un 44% de las personas que decidieron viajar a S.C de Bariloche. En segundo lugar se puede ver como Bahía Blanca aporta una buena porción de los viajeros (14%), seguida del aglomerado Gran San Juan (11%) y Neuquén - Plottier (7%).
+
+
+***
+
+### Recursos - Turismo Interno / Microdatos
+
+[**Dataset**](http://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos)
+
+[**Ficha metodológica**](http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/1b5d26f1-0ab9-4908-a44f-9ac5bd685f1b/download/2021.01.05_evyth-data.pdf)
+
+[**Datos Abiertos**](http://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos)
+
+[**Informes**](https://www.yvera.tur.ar/estadistica/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth)
+
+[**Reportes**](https://tableros.yvera.tur.ar/interno.html)
+
+
+
+
