@@ -7,7 +7,7 @@ output:
     self_contained: false
     toc: true
     toc_floate: true
-draft: true    
+draft: false    
 ---
 
 
