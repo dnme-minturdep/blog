@@ -1,0 +1,558 @@
+---
+title: "Publicación de la Cuenta Satélite de Turismo de la Argentina"
+description: |
+ La Cuenta Satélite de Turismo de la Argentina (CST-A) proporciona el marco para la medición de la contribución del sector turístico a la economía
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: true    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message = F, warning = F, 
+                      fig.align = 'left', fig.width = 10,fig.height = 6)
+library(tidyverse)
+library(gt)
+library(ggtext)
+library(dnmye)
+library(glue)
+```
+
+
+## Introducción
+
+La Dirección Nacional de Mercados y Estadística (DNMyE) presenta la primera estimación y difusión, en el marco de las estadísticas
+oficiales de la Argentina, de una Cuenta Satélite de Turismo (CST-A). Es
+resultado de un proyecto conjunto de colaboración entre de la DNMyE-MINTURDEP y la Dirección Nacional de Cuentas
+Nacionales del Instituto Nacional de Estadística y Censos (DNCN-INDEC).
+
+En una sección específica del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/estadistica/informe/cuenta-satelite-de-turismo){target=”_blank”} se puede acceder al informe técnico con información de los años 2004 y 2016-2019, el documento metodológico y los principales cuadros estadísticos.
+
+Es el corolario de los años invertidos en el desarrollo del Sistema de
+Estadísticas de Turismo de la Argentina que consta de un conjunto de
+operaciones estadísticas e investigaciones, principalmente integrado
+por:
+
+-   La Encuesta de Turismo Internacional
+[(ETI)](https://www.yvera.tur.ar/estadistica/informe/info/turismo-internacional){target=”_blank”}
+
+-   La Encuesta de Viajes y Turismo de los
+Hogares [(EVyTH)](<https://www.yvera.tur.ar/estadistica/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth>){target=”_blank”}
+
+-   La Encuesta de Ocupación Hotelera y parahotelera
+[(EOH)](https://www.yvera.tur.ar/estadistica/informe/info/encuesta-de-ocupacion-hotelera-eoh){target=”_blank”}
+
+-   La explotación de gran cantidad de registros administrativos (datos de
+tránsitos de migraciones internacionales, visitas a los parques
+nacionales, precios, peajes, etc).
+
+El Sistema de Estadísticas de Turismo se integró a las cuentas
+nacionales de la Argentina elaboradas por el INDEC, que aportó las
+cuentas de producción para los sectores turísticos y los cuadros de
+oferta y utilización, con su reciente actualización al año 2018, que son
+la base para la estimación de la serie de la CST-A.
+
+## ¿Qué es la CST?
+
+Es la herramienta recomendada por la [Organización Mundial del
+Turismo](https://www.unwto.org/es){target=”_blank”}, y reconocida por la comunidad
+internacional, para evaluar la importancia económica del turismo,
+conocer las industrias que se benefician de la llegada de visitantes,
+cuantificar el valor agregado directo que se genera al satisfacer la
+demanda turística y la generación de empleo, entre otros.
+Actualmente 54 países tienen una Cuenta Satélite de Turismo con actualización reciente.
+De ellos, 4 son sudamericanos: Colombia, Ecuador, Perú y Uruguay.[^6]
+
+[^6]: **Fuente:** https://www.unwto.org/statistic-data-economic-contribution-of-tourism-and-beyond{target=”_blank”}
+
+El propósito de la CST-A es analizar minuciosamente todos los aspectos
+de la demanda de bienes y servicios asociados con la actividad de los
+visitantes argentinos y extranjeros que recorren nuestro país. Los
+principales resultados que muestra son una serie de indicadores
+económicos consistentes con las Cuentas Nacionales. Estos son:
+
+-   **Producto interno bruto directo turístico (PIBDT):** se trata de la producción de bienes y servicios que se genera directamente por el consumo de los visitantes, sin importar la industria que los produjo. Surge de contrastar el consumo total de los visitantes (turístico interno y receptor) con la producción del país.
+
+-   **Valor agregado bruto directo turístico (VABDT):** corresponde a la parte del valor agregado bruto generado por todas las industrias de una economía, ya sean turísticas o no, que atendieron directamente al consumo de los visitantes.
+
+-   **Valor agregado bruto de la industria del turismo (VABIT):** se refiere al Valor Agregado (es decir, la producción total excluyendo los consumos intermedios o insumos) de un conjunto de ramas de actividad que se consideran características del turismo (Gastronomía, Alojamiento, Transporte, Agencias de Viaje, Actividades de Entretenimiento, Culturales y Deportivas, entre otras).
+
+-   **Empleo de la industria del turismo:** corresponde al total de puestos de trabajo de las ramas de actividad características del turismo.
+
+## Principales resultados de la CST-A
+
+### Consumo Turístico Interior
+
+El consumo turístico interior es el que realizan los visitantes para la adquisición de bienes o servicios en sus viajes más los otros consumos imputados. En la CST-A, se analizan distintos aspectos del gasto turístico, según la residencia de los visitantes:
+
+•	**Gasto Turístico Receptor:** referido a los visitantes no residentes en la Argentina.
+
+•	**Gasto Turístico Interno:** referido a visitantes residentes en la Argentina.
+
+<br>
+
+
+```{r}
+consumo_interior <- data.frame(
+  stringsAsFactors = FALSE,
+       check.names = FALSE,
+                                             rubro = c("Consumo turístico Interior",
+                                                       "Gasto turístico receptor",
+                                                       "Gasto turístico interno",
+                                                       "Otros componentes"),
+                                            `2004` = c(19279,7572,
+                                                       11343,364),
+                                            `2016` = c(297431,73672,
+                                                       217605,6155),
+                                            `2017` = c(407982,91981,
+                                                       30774,8261),
+                                            `2018` = c(532762,156353,
+                                                       368217,8191),
+                                            `2019` = c(800903,262897,
+                                                       529619,8387))
+
+consumo_interior %>% 
+  gt() %>% 
+  cols_label(rubro = "") %>% 
+  fmt_number(columns = 2:6,decimals = 0, dec_mark=",",sep_mark=".") %>% 
+  tab_style(style = list(#cell_text(indent = pct(10),
+                                   cell_text(weight="bold")),
+            locations = cells_body(
+      columns = 1:6,
+      rows = 1)) %>% 
+  tab_style(style = list(cell_text(indent = pct(8))),
+            locations = cells_body(
+      columns = rubro,
+      rows = 2:4)) %>% 
+ cols_align(
+    align = "center",
+    columns = 2:6
+    ) %>% 
+  tab_header(title=md("**Consumo Turístico Interior**"),
+             subtitle=md("*En millones de pesos corrientes. Años 2004 y 2016-2019*")) %>% 
+  tab_source_note(source_note = md("**Fuente:** Ministerio de Turismo y Deportes. Instituto Nacional de Estadística y Censos")) 
+```
+
+<br>
+
+```{r}
+consumo_interior$part = consumo_interior$`2019`/consumo_interior[consumo_interior$rubro == "Consumo turístico Interior","2019"]
+
+grafico_consumo_interior <- consumo_interior %>% 
+  filter(rubro!= "Consumo turístico Interior") %>% 
+  ggplot(aes(x=reorder(rubro,part),y=part))+
+  geom_col(fill=dnmye::dnmye_col(1)[[1]]) +
+ geom_text(aes(x = reorder(rubro,part), y = part, label = paste0(format(round(100*part,1),decimal.mark=",",big.mark="."),"%")),
+        size = 4,  
+            fontface = "bold",
+            #vjust = -.3,
+            hjust=-.2
+        #family = familia_fuente
+            #position=position_dodge(width = 0.9)
+            ) +
+  scale_y_continuous(limits = c(0,0.7))+
+ coord_flip(clip="off")+
+  #scale_y_continuous(limits = c(0,max(vab_sectores$part*1.15)))+
+  theme_minimal() +
+  theme(
+    #text = element_text(family = familia_fuente), 
+    plot.title    = element_markdown(size = 14),
+    plot.subtitle = element_markdown(size = 12),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 7, face = "bold"),
+    axis.text.x   = element_blank(),
+    axis.text.y   = element_markdown(size=12),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside"
+  )+
+  labs(title = "**Consumo Turístico en la Argentina**",
+       subtitle = "Participación según tipo de visitante. Año 2019",
+       caption = "Fuente: DNMyE e INDEC",
+       x = "", y = "")
+
+grafico_consumo_interior
+```
+
+### Participación del turismo en la economía
+
+Los indicadores que surgen de confrontar el consumo turístico con la producción de la economía (PIBdt y VABdt) permiten medir el impacto directo del turismo en la economía. En este sentido, no se tienen en cuenta otros efectos (indirectos o inducidos hacia otras ramas de la economía) asi como el gasto de capital y el consumo de gobierno relativos al turismo. Estos aspectos, asi como diferencias en la forma de medir los componentes directos, explican las discrepancias con mediciones alternativas del impacto del turismo en la economía (v.g. la medición del Consejo Mundial de Viajes y Turismo -[WTTC](https://wttc.org/Research/Economic-Impact){target=”_blank”}-)
+
+A continuación, se presenta el PIBdt y el VABdt para los años en análisis, tanto en pesos corrientes como en porcentaje de participación sobre el PIB de la economía total.
+
+<br>
+
+```{r}
+pib <- data.frame(
+  stringsAsFactors = FALSE,
+       check.names = FALSE,
+            indicador = c("PIB directo turístico",
+                          "PIB economía total","(%) PIBDT / PIB"),
+            `2004` = c(10.168, 485.115, "2,1"),
+            `2016` = c("157.789", "8.228.160", "1,9"),
+            `2017` = c("211.74", "10.660.228", "2,0"),
+            `2018` = c("271.273", "14.744.811", "1,8"),
+            `2019` = c("413.482", "21.802.256", "1,9")
+   )
+
+
+pib %>% 
+  gt() %>% 
+  cols_label(indicador = "") %>% 
+  tab_header(title=md("**Producto Interno Bruto directo turístico**"),
+             subtitle=md("*En millones de pesos corrientes y participación sobre economía total. Años 2004 y 2016-2019*")) %>% 
+  cols_align(
+    align = "center",
+    columns = 2:6
+    ) %>% 
+  tab_source_note(source_note = md("**Fuente:** Ministerio de Turismo y Deportes. Instituto Nacional de Estadística y Censos")) 
+```
+
+<br>
+
+El indicador PIBdt permite la comparación con otros países, en términos de la participación del turismo en la economía:
+
+<br>
+
+```{r}
+pibdt_paises <- data.frame(
+                 stringsAsFactors = FALSE,
+                      check.names = FALSE,
+                                                        Pais = c("Luxemburgo",
+                                                                 "Polonia",
+                                                                 "Kazajistán","Argentina",
+                                                                 "Canadá","Colombia",
+                                                                 "Ecuador","Japón",
+                                                                 "Israel",
+                                                                 "Sudáfrica","EEUU",
+                                                                 "Australia","Chile",
+                                                                 "Puerto Rico","Perú",
+                                                                 "Egipto","Costa Rica",
+                                                                 "Nueva Zelandia",
+                                                                 "Italia","Uruguay",
+                                                                 "Francia","México",
+                                                                 "España"),
+                             `PBIDT.(ultimo.año.disponible)` = c(1.1,1.2,
+                                                                 1.4,1.9,2,2,2,2,
+                                                                 2.6,2.7,2.9,3.1,
+                                                                 3.2,3.4,3.9,4.3,
+                                                                 5,5.9,6,7,7.4,
+                                                                 8.7,12.3))  %>% janitor::clean_names() %>% 
+  mutate(turismo = ifelse(pais == "Argentina","si","no")
+                           )
+
+
+# pibdt_paises <- data.frame(
+#                  stringsAsFactors = FALSE,
+#                       check.names = FALSE,
+#                                 Pais = c("Argentina","Canada","Colombia",
+#                                          "Ecuador","Japan","Israel",
+#                                          "South Africa","United States of America",
+#                                          "Australia","Puerto Rico","Peru",
+#                                          "Russian Federation","Indonesia","Italy",
+#                                          "Thailand","Uruguay","France",
+#                                          "Iceland","Mexico","Spain"),
+#                               `2017` = c(NA,2,2,1.9,2,2.7,2.8,3,3.1,
+#                                          3.6,3.9,3.8,4.1,6,7,8.5,7.2,
+#                                          8.6,8.7,11.8),
+#                               `2018` = c(NA,2.1,2,1.9,2,2.6,2.7,2.9,
+#                                          3.1,3.2,3.9,3.9,NA,NA,6.9,8.1,
+#                                          7.4,NA,8.7,12.3),
+#                               `2019` = c(NA,2,NA,2,NA,NA,NA,NA,NA,
+#                                          3.4,NA,NA,NA,NA,NA,7,NA,NA,NA,
+#                                          NA),
+#      `PBIDT.(ultimo.año.disponible)` = c(1.9,2,2,2,2,2.6,2.7,2.9,
+#                                          3.1,3.4,3.9,3.9,4.1,6,6.9,7,7.4,
+#                                          8.6,8.7,12.3)
+#    ) %>% janitor::clean_names() %>% 
+#   mutate(turismo = ifelse(pais == "Argentina","si","no"))
+```
+
+```{r}
+grafico_pibdt_paises <- pibdt_paises %>% 
+  ggplot(aes(x = reorder(pais,pbidt_ultimo_ano_disponible), y = pbidt_ultimo_ano_disponible)) + 
+ geom_col(aes(fill=turismo)) +
+ geom_text(aes(x = reorder(pais,pbidt_ultimo_ano_disponible), y = pbidt_ultimo_ano_disponible, label = paste0(format(pbidt_ultimo_ano_disponible,decimal.mark=",",big.mark=".")),color=turismo),
+        size = 4,  
+            fontface = "bold",
+            #vjust = -.3,
+            hjust=-.2
+        #family = familia_fuente
+            #position=position_dodge(width = 0.9)
+            ) +
+  scale_fill_manual(values = c("si"=dnmye_col(1)[[1]],
+                               "no" = dnmye_col(5)[[1]] ))+
+  scale_color_manual(values = c("si"=dnmye_col(1)[[1]],
+                               "no" = dnmye_col(5)[[1]] ))+
+  coord_flip(clip="off")+
+  scale_y_continuous(limits = c(0,max(pibdt_paises$pbidt_ultimo_ano_disponible*1.15)))+
+  theme_minimal() +
+  theme(
+    #text = element_text(family = familia_fuente), 
+    plot.title    = element_markdown(size = 14),
+    plot.subtitle = element_markdown(size = 8),
+    plot.caption  = element_markdown(size = 10),
+    strip.text.y  = element_text(size = 8, face = "bold"),
+    axis.text.x   = element_blank(),
+    axis.text.y   = element_markdown(size=10),
+    axis.ticks.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x=element_blank(),
+    legend.position = "none",
+    strip.placement = "outside"
+  )+
+  labs(title = "**PIB directo turístico**",
+       subtitle = "Porcentaje del PIB total. Publicación más reciente (2017-2019)",
+       caption = "Fuente: DNMyE a partir de OMT",
+       x = "", y = "")
+grafico_pibdt_paises
+```
+
+
+<br>
+
+```{r}
+vab <- data.frame(
+  stringsAsFactors = FALSE,
+       check.names = FALSE,
+            indicador = c("VAB directo turístico",
+                          "VAB economía total","(%) VABDT / VAB"),
+            `2004` = c(8.273, 412.427, "2,0"),
+            `2016` = c("123.356", "6.947.933", "1,8"),
+            `2017` = c("164.464", "8.993.361", "1,8"),
+            `2018` = c("208.401", "12.478.124", "1,7"),
+            `2019` = c("306.153", "18.340.548", "1,7")
+   )
+
+vab %>% 
+  gt() %>% 
+  cols_label(indicador = "") %>% 
+  cols_align(
+    align = "center",
+    columns = 2:6
+    ) %>% 
+  tab_header(title=md("**Valor Agregado Bruto directo turístico**"),
+             subtitle=md("*En millones de pesos corrientes y participación sobre economía total. Años 2004 y 2016-2019*")) %>% 
+  tab_source_note(source_note = md("**Fuente:** Ministerio de Turismo y Deportes. Instituto Nacional de Estadística y Censos")) 
+```
+
+<br>
+
+Asimismo, con el VABDT podemos comparar el aporte del turismo en relación con otros sectores de actividad económica del país: 
+
+```{r}
+vab_sectores <- data.frame(
+  stringsAsFactors = FALSE,
+                                           sector = c("Comercio",
+                                                  "Industria manufacturera",
+                                                  "Actividades inmobiliarias",
+                                                  "Administración pública y defensa",
+                                                  "Transporte",
+                                                  "Enseñanza",
+                                                  "Agricultura, ganadería, etc.",
+                                                  "Servicios sociales y de salud",
+                                                  "Turismo (VABit)",
+                                                  "Minería","Construcción",
+                                                  "Intermediación financiera",
+                                                  "Otras actividades de servicios",
+                                                  "Hoteles y restaurantes",
+                                                  "Electricidad, gas y agua",
+                                                  "Turismo (VABdt)",
+                                                  "Servicio doméstico",
+                                                  "Pesca"),
+                                           vab = c(3190187,
+                                                  3154755,2107509,1577551,
+                                                  1183208,1118658,1037669,
+                                                  1026135,906934,866380,830774,652569,
+                                                  565131,423205,392054,306153,
+                                                  138115,76648),
+                                           part = c(0.173941734,0.172009874,0.11490979,
+                                                  0.086014414,0.064513245,
+                                                  0.06099373,0.056577876,
+                                                  0.055948961,0.049,0.047238497,0.045297116,
+                                                  0.035580668,0.030813189,
+                                                  0.023074816,0.021376358,
+                                                  0.016692692,0.007530594,0.004179137)
+                           ) %>% 
+  mutate(turismo = ifelse(str_detect(sector,"Turismo"),"si","no"),
+         sector = stringr::str_trunc(sector,width = 35))
+```
+
+<br>
+
+```{r}
+grafico_vab_sectores <- vab_sectores %>% 
+  mutate(sector = case_when(sector == "Turismo (VABit)" ~ glue("<span style='color:{'#EE3D8F'}'>**Turismo (VABit)**</span>"),
+                            sector == "Turismo (VABdt)" ~  glue("<span style='color:{'#EE3D8F'}'>**Turismo (VABdt)**</span>"),  
+                            TRUE ~sector)) %>% 
+  ggplot(aes(x = reorder(sector,part), y = part)) + 
+ geom_col(aes(fill=turismo)) +
+ geom_text(aes(x = reorder(sector,part), y = part, label = paste0(format(round(100*part,1),decimal.mark=",",big.mark=".")),
+               color=turismo),
+        size = 4,  
+            fontface = "bold",
+            #vjust = -.3,
+            hjust=-.2
+        #family = familia_fuente
+            #position=position_dodge(width = 0.9)
+            ) +
+  scale_fill_manual(values = c("si"=dnmye_col(1)[[1]],
+                               "no" = dnmye_col(5)[[1]] ))+
+  scale_color_manual(values = c("si"=dnmye_col(1)[[1]],
+                               "no" = dnmye_col(5)[[1]] ))+
+  coord_flip(clip="off")+
+  scale_y_continuous(limits = c(0,max(vab_sectores$part*1.15)))+
+  theme_minimal() +
+  theme(
+    #text = element_text(family = familia_fuente), 
+    plot.title    = element_markdown(size = 14),
+    plot.subtitle = element_markdown(size = 12),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_markdown(size = 7, face = "bold"),
+    axis.text.x   = element_blank(),
+    axis.text.y   = element_markdown(size=10),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside"
+  )+
+  labs(title = "**Valor Agregado Bruto**",
+       subtitle = "Porcentaje del VAB total. Año 2019",
+       caption = "Fuente: DNMyE e INDEC",
+       x = "", y = "")
+grafico_vab_sectores
+```
+
+<br>
+
+### Empleo en la industria turística
+
+La industria turística reúne a las ramas de actividad que producen principalmente productos característicos del turismo. En base a ella se miden indicadores como el Valor agregado bruto de las industrias turísticas (VABIT) o el Empleo en las industrias turísticas.
+
+<br>
+
+```{r}
+empleo <- data.frame(
+  stringsAsFactors = FALSE,
+       check.names = FALSE,
+            indicador = c("Empleo industrias turísticas","Empleo economía total",
+                          "(%) Empleo IT / Empleo"),
+            `2004` = c(931, 14911, 6.2),
+            `2016` = c(1246, 2002, 6.2),
+            `2017` = c(1274, 20345, 6.3),
+            `2018` = c(1271, 20573, 6.2),
+            `2019` = c(126, 20855, 6.0)
+   )
+
+
+empleo %>% 
+  gt() %>% 
+  fmt_number(columns = 2:6,rows = 3,decimals = 1, dec_mark = ",",sep_mark = ".") %>% 
+  fmt_number(columns = 2:6,rows = 1:2,decimals = 0, dec_mark = ",",sep_mark = ".") %>% 
+  cols_label(indicador = "") %>% 
+  cols_align(
+    align = "center",
+    columns = 2:6
+    ) %>% 
+  tab_header(title=md("**Puestos de trabajo en las industrias características del turismo**"),
+             subtitle=md("*Total y participación sobre economía total. Años 2004 y 2016-2019*")) %>% 
+  tab_source_note(source_note = md("**Fuente:** Ministerio de Turismo y Deportes. Instituto Nacional de Estadística y Censos")) 
+```
+
+
+```{r}
+empleo <- data.frame(
+  stringsAsFactors = FALSE,
+                   sector = c("Comercios","Industria manufacturera",
+                          "Servicio doméstico","Construcción",
+                          "Administración pública y defensa",
+                          "Actividades inmobiliarias",
+                          "Enseñanza pública","Agricultura, ganadería, etc.",
+                          "Turismo",
+                          "Transporte, almacenamiento y comunicaciones",
+                          "Otras actividades de servicios",
+                          "Servicios sociales y de salud privados","Enseñanza privada","Hoteles y restaurantes",
+                          "Servicios sociales y de salud públicos",
+                          "Intermediación financiera","Electricidad, gas y agua",
+                          "Minería","Pesca"),
+                   puestos = c(3578,2326,1742,1727,
+                          1601,1460,1446,1387,1260,1201,1117,863,698,677,
+                          471,308,128,103,22),
+                   V3 = c(0.17157534,0.111522053,
+                          0.08353611,0.082815747,0.076770796,0.069997054,
+                          0.069356157,0.066494542,0.06039948,0.05757822,
+                          0.053541749,0.041366899,0.033490999,0.032486324,
+                          0.02256319,0.014774649,0.006143486,0.004919384,0.001067302),
+                   V4 = c(0.206391562,0.134152208,
+                          0.100487332,0.099620793,0.092349194,0.084200919,
+                          0.08342997,0.079987674,0.072655797,0.069262044,
+                          0.064406489,0.049761108,0.040287023,0.039078477,
+                          0.027141732,0.017772734,0.007390127,0.00591763,
+                          0.00128388)
+   ) %>% 
+  mutate(turismo = ifelse(str_detect(sector,"Turismo"),"si","no"),
+         sector = stringr::str_trunc(sector,width = 35))
+```
+
+<br>
+
+En el siguiente gráfico puede observarse el aporte de las ramas características del turismo al empleo, en comparación al resto de los sectores de la economía.
+
+<br>
+
+```{r}
+grafico_empleo_sectores <- empleo %>%
+  mutate(sector = ifelse(sector == "Turismo",glue("<span style='color:{'#EE3D8F'}'>**Turismo**</span>"),sector)) %>% 
+  ggplot(aes(x = reorder(sector,puestos), y = puestos)) + 
+ geom_col(aes(fill=turismo)) +
+ geom_text(aes(x = reorder(sector,puestos), y = puestos, label = paste0(format(round(puestos/1000,1),decimal.mark=",",big.mark=".")),
+               color=turismo),
+        size = 4,  
+            fontface = "bold",
+            #vjust = -.3,
+            hjust=-.2
+        #family = familia_fuente
+            #position=position_dodge(width = 0.9)
+            ) +
+  scale_fill_manual(values = c("si"=dnmye_col(1)[[1]],
+                               "no" = dnmye_col(5)[[1]] ))+
+  scale_color_manual(values = c("si"=dnmye_col(1)[[1]],
+                               "no" = dnmye_col(5)[[1]] ))+
+  coord_flip(clip="off")+
+  scale_y_continuous(limits = c(0,max(empleo$puestos*1.15)))+
+  theme_minimal() +
+  theme(
+    #text = element_text(family = familia_fuente), 
+    plot.title    = element_markdown(size = 14),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 7, face = "bold"),
+    axis.text.x   = element_blank(),
+    axis.text.y   = element_markdown(size=10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside"
+  )+
+  labs(title = "**Empleo por sector**",
+       subtitle = "Puestos de trabajo (millones). Año 2019",
+       caption = "Fuente: DNMyE e INDEC",
+       x = "", y = "")
+grafico_empleo_sectores
+```
+
+
+
+## Recursos - CST-A
+
+[**Publicación**](https://indec.gob.ar){target=”_blank”}
+
+[**Documento Técnico #5: Medición de la contribución económica del turismo**](https://dnme-minturdep.github.io/DT5_actividad_empleo/){target=”_blank”}
