@@ -7,7 +7,7 @@ output:
     self_contained: true
     toc: true
     toc_floate: true
-draft: true    
+draft: false    
 editor_options: 
   markdown: 
     wrap: 72
@@ -66,9 +66,9 @@ conocer las industrias que se benefician de la llegada de visitantes,
 cuantificar el valor agregado directo que se genera al satisfacer la
 demanda turística y la generación de empleo, entre otros.
 Actualmente 54 países tienen una Cuenta Satélite de Turismo con actualización reciente.
-De ellos, 4 son sudamericanos: Colombia, Ecuador, Perú y Uruguay.[^6]
+De ellos, 4 son sudamericanos: Colombia, Ecuador, Perú y Uruguay[^6].
 
-[^6]: **Fuente:** https://www.unwto.org/statistic-data-economic-contribution-of-tourism-and-beyond{target=”_blank”}
+[^6]: **Fuente:** https://www.unwto.org/statistic-data-economic-contribution-of-tourism-and-beyond
 
 El propósito de la CST-A es analizar minuciosamente todos los aspectos
 de la demanda de bienes y servicios asociados con la actividad de los
