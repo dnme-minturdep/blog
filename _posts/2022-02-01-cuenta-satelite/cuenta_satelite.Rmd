@@ -553,6 +553,6 @@ grafico_empleo_sectores
 
 ## Recursos - CST-A
 
-[**Publicación**](https://indec.gob.ar){target=”_blank”}
+[**Publicación**](https://www.yvera.tur.ar/estadistica/informe/cuenta-satelite-de-turismo){target=”_blank”}
 
 [**Documento Técnico #5: Medición de la contribución económica del turismo**](https://dnme-minturdep.github.io/DT5_actividad_empleo/){target=”_blank”}
