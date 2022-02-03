@@ -449,7 +449,7 @@ empleo <- data.frame(
             `2016` = c(1246, 2002, 6.2),
             `2017` = c(1274, 20345, 6.3),
             `2018` = c(1271, 20573, 6.2),
-            `2019` = c(126, 20855, 6.0)
+            `2019` = c(1260, 20855, 6.0)
    )
 
 
@@ -463,7 +463,7 @@ empleo %>%
     columns = 2:6
     ) %>% 
   tab_header(title=md("**Puestos de trabajo en las industrias características del turismo**"),
-             subtitle=md("*Total y participación sobre economía total. Años 2004 y 2016-2019*")) %>% 
+             subtitle=md("*En miles y participación sobre economía total. Años 2004 y 2016-2019*")) %>% 
   tab_source_note(source_note = md("**Fuente:** Ministerio de Turismo y Deportes. Instituto Nacional de Estadística y Censos")) 
 ```
 
