@@ -9,7 +9,7 @@ navbar:
   search: false
   right:
     - text: "Calendario"
-      href: http://calendario.yvera.gob.ar/
+      href: https://calendario.yvera.tur.ar/
     - text: "Datos Abiertos"
       href: http://datos.yvera.gob.ar/
     - text: "Informes"
