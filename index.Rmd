@@ -1,5 +1,5 @@
 ---
-title: "Bitácora"
+title: "Novedades e Investigaciones"
 site: distill::distill_website
 listing: posts
 ---
