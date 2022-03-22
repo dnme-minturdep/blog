@@ -18,30 +18,29 @@ editor_options:
 knitr::opts_chunk$set(echo = FALSE, warnings = FALSE, message = FALSE)
 ```
 
-En el marco de [Principios Fundamentales de las Estadísticas Oficiales](https://unstats.un.org/unsd/dnss/hb/S-fundamental%20principles_A4-WEB.pdf) (*Relevancia, imparcialidad, acceso equitativo, responsabilidad y transparencia, entre otros*) y en adhesión a las [Recomendaciones Internacionales](https://www.oecd.org/statistics/good-practice-toolkit/Brochure-Recommendation%20of%20the%20OECD%20Council%20on%20Good%20Statistical%20Practice_SPANISH.pdf) reconocidas por el [Sistema Estadístico Nacional](https://www.indec.gob.ar/indec/web/Institucional-Indec-SistemaEstadistico) (*Asegurar un acceso y una difusión de datos fáciles de usar, de modo que las estadísticas se presenten de forma clara y comprensible, se publiquen de una manera adecuada y conveniente, incluso en forma legible por máquina ( "datos abiertos")*), la **Dirección Nacional de Mercados y Estadística (DNMyE)** pone a disposición del conjunto de la población el [**Calendario de Difusión de Estadísticas del Turismo**](https://calendario.yvera.tur.ar/).
+En el marco de [Principios Fundamentales de las Estadísticas Oficiales](https://unstats.un.org/unsd/dnss/hb/S-fundamental%20principles_A4-WEB.pdf) (*Relevancia, imparcialidad, acceso equitativo, responsabilidad y transparencia, entre otros*) y en adhesión a las [Recomendaciones Internacionales](https://www.oecd.org/statistics/good-practice-toolkit/Brochure-Recommendation%20of%20the%20OECD%20Council%20on%20Good%20Statistical%20Practice_SPANISH.pdf) reconocidas por el [Sistema Estadístico Nacional](https://www.indec.gob.ar/indec/web/Institucional-Indec-SistemaEstadistico) (*Asegurar un acceso y una difusión de datos fáciles de usar, de modo que las estadísticas se presenten de forma clara y comprensible, se publiquen de una manera adecuada y conveniente, incluso en forma legible por máquina - "datos abiertos"*), la **Dirección Nacional de Mercados y Estadística (DNMyE)** pone a disposición del conjunto de la población el [**Calendario de Difusión de Estadísticas del Turismo**](https://calendario.yvera.tur.ar/).
 
 ```{r, out.width='100%', fig.align='center', echo=FALSE}
 knitr::include_graphics('img/ejemplo_calendario_dnmye.png')
 ```
 
-## Conjunto de información calendarizada:
+## Conjunto de información calendarizada (Informes, Datos Abiertos y Reportes):
 
-- Encuesta de Ocupación Hotelera (EOH) - (Informes, Datos Abiertos y Reportes)
+- Encuesta de Ocupación Hotelera (EOH) 
 
-- Encuesta de Turismo Internacional (ETI) - (Informes, Datos Abiertos y Reportes)
+- Encuesta de Turismo Internacional (ETI) 
 
-- Encuesta de Viajes y Turismo de los Hogares (EVyTH) - (Base usuaria)
+- Encuesta de Viajes y Turismo de los Hogares (EVyTH) - incluye base usuaria
 
-- Cuenta Satélite de Turismo de la Argentina - (Informe)
+- Cuenta Satélite de Turismo de la Argentina
 
 - Ingresos y Egresos por Turismo en el Mercado Único y Libre de Cambios (MULC) - (Reporte)
 
-- Parques Nacionales (PN) - (Reportes, Tableros y Datos Abiertos)
-
+- Parques Nacionales (PN)
 
 ## Ejemplo
 
-Con esta nueva herramienta se podrá visualizar como, por ejemplo, el 21 de marzo de 2022 se publicó y dió acceso a todo lo que produce la DNMyE respecto a la **Encuesta de Ocupación Hotelera** para el período de enero de 2022: 
+Con esta nueva herramienta se podrá visualizar como, por ejemplo, el 21 de marzo de 2022 se publicó y dio acceso a todo lo que produce la DNMyE respecto a la **Encuesta de Ocupación Hotelera** para el período de enero de 2022: 
 
 - 🔗 [Informe](https://www.yvera.tur.ar/estadistica/informe/documentos/descarga/621684925e880402249321.pdf)
 
@@ -50,7 +49,7 @@ Con esta nueva herramienta se podrá visualizar como, por ejemplo, el 21 de marz
 - 📖 [Datos Abiertos](https://datos.yvera.gob.ar/dataset?groups=sector-hotelero)
 
 
-De esta forma se continúa el trabajo de cara a planificar y ejecutar programas de disfusión para la producción estadística, asi como diseñar e implementar estrategias de comunicación externa de divulgación en cuanto a lo producido por el área a lo largo del año calendario.
+De esta forma se continúa el trabajo de cara a planificar y ejecutar programas de difusión para la producción estadística, asi como diseñar e implementar estrategias de comunicación externa de divulgación en cuanto a lo producido por el área a lo largo del año calendario.
 
 
 ## Bitácora
