@@ -1,0 +1,58 @@
+---
+title: "Publicación del Calendario de Difusión"
+description: |
+ Siguiendo con la política de apertura de información estadística, se pone a disposición el calendario de publicaciones de la Dirección de Mercados y Estadísticas, desde donde se podrá acceder a los productos estadísticos del área.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warnings = FALSE, message = FALSE)
+```
+
+En el marco de [Principios Fundamentales de las Estadísticas Oficiales](https://unstats.un.org/unsd/dnss/hb/S-fundamental%20principles_A4-WEB.pdf) (*Relevancia, imparcialidad, acceso equitativo, responsabilidad y transparencia, entre otros*) y en adhesión a las [Recomendaciones Internacionales](https://www.oecd.org/statistics/good-practice-toolkit/Brochure-Recommendation%20of%20the%20OECD%20Council%20on%20Good%20Statistical%20Practice_SPANISH.pdf) reconocidas por el [Sistema Estadístico Nacional](https://www.indec.gob.ar/indec/web/Institucional-Indec-SistemaEstadistico) (*Asegurar un acceso y una difusión de datos fáciles de usar, de modo que las estadísticas se presenten de forma clara y comprensible, se publiquen de una manera adecuada y conveniente, incluso en forma legible por máquina ( "datos abiertos")*), la **Dirección Nacional de Mercados y Estadística (DNMyE)** pone a disposición del conjunto de la población el [**Calendario de Difusión de Estadísticas del Turismo**](https://calendario.yvera.tur.ar/).
+
+```{r, out.width='100%', fig.align='center', echo=FALSE}
+knitr::include_graphics('img/ejemplo_calendario_dnmye.png')
+```
+
+## Conjunto de información calendarizada:
+
+- Encuesta de Ocupación Hotelera (EOH) - (Informes, Datos Abiertos y Reportes)
+
+- Encuesta de Turismo Internacional (ETI) - (Informes, Datos Abiertos y Reportes)
+
+- Encuesta de Viajes y Turismo de los Hogares (EVyTH) - (Base usuaria)
+
+- Cuenta Satélite de Turismo de la Argentina - (Informe)
+
+- Ingresos y Egresos por Turismo en el Mercado Único y Libre de Cambios (MULC) - (Reporte)
+
+- Parques Nacionales (PN) - (Reportes, Tableros y Datos Abiertos)
+
+
+## Ejemplo
+
+Con esta nueva herramienta se podrá visualizar como, por ejemplo, el 21 de marzo de 2022 se publicó y dió acceso a todo lo que produce la DNMyE respecto a la **Encuesta de Ocupación Hotelera** para el período de enero de 2022: 
+
+- 🔗 [Informe](https://www.yvera.tur.ar/estadistica/informe/documentos/descarga/621684925e880402249321.pdf)
+
+- 💻 [Reporte](https://tableros.yvera.tur.ar/eoh.html)
+
+- 📖 [Datos Abiertos](https://datos.yvera.gob.ar/dataset?groups=sector-hotelero)
+
+
+De esta forma se continúa el trabajo de cara a planificar y ejecutar programas de disfusión para la producción estadística, asi como diseñar e implementar estrategias de comunicación externa de divulgación en cuanto a lo producido por el área a lo largo del año calendario.
+
+
+## Bitácora
+
+Al mismo tiempo, la DNMyE inaugura un esquema de publicación semanal en la bitácora con los aspectos más importantes en cuanto novedades del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/), publicación de nuevos informes sobre diversas temáticas relacionadas al sector, apertura de procesos, incorporación de fuentes o metodologías, entre muchos otros temas.
