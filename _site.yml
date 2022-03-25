@@ -4,8 +4,8 @@ favicon: favicon.ico
 output_dir: "docs"
 navbar:
   logo:
-    image: logo.png
-    href: http://turismo.gob.ar/
+    image: sinta.png
+    href: https://www.yvera.tur.ar/sinta/
   search: false
   right:
     - text: "SINTA"
