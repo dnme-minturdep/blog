@@ -1,0 +1,121 @@
+---
+title: "Tutorial SINTA"
+description: |
+  A short description of the post.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+En la [Bienvenida](https://bitacora.yvera.tur.ar/posts/bienvenida/) al espacio de la **Bitácora** inauguramos el [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/), comentando las distintas estratégias desarrolladas para acceder al conjunto de información recolectada, procesada, analizada y difundida por parte de la Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE-MINTURyDEP).
+
+En esta oportunidad, dejamos a disposición un set de videos a modo de tutorial con las diversas posibilidades de navegación hacia el interior del **SINTA**, en función de las necesidades particulares de las y los usuarios de estadísticas de turismo. De esta forma, se podrá visualizar como acceder al mismo SINTA, como así también al resto de las secciones que lo conforman: **Bitácora**, **Informes**, **Datos Abiertos**, **Armonización**, **Tableros**, **Calendario**, **Cuenta Satélite de Turismo** y el **Monitor de Provincias**
+
+
+***
+
+Se detalla abajo cada una de las secciones con sus respectivos videos para conocer como navegar en ellas:
+
+## SINTA
+
+Acceso al Sistema de Información Turística de la Argentina
+
+<video autosize: true controls>
+  <source src="video/www.yvera.mp4" type="video/mp4">
+</video>
+
+
+## Bitácora
+
+Un espacio virtual de la Dirección Nacional de Mercados y Estadística (DNMyE) en el que nos proponemos compartir avances de investigaciones, datos y reportes relacionados con el desarrollo de la industria turística de Argentina.
+
+<video width="680" height="480" controls>
+  <source src="video/bitacora.mp4" type="video/mp4">
+</video>
+
+
+
+## Informes
+
+Publicaciones periódicas y no periodicas que produce la DNMyE con información estadística sobre los principales temas del turísmo.
+
+<video autosize: true controls>
+  <source src="video/informes.mp4" type="video/mp4">
+</video>
+
+<br>
+
+## Datos Abiertos
+
+El portal de Datos Abiertos de Turismo incluye un set datasets y recursos disponibles en diferentes niveles de desagregación y en variados formatos en caso de que se necesite un reprocesamiento de los mismos. 
+
+<video autosize: true controls>
+  <source src="video/datos_abiertos.mp4" type="video/mp4">
+</video>
+
+<br>
+
+## Armonización
+
+Proyecto en el cual se desarrollaron una serie de actividades junto a las jurisdicciones provinciales, tales como: diagnóstico de funcionamiento y capacidades de las oficinas a cargo de las estadísticas de turismo en el país; desarrollo de materiales con propuestas teóricas y metodológicas para el trabajo estadístico de turismo a nivel subnacional; capacitaciones teóricas y prácticas a referentes técnicos de estadísticas; la creación de un foro de intercambio permanente entre referntes técnicos de los distintos niveles de gobierno; y la generación de una herramienta de gestión de datos federal.
+
+<video autosize: true controls>
+  <source src="video/armonizacion.mp4" type="video/mp4">
+</video>
+
+<br>
+
+## Tableros y Reportes
+
+### Tableros
+
+El micrositio TABLEROS y REPORTES reúne una serie de recursos que tienen como objetivo facilitar el acceso a los últimos datos disponibles de una multiplicidad de indicadores del turismo en Argentina.
+
+<video autosize: true controls>
+  <source src="video/tablero.mp4" type="video/mp4">
+</video>
+
+<br>
+
+### Reportes
+
+<video autosize: true controls>
+  <source src="video/tablero_reporte.mp4" type="video/mp4">
+</video>
+
+<br>
+
+## Calendario
+
+Siguiendo con la política de apertura de información estadística, se pone a disposición el calendario de publicaciones de la Dirección de Mercados y Estadísticas, desde donde se podrá acceder a los productos estadísticos del área.
+
+<video autosize: true controls>
+  <source src="video/calendario.mp4" type="video/mp4">
+</video>
+
+<br>
+
+## Cuenta Satélite de Turismo
+
+La Cuenta Satélite de Turismo de Argentina (CST-A) proporciona el marco para la medición de la contribución del sector turístico a la economía y sus interrelaciones con el resto de las actividades. Para la elaboración de la CST, se analizan en forma pormenorizada todos los aspectos de la demanda de bienes y servicios asociados con el turismo, al establecer la vinculación real con la oferta de dichos bienes y servicios dentro de la economía y al describir cómo interactúa esa oferta con otras actividades económicas.
+
+<br>
+
+## Monitor de Provincias
+
+El Monitor de Turismo en las Provincias procura servir como herramienta de consulta de los últimos datos disponibles de una variedad de indicadores relativos al turismo en la Argentina, poniendo el foco en el nivel provincial.
+
+
+<video autosize: true controls><source src="video/provincias.mp4" type="video/mp4"></video>
