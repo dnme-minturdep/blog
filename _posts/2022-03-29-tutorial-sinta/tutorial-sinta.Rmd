@@ -63,7 +63,7 @@ Publicaciones periódicas y no periodicas que produce la DNMyE con información 
 
 ## Datos Abiertos
 
-El portal de Datos Abiertos de Turismo incluye un set datasets y recursos disponibles en diferentes niveles de desagregación y en variados formatos en caso de que se necesite un reprocesamiento de los mismos. 
+El portal de Datos Abiertos de Turismo incluye un conjunto de datasets y recursos disponibles en diferentes niveles de desagregación y en variados formatos en caso de que se necesite un reprocesamiento de los mismos. 
 
 <video width="680" height="480" controls>
   <source src="/srv/shiny-server/dnmye/video/sinta/datos_abiertos.mp4" type="video/mp4">
@@ -75,7 +75,7 @@ El portal de Datos Abiertos de Turismo incluye un set datasets y recursos dispon
 
 ## Armonización
 
-Proyecto en el cual se desarrollaron una serie de actividades junto a las jurisdicciones provinciales, tales como: diagnóstico de funcionamiento y capacidades de las oficinas a cargo de las estadísticas de turismo en el país; desarrollo de materiales con propuestas teóricas y metodológicas para el trabajo estadístico de turismo a nivel subnacional; capacitaciones teóricas y prácticas a referentes técnicos de estadísticas; la creación de un foro de intercambio permanente entre referntes técnicos de los distintos niveles de gobierno; y la generación de una herramienta de gestión de datos federal.
+Proyecto en el cual se desarrolló una serie de actividades junto a las jurisdicciones provinciales, tales como: diagnóstico de funcionamiento y capacidades de las oficinas a cargo de las estadísticas de turismo en el país; desarrollo de materiales con propuestas teóricas y metodológicas para el trabajo estadístico de turismo a nivel subnacional; capacitaciones teóricas y prácticas a referentes técnicos de estadísticas; la creación de un foro de intercambio permanente entre referntes técnicos de los distintos niveles de gobierno; y la generación de una herramienta de gestión de datos federal.
 
 <video width="680" height="480" controls>
   <source src="/srv/shiny-server/dnmye/video/sinta/armonizacion.mp4" type="video/mp4">
