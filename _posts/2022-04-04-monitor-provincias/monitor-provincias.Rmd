@@ -49,7 +49,3 @@ knitr::include_graphics('img/monitor_2.png')
 
 Por último, se puede acceder a la plataforma desde la [página del SINTA](https://www.yvera.tur.ar/sinta/) o directamente desde la página: [https://provincias.yvera.tur.ar/](https://provincias.yvera.tur.ar/)
 
-<video width="680" height="480" controls>
-<source src="/srv/shiny-server/dnmye/video/sinta/provincias.mp4" type="video/mp4">
-</video>
-
