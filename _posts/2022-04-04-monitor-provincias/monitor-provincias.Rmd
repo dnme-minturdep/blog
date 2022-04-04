@@ -13,39 +13,62 @@ editor_options:
     wrap: 72
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+En el marco del trabajo continuo de puesta en valor del [Sistema de
+Información Turística de Argentina](https://www.yvera.tur.ar/sinta/) de
+la **Dirección Nacional de Mercados y Estadística del Ministerio de
+Turismo y Deportes de la Nación**, se pone a disposición de usuarios y
+usuarias una nueva [plataforma](https://provincias.yvera.tur.ar/) que
+busca facilitar el seguimiento de las principales estadísticas
+vinculadas al turismo en las provincias argentinas con los últimos datos
+disponibles.
 
-En el marco del contínuo trabajo por parte de la **Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE-MINTURyDEP)** por la puesta en valor del [Sistema de Información Turística de Argentina](https://www.yvera.tur.ar/sinta/), se pone a disposición de usuarios y usuarias una [plataforma](https://provincias.yvera.tur.ar/) para el seguimiento de las principales estadísticas vinculadas al turismo en las provincias argentinas.
+En esta sección se podrá obtener información provincial relativa a las
+siguientes temáticas:
 
-En esta sección se podrá obtener información provincial relativa a las siguientes temáticas:
+-   **Turismo interno,** a partir de la *Encuesta de Viajes y Turismo de
+    los Hogares* (EVyTH).
 
-- Turismo interno
+-   **Turismo receptivo,** que muestra estimaciones del turismo
+    receptivo a nivel provincial, detallando el flujo de turistas no
+    residentes que salieron por cada paso fronterizo.
 
-- Turismo receptivo
-    
-- Padrón de alojamientos (PUNA)
-    
-- Áreas naturales
-    
-- Conectividad aérea
+-   **Padrón de alojamientos (PUNA),** que muestra indicadores
+    relevantes de la oferta hotelera y parahotelera.
 
-- Empresas turísticas
+-   **Áreas naturales,** que presenta datos del registro de visitaciones
+    a áreas naturales protegidas de carácter nacional a partir de
+    información de la *Administración de Parques Nacionales* (APN).
 
+-   **Conectividad aérea,** basado en datos provenientes de los
+    registros administrativos de la *Autoridad Nacional de Aviación
+    Civil* (ANAC).
+
+-   **Empresas turísticas,** correspondiente a las *Ramas
+    Características del Turismo* (RCT) a partir de datos de la
+    *Administración Federal de Ingresos Públicos* (AFIP).
 
 ```{r out.width='100%', fig.align='center', echo=FALSE}
 knitr::include_graphics('img/monitor_1.png')
 ```
 
-
-Para cada una de estas temáticas se presentan diferentes indicadores para los cuales se puede visualizar provincia por provincia, tanto en tablas como en gráficos
+Para cada una de ellas se presentan diferentes indicadores agrupados
+para visualizar provincia por provincia, tanto en tablas como en
+gráficos
 
 ```{r out.width='100%', fig.align='center', echo=FALSE}
 knitr::include_graphics('img/monitor_2.png')
 ```
 
-Por último, se puede acceder a la plataforma desde la [página del SINTA](https://www.yvera.tur.ar/sinta/) o directamente desde la página: [https://provincias.yvera.tur.ar/](https://provincias.yvera.tur.ar/)
+Se puede acceder a la plataforma desde la [página del
+SINTA](https://www.yvera.tur.ar/sinta/) o directamente desde la página:
+<https://provincias.yvera.tur.ar/>
 
+<video width="680" height="480" controls>
+
+<source src="/srv/shiny-server/dnmye/video/sinta/provincias.mp4" type="video/mp4">
+
+</video>
