@@ -17,14 +17,14 @@ editor_options:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-En el marco del trabajo continuo de puesta en valor del [Sistema de
-Información Turística de Argentina](https://www.yvera.tur.ar/sinta/) de
-la **Dirección Nacional de Mercados y Estadística del Ministerio de
-Turismo y Deportes de la Nación**, se pone a disposición de usuarios y
-usuarias una nueva [plataforma](https://provincias.yvera.tur.ar/) que
-busca facilitar el seguimiento de las principales estadísticas
-vinculadas al turismo en las provincias argentinas con los últimos datos
-disponibles.
+En el marco del trabajo continuo de puesta en valor del [**Sistema de
+Información Turística de Argentina**](https://www.yvera.tur.ar/sinta/)
+**(SINTA)** de la **Dirección Nacional de Mercados y Estadística del
+Ministerio de Turismo y Deportes de la Nación**, se pone a disposición
+de usuarios y usuarias una nueva
+[plataforma](https://provincias.yvera.tur.ar/) que busca facilitar el
+seguimiento de las principales estadísticas vinculadas al turismo en las
+provincias argentinas con los últimos datos disponibles.
 
 En esta sección se podrá obtener información provincial relativa a las
 siguientes temáticas:
@@ -37,10 +37,10 @@ siguientes temáticas:
     residentes que salieron por cada paso fronterizo.
 
 -   **Padrón de alojamientos (PUNA),** que muestra indicadores
-    relevantes de la oferta hotelera y parahotelera.
+    relevantes de la oferta de alojamientos colectivos.
 
 -   **Áreas naturales,** que presenta datos del registro de visitaciones
-    a áreas naturales protegidas de carácter nacional a partir de
+    a las áreas naturales protegidas de carácter nacional a partir de
     información de la *Administración de Parques Nacionales* (APN).
 
 -   **Conectividad aérea,** basado en datos provenientes de los
