@@ -1,0 +1,236 @@
+---
+title: "Turismo de Naturaleza"
+description: |
+  Principales indicadores para caracterizar los viajes y el perfil de las y los viajeros, nacionales y extranjeros, que realizan Turismo de Naturaleza en Argentina.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(comunicacion)
+library(gt)
+```
+
+# Presentación 
+
+El **turismo de naturaleza** o **turismo activo natural** -que incluye al turismo aventura, el ecoturismo y otras prácticas en las que la naturaleza ocupa un rol protagónico- es un segmento estratégico para el sector turístico de Argentina y uno de los de mayor crecimiento en nuestro país y el mundo. Este crecimiento refleja una tendencia global en la que los destinos naturales, los espacios abiertos y las experiencias genuinas en ámbitos silvestres, que permiten a una población crecientemente urbana reconectar con la naturaleza, ocupan un lugar central en la preferencia de los viajeros. La pandemia de Covid 19 no hizo más que reafirmar esta tendencia.
+
+Argentina cuenta con un patrimonio natural incomparable, que explica gran parte del flujo turístico interno y receptivo. Este movimiento es una fuente de empleo y desarrollo económico de gran relevancia para nuestro país, y uno de los principales motores productivos de numerosas economías regionales. En este sentido, se encuentra en marcha un programa integral de turismo de naturaleza llamado [La Ruta Natural](https://www.argentina.gob.ar/turismoydeportes/larutanatural), con el cual Argentina se propone desarrollar territorios y comunidades con respeto a los valores naturales y la autenticidad cultural, como así también promocionar viajes seguros y turismo sustentable a partir del turismo de naturaleza en todo el territorio nacional.
+
+Es desde este marco que la [Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación](https://www.yvera.tur.ar/sinta/) elaboró [un informe](https://tableros.yvera.tur.ar/institucional/turismo-naturaleza/informe_tur_nat.pdf) cuyo principal objetivo es caracterizar cuantitativamente los **principales aspectos del Turismo de Naturaleza**. Para esto se recurrió a dos de las principales fuentes de información con la que se cuenta tanto para el turismo nacional como el internacional. En cuanto al primero, la **Encuesta de Viajes y Turismo de los Hogares (EVyTH)** releva información sociodemográfica de los residentes en argentina y de las principales caraceterísticas de sus viajes. En cuenato al segundo, la **Encuesta de Turismo Internacional (ETI)**, que indaga sobre los principales aspectos de las y los viajeros residentes en el exterior.
+
+
+### ¿Qué se entiende por Turismo de Naturaleza según la ETI y la EVyTH? {-}
+
+**Según la ETI, se pueden consideran las siguientes actividades:**
+
+- Turismo aventura.
+- Actividades de baja diﬁcultad en medios naturales.
+- Visita a parques nacionales.
+- Actividades en la nieve.
+
+**Según la EVyTH, se consideran las siguientes actividades:**
+
+- Visitaron espacios rurales como estancias, granjas, etc.
+- Visitaron parques nacionales o provinciales, reservas, etc.
+- Hicieron esquí, snowboard, u otro deporte de nieve.
+- Realizaron deportes de aventura como mountain bike, montañismo, rafting, travesías, ala delta, etc.
+- Otras actividades en espacios abiertos y naturales.
+
+
+***
+
+# Principales resultados {-}
+
+## TURISMO INTERNACIONAL
+
+```{r}
+eti_tabla_1 <- read_csv("/srv/DataDNMYE/turismo_naturaleza/tablas/eti_tabla_1.csv")
+```
+
+
+### `r toupper("Participación anual de los turistas que realizaron Turismo de Naturaleza durante su visita a la Argentina")`
+
+```{r}
+### Gráfico - Evolución de la participación de TN respecto al total
+eti_tabla_1 %>% 
+  mutate(participacion = round(participacion * 100, 1)) %>% 
+  ggplot(aes(x = as.factor(p3_3), y = participacion, group = "")) +
+  geom_point(color = dnmye_colores("celeste"), size = 4) +
+  geom_line(color = dnmye_colores("celeste"), size = 3) +
+  geom_text(aes(label = paste0(participacion, "%")), 
+            color = dnmye_colores("celeste"), vjust = -1) +
+  ylim(0, 50) +
+  theme_minimal() +
+  labs(caption = "Fuente: Encuesta de Turismo Internacional - Dirección Nacional de Mercados y Estadística - MINTURDEP",
+       x = "", y = "")
+```
+
+
+### `r toupper("Participación de los/las turistas que realizaron turismo de naturaleza por país de residencia. Año 2019")`
+
+
+```{r}
+eti_tabla_2 <- read_csv("/srv/DataDNMYE/turismo_naturaleza/tablas/eti_tabla_2.csv")
+```
+```{r}
+### Gráfico por país de residencia
+eti_tabla_2 %>% 
+  filter(indicador == "País de residencia") %>% 
+  mutate(turistas_naturaleza = round(turistas_naturaleza * 100, 1)) %>% 
+  ggplot(aes(x = fct_reorder(categoria, turistas_naturaleza), y = turistas_naturaleza,
+             fill = categoria)) +
+  geom_col() +
+  geom_text(aes(label = paste0(turistas_naturaleza, "%"))) +
+  scale_fill_dnmye() +
+  ylim(0, 50) + 
+  coord_flip() +
+  labs(caption = "Fuente: Encuesta de Turismo Internacional - Dirección Nacional de Mercados y Estadística - MINTURDEP",
+       x = "", y = "") +
+  theme_minimal() +
+  theme(legend.position = "none")
+  
+```
+
+### `r toupper("Estadía y Gasto promedio")`
+
+
+```{r}
+eti_tabla_3 <- read_csv("/srv/DataDNMYE/turismo_naturaleza/tablas/eti_tabla_3.csv")
+```
+
+```{r}
+# Tabla 3 de la ETI.
+
+eti_tabla_3 %>%
+  mutate(variables=case_when(variables=="estadia_media"~"Estadía promedio en la Argentina (en noches)",
+                             variables=="gasto_turista"~"Gasto por turista (en US$)",
+                             variables=="gasto_diario"~"Gasto promedio diario (en US$)")) %>% 
+  gt() %>%
+  tab_header(
+    title = md("**PERFIL DEL TURISMO DE NATURALEZA - AÑO 2019**"),
+    subtitle = md("Estadía y gasto promedio")) %>%
+  tab_source_note(
+    source_note = md(
+      "**Fuente:** Dirección Nacional de Mercados y Estadística en base a la Encuesta de Turismo Internacional (ETI).")) %>% 
+  cols_label(
+    variables = md("**Variable:**"),
+    total_turistas=md("**Total Turistas**"),
+    turistas_naturaleza=md("**Turistas de Naturaleza**")) %>% 
+  fmt_number(columns = c(2,3), decimals = 1, dec_mark = ",", sep_mark = ".") %>% 
+  cols_align(
+    align = "center",
+    columns = c(2,3)) %>% 
+  opt_table_font(
+    font = list(
+      google_font(name = "Encode Sans")))
+```
+
+<br>
+
+## TURISMO NACIONAL
+
+
+### `r toupper("Participación anual de los turistas que realizaron Turismo de Naturaleza durante su viaje por Argentina")`
+
+```{r}
+evyth_tabla_1 <- read.csv("/srv/DataDNMYE/turismo_naturaleza/tablas/evyth/evyth_tabla_1.csv") %>% 
+  filter(anio < 2022)
+```
+
+```{r}
+### Gráfico - Evolución de la participación de TN respecto al total
+evyth_tabla_1 %>% 
+  ggplot(aes(x = as.factor(anio), y = turistas_naturaleza_amplio_aporte, group = "")) +
+  geom_point(color = dnmye_colores("naranja"), size = 4) +
+  geom_line(color = dnmye_colores("naranja"), size = 3) +
+  geom_text(aes(label = paste0(turistas_naturaleza_amplio_aporte, "%")), 
+            color = dnmye_colores("naranja"), vjust = -1) +
+  ylim(0, 50) +
+  theme_minimal() +
+  labs(caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística - MINTURDEP",
+       x = "", y = "")
+```
+
+
+### `r toupper("Principales regiones elegidas para realizar Turismo de Naturaleza. Año 2019")`
+
+
+```{r}
+evyth_tabla_4 <- read.csv("/srv/DataDNMYE/turismo_naturaleza/tablas/evyth/evyth_tabla_4.csv")
+```
+
+```{r}
+evyth_tabla_4 %>% 
+  filter(variable == "Región de destino") %>% 
+  ggplot(aes(x = fct_reorder(categoria, turistas_naturaleza), y = turistas_naturaleza,
+             fill = categoria)) +
+  geom_col() +
+  geom_text(aes(label = paste0(turistas_naturaleza, "%"))) +
+  scale_fill_dnmye() +
+  ylim(0, 50) + 
+  coord_flip() +
+  labs(caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística - MINTURDEP",
+       x = "", y = "") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+
+### `r toupper("Estadía y Gasto promedio*")`
+
+
+```{r}
+evyth_tabla_3 <- read.csv("/srv/DataDNMYE/turismo_naturaleza/tablas/evyth/evyth_tabla_3.csv")
+```
+
+```{r}
+# Tabla 3 de la ETI.
+evyth_tabla_3 %>% 
+  filter(anio == 2019) %>%
+  select(-anio) %>% 
+  pivot_longer(cols = 1:6, names_to = "variables", values_to = "turistas_naturaleza") %>% 
+  mutate(tipo_turista = case_when(str_detect(variables, "nat_amp") ~ "turistas_naturaleza",
+                                  TRUE ~ "total_turistas"),
+         variables = str_remove_all(variables,"_total|_nat_amp")) %>% 
+  pivot_wider(names_from = tipo_turista, values_from = turistas_naturaleza) %>% 
+  mutate(variables=case_when(variables=="estadia_media"~"Estadía promedio en la Argentina (en noches)",
+                             variables=="gasto_promedio"~"Gasto por turista",
+                             variables=="gasto_diario"~"Gasto promedio diario")) %>% 
+  gt() %>%
+  tab_header(
+    title = md("**PERFIL DEL TURISMO DE NATURALEZA - AÑO 2019**"),
+    subtitle = md("Estadía y gasto promedio")) %>%
+  tab_source_note(
+    source_note = md(
+      "**Nota:** Gasto en pesos constantes a febrero de 2022 (IPC turístico).")) %>% 
+    tab_source_note(
+    source_note = md(
+      "**Fuente:** Dirección Nacional de Mercados y Estadística en base a la Encuesta de Viajes y Turismo de los Hogares (EVyTH).")) %>%
+  cols_label(
+    variables = md("**Variable:**"),
+    total_turistas=md("**Total Turistas**"),
+    turistas_naturaleza=md("**Turistas de Naturaleza**")) %>% 
+  fmt_number(columns = c(2,3), decimals = 1, dec_mark = ",", sep_mark = ".") %>% 
+  cols_align(
+    align = "center",
+    columns = c(2,3)) %>% 
+  opt_table_font(
+    font = list(
+      google_font(name = "Encode Sans")))
+```
+
