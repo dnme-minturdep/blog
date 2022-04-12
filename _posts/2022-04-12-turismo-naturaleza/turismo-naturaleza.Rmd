@@ -191,7 +191,7 @@ evyth_tabla_4 %>%
 
 
 
-### `r toupper("Estadía y Gasto promedio")`
+### `r toupper("Estadía y Gasto promedio*")`
 
 
 ```{r}
@@ -209,15 +209,18 @@ evyth_tabla_3 %>%
          variables = str_remove_all(variables,"_total|_nat_amp")) %>% 
   pivot_wider(names_from = tipo_turista, values_from = turistas_naturaleza) %>% 
   mutate(variables=case_when(variables=="estadia_media"~"Estadía promedio en la Argentina (en noches)",
-                             variables=="gasto_promedio"~"Gasto por turista (en US$)",
-                             variables=="gasto_diario"~"Gasto promedio diario (en US$)")) %>% 
+                             variables=="gasto_promedio"~"Gasto por turista",
+                             variables=="gasto_diario"~"Gasto promedio diario")) %>% 
   gt() %>%
   tab_header(
     title = md("**PERFIL DEL TURISMO DE NATURALEZA - AÑO 2019**"),
     subtitle = md("Estadía y gasto promedio")) %>%
   tab_source_note(
     source_note = md(
-      "**Fuente:** Dirección Nacional de Mercados y Estadística en base a la Encuesta de Turismo Internacional (ETI).")) %>% 
+      "**Nota:** Gasto en pesos constantes a febrero de 2022 (IPC turístico).")) %>% 
+    tab_source_note(
+    source_note = md(
+      "**Fuente:** Dirección Nacional de Mercados y Estadística en base a la Encuesta de Viajes y Turismo de los Hogares (EVyTH).")) %>%
   cols_label(
     variables = md("**Variable:**"),
     total_turistas=md("**Total Turistas**"),
