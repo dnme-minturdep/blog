@@ -26,11 +26,11 @@ library(gt)
 
 # Presentación 
 
-El **turismo de naturaleza** o **turismo activo natural** -que incluye al turismo aventura, el ecoturismo y otras prácticas en las que la naturaleza ocupa un rol protagónico- es un segmento estratégico para el sector turístico de Argentina y uno de los de mayor crecimiento en nuestro país y el mundo. Este crecimiento refleja una tendencia global en la que los destinos naturales, los espacios abiertos y las experiencias genuinas en ámbitos silvestres, que permiten a una población crecientemente urbana reconectar con la naturaleza, ocupan un lugar central en la preferencia de los viajeros. La pandemia de Covid 19 no hizo más que reafirmar esta tendencia.
+El **turismo de naturaleza** o **turismo activo natural** -que incluye al turismo aventura, el ecoturismo y otras prácticas en las que la naturaleza ocupa un rol protagónico- es un segmento estratégico para el sector turístico de Argentina y uno de los de mayor crecimiento en nuestro país y el mundo. Este crecimiento refleja una tendencia global en la que los destinos naturales, los espacios abiertos y las experiencias genuinas en ámbitos silvestres, permiten a una población crecientemente urbana reconectar con la naturaleza y ocupan un lugar central en la preferencia de los viajeros. La pandemia de Covid 19 no hizo más que reafirmar esta tendencia.
 
 Argentina cuenta con un patrimonio natural incomparable, que explica gran parte del flujo turístico interno y receptivo. Este movimiento es una fuente de empleo y desarrollo económico de gran relevancia para nuestro país, y uno de los principales motores productivos de numerosas economías regionales. En este sentido, se encuentra en marcha un programa integral de turismo de naturaleza llamado [La Ruta Natural](https://www.argentina.gob.ar/turismoydeportes/larutanatural), con el cual Argentina se propone desarrollar territorios y comunidades con respeto a los valores naturales y la autenticidad cultural, como así también promocionar viajes seguros y turismo sustentable a partir del turismo de naturaleza en todo el territorio nacional.
 
-Es desde este marco que la [Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación](https://www.yvera.tur.ar/sinta/) elaboró [un informe](https://tableros.yvera.tur.ar/institucional/turismo-naturaleza/informe_tur_nat.pdf) cuyo principal objetivo es caracterizar cuantitativamente los **principales aspectos del Turismo de Naturaleza**. Para esto se recurrió a dos de las principales fuentes de información con la que se cuenta tanto para el turismo nacional como el internacional. En cuanto al primero, la **Encuesta de Viajes y Turismo de los Hogares (EVyTH)** releva información sociodemográfica de los residentes en argentina y de las principales caraceterísticas de sus viajes. En cuenato al segundo, la **Encuesta de Turismo Internacional (ETI)**, que indaga sobre los principales aspectos de las y los viajeros residentes en el exterior.
+Es desde este marco que la [Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación](https://www.yvera.tur.ar/sinta/) elaboró [un informe](https://tableros.yvera.tur.ar/institucional/turismo-naturaleza/informe_tur_nat.pdf) cuyo principal objetivo es caracterizar cuantitativamente los **principales aspectos del Turismo de Naturaleza**. Para esto se recurrió a dos de las principales fuentes de información con la que se cuenta tanto para el turismo nacional como el internacional. En cuanto a la primera, la **Encuesta de Viajes y Turismo de los Hogares (EVyTH)** releva información sociodemográfica de los residentes en argentina y de las principales caraceterísticas de sus viajes. La segunda, la **Encuesta de Turismo Internacional (ETI)**, en donde se indaga sobre los principales aspectos de las y los viajeros residentes en el exterior.
 
 
 ### ¿Qué se entiende por Turismo de Naturaleza según la ETI y la EVyTH? {-}
@@ -72,7 +72,7 @@ eti_tabla_1 %>%
   geom_point(color = dnmye_colores("celeste"), size = 4) +
   geom_line(color = dnmye_colores("celeste"), size = 3) +
   geom_text(aes(label = paste0(participacion, "%")), 
-            color = dnmye_colores("celeste"), vjust = -1) +
+            color = dnmye_colores("celeste"), vjust = -1.3) +
   ylim(0, 50) +
   theme_minimal() +
   labs(caption = "Fuente: Encuesta de Turismo Internacional - Dirección Nacional de Mercados y Estadística - MINTURDEP",
@@ -94,7 +94,7 @@ eti_tabla_2 %>%
   ggplot(aes(x = fct_reorder(categoria, turistas_naturaleza), y = turistas_naturaleza,
              fill = categoria)) +
   geom_col() +
-  geom_text(aes(label = paste0(turistas_naturaleza, "%"))) +
+  geom_text(aes(label = paste0(turistas_naturaleza, "%")), hjust = "inward") +
   scale_fill_dnmye() +
   ylim(0, 50) + 
   coord_flip() +
@@ -158,7 +158,7 @@ evyth_tabla_1 %>%
   geom_point(color = dnmye_colores("naranja"), size = 4) +
   geom_line(color = dnmye_colores("naranja"), size = 3) +
   geom_text(aes(label = paste0(turistas_naturaleza_amplio_aporte, "%")), 
-            color = dnmye_colores("naranja"), vjust = -1) +
+            color = dnmye_colores("naranja"), vjust = -1.7) +
   ylim(0, 50) +
   theme_minimal() +
   labs(caption = "Fuente: Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística - MINTURDEP",
@@ -179,7 +179,7 @@ evyth_tabla_4 %>%
   ggplot(aes(x = fct_reorder(categoria, turistas_naturaleza), y = turistas_naturaleza,
              fill = categoria)) +
   geom_col() +
-  geom_text(aes(label = paste0(turistas_naturaleza, "%"))) +
+  geom_text(aes(label = paste0(turistas_naturaleza, "%")), hjust = "inward") +
   scale_fill_dnmye() +
   ylim(0, 50) + 
   coord_flip() +
@@ -233,4 +233,3 @@ evyth_tabla_3 %>%
     font = list(
       google_font(name = "Encode Sans")))
 ```
-
