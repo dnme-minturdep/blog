@@ -446,7 +446,7 @@ empleo <- data.frame(
             indicador = c("Empleo industrias turísticas","Empleo economía total",
                           "(%) Empleo IT / Empleo"),
             `2004` = c(931, 14911, 6.2),
-            `2016` = c(1246, 2002, 6.2),
+            `2016` = c(1246, 20020 6.2),
             `2017` = c(1274, 20345, 6.3),
             `2018` = c(1271, 20573, 6.2),
             `2019` = c(1260, 20855, 6.0)
