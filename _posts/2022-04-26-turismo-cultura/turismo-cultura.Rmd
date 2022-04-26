@@ -1,0 +1,298 @@
+---
+title: "Turismo de Cultura"
+description: |
+  Principales indicadores para caracterizar los viajes y el perfil de las y los viajeros, nacionales y extranjeros, que realizan Turismo de Cultura en Argentina.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(gt) # Easily Create Presentation-Ready Display Tables, CRAN v0.2.2
+library(extrafont) # Tools for using fonts, CRAN v0.17 # Tools for using fonts, CRAN v0.17
+library(hrbrthemes) # Additional Themes, Theme Components and Utilities for 'ggplot2', CRAN v0.8.0
+library(ggtext)
+library(tidytext)
+library(webshot)
+library(comunicacion)
+library(patchwork)
+```
+
+# Presentación 
+
+Con la reciente publicación del [Informe de Naturaleza](https://tableros.yvera.tur.ar/institucional/turismo-naturaleza/informe_tur_nat.pdf), la [Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación](https://www.yvera.tur.ar/sinta/) inaugura una secuencia de documentos con el objetivo de caracterizar a los diferentes perfiles turísticos que se desarrollan en Argentina. En esta oportunidad, se pone a disposición el informe de [**Turismo de Cultura**](https://tableros.yvera.tur.ar/institucional/turismo-cultura/informe_cultura.pdf), un conjunto de estadísticas relacionadas con las **prácticas turísticas en entornos culturales**.
+
+Las principales fuentes de información con la que se elaboró el informe, sea para el turismo nacional como el internacional, son:
+
+- La **Encuesta de Viajes y Turismo de los Hogares (EVyTH)**, a partir de la cual se releva información sociodemográfica de los residentes en argentina y de las principales caraceterísticas de sus viajes. 
+
+- La **Encuesta de Turismo Internacional (ETI)**, en donde se indaga sobre los principales aspectos de las y los viajeros residentes en el exterior.
+
+
+### ¿Qué se entiende por Turismo de Cultura? {-}
+
+Según la Organización Mundial del Turismo
+
+>| _El turismo cultural es un tipo de actividad turística en el que la motivación esencial del visitante es aprender, descubrir, disfrutar y consumir los atractivos/productos materiales e inmateriales de un destino turístico. Estos atractivos/productos guardan relación con un conjunto de elementos materiales, intelectuales, espirituales y emocionales distintivos de una sociedad, entre ellos las artes y la arquitectura, el patrimonio histórico y cultural, el patrimonio gastronómico, la literatura, la música, las industrias creativas y las culturas vivas, con sus estilos de vida, sistemas de valores, creencias y tradiciones._ [^1]
+
+[^1]: (https://www.unwto.org/es/etica-cultura-y-responsabilidad-social)
+
+En base a esta definición y con las fuentes disponibles, se elaboró la siguiente operacionalización:
+
+**Según la ETI, se pueden consideran las siguientes actividades:**
+
+- Actividades culturales en lugares urbanos.
+- Asistencia a eventos deportivos o culturales.
+- Actividades de tango.
+- Actividades vinculadas al vino.
+- Actividades vinculadas con la gastronomía.
+
+**Según la EVyTH, se consideran las siguientes actividades:**
+
+- Asistencia a actos o festividades religiosas.
+- Visitas a teatros, cines, conciertos o recitales. 
+- Visitas a museos, monumentos, parques temáticos, zoológicos, etc.
+- Asistencia a espectáculos deportivos.
+
+***
+
+# Principales resultados {-}
+
+
+
+
+## TURISMO INTERNACIONAL
+
+```{r}
+eti_tabla_1 <- read_csv("/srv/DataDNMYE/turismo_perfiles/turismo_cultura/tablas/eti/eti_tabla_1.csv")
+```
+
+
+### PARTICIPACIÓN ANUAL DE LOS TURISTAS QUE REALIZARON TURISMO DE CULTURA DURANTE SU VIAJE POR ARGENTINA
+
+```{r}
+#Gráfico 1 de la ETI
+eti_tabla_1 %>%
+  mutate(participacion=participacion*100) %>% 
+  ggplot() +
+  geom_line(aes(x = as.factor(p3_3), y = participacion, group = 1), color = dnmye_colores("celeste"), size = 2) +
+  geom_point(aes(x = as.factor(p3_3), y = participacion, group = 1), color = dnmye_colores("celeste"), size = 3) +
+  geom_text(aes(x = as.factor(p3_3), y = participacion + 5, label = paste0(participacion, "%")), color = dnmye_colores("celeste"), size = 3) +
+  scale_y_continuous(limits = c(0, 100),
+                     breaks = seq(0, 100, 10),
+                     labels = function(x) paste0(x, "%")) +
+  labs(x = "",
+       y = "",
+       caption = "Fuente: Dirección Nacional de Mercados y Estadística en base a la Encuesta de Turismo Internacional (ETI).") +
+  theme_minimal()
+```
+
+
+
+```{r}
+eti_tabla_3 <- read_csv("/srv/DataDNMYE/turismo_perfiles/turismo_cultura/tablas/eti/eti_tabla_3.csv")
+
+eti_tabla_3 %>%
+  mutate(variables=case_when(variables=="estadia_media"~"Estadía promedio en la Argentina (en noches)",
+                             variables=="gasto_turista"~"Gasto por turista (en US$)",
+                             variables=="gasto_diario"~"Gasto promedio diario (en US$)")) %>% 
+  gt() %>%
+  tab_header(
+    title = md("**PERFIL DEL TURISMO DE CULTURA - AÑO 2019**"),
+    subtitle = md("Estadía y gasto promedio")) %>%
+  tab_source_note(
+    source_note = md(
+      "**Fuente:** Dirección Nacional de Mercados y Estadística en base a la Encuesta de Turismo Internacional (ETI).")) %>% 
+  cols_label(
+    variables = md("**Variable:**"),
+    total_turistas=md("**Total Turistas**"),
+    turistas_cultura=md("**Turistas de cultura**")) %>% 
+  fmt_number(columns = c(2,3), decimals = 1, dec_mark = ",", sep_mark = ".") %>% 
+  cols_align(
+    align = "center",
+    columns = c(2,3)) %>% 
+  opt_table_font(
+    font = list(
+      google_font(name = "Encode Sans")))
+```
+
+### GASTO PROMEDIO POR TURISTA EN USD (2015-2019)
+
+
+```{r}
+eti_tabla_3b <- read_csv("/srv/DataDNMYE/turismo_perfiles/turismo_cultura/tablas/eti/eti_tabla_3b.csv")
+```
+
+```{r}
+#Gráfico 2 de la ETI
+eti_tabla_3b %>% 
+  filter(p3_3 > 2014) %>%
+  select(1,3,6) %>% 
+  ggplot() +
+  geom_line(aes(x = as.factor(p3_3), y = gasto_turista_tot, group = 1, color = "Turistas (promedio)"), size = 2) +
+  geom_line(aes(x = as.factor(p3_3), y = gasto_turista_cult, group = 1, color = "Turistas de Cultura"), size = 2) +
+  geom_point(aes(x = as.factor(p3_3), y = gasto_turista_tot, group = 1, color = "Turistas (promedio)"), size = 3) +
+  geom_point(aes(x = as.factor(p3_3), y = gasto_turista_cult, group = 1, color = "Turistas de Cultura"), size = 3) +
+  geom_text(aes(x = as.factor(p3_3), y = gasto_turista_tot+100, 
+                label = paste0("$", format(gasto_turista_tot, big.mark = ".", 
+                                           decimal.mark = ",", digits = 1))), 
+            size = 3) +
+  geom_text(aes(x = as.factor(p3_3), y = gasto_turista_cult-100, 
+                label = paste0("$", format(gasto_turista_cult, big.mark = ".", 
+                                           decimal.mark = ",",
+                                           digits = 1))), 
+            size = 3) +
+  scale_color_manual(values = c("Turistas (promedio)" = dnmye_colores("celeste"), "Turistas de Cultura" = dnmye_colores("naranja"))) +
+  scale_y_continuous(limits = c(0, 1500),
+                     breaks = seq(0, 1500, 500),
+                     labels = function(x) paste0("$", x))+
+  labs(subtitle = "Aerop. Intern. de  Ezeiza, Aeroparque J. Newbery, Aerop. Intern. de Córdoba,\nAerop. Intern. de Mendoza, Paso Internacional Cristo Redentor y Terminal de\nBuquebús en la Ciudad Autónoma de Buenos Aires.",
+       x = "",
+       y = "US$",
+       colour = "",
+       caption = "Fuente: Dirección Nacional de Mercados y Estadística en base a la Encuesta de Turismo Internacional (ETI).\nNota: A partir de 2015 se modficó la metodología de estimación del gasto de los turistas, se omitieron\nlos datos del 2014 por no ser comparables con el resto de la serie.") +
+  theme_minimal() +
+  theme(plot.caption  = element_text(hjust = 0),
+        legend.position = "bottom")
+```
+
+
+<br>
+
+## TURISMO NACIONAL
+
+
+### PARTICIPACIÓN ANUAL DE LOS TURISTAS QUE REALIZARON TURISMO DE CULTURA DURANTE SU VIAJE POR ARGENTINA
+
+```{r}
+evyth_tabla_1 <- read.csv("/srv/DataDNMYE/turismo_perfiles/turismo_cultura/tablas/evyth/evyth_tabla_1.csv") 
+```
+
+```{r}
+evyth_tabla_1 %>% 
+  filter(anio <= "2019") %>% 
+  ggplot() +
+  geom_line(aes(x = as.factor(anio), y = turistas_cultura_aporte, group = 1), color = dnmye_colores("celeste"), size = 2) +
+  geom_point(aes(x = as.factor(anio), y = turistas_cultura_aporte, group = 1), color = dnmye_colores("celeste"), size = 3) +
+  geom_text(aes(x = as.factor(anio), y = turistas_cultura_aporte , 
+                label = paste0(format(turistas_cultura_aporte, decimal.mark = ","), "%")), 
+            color = dnmye_colores("celeste"), size = 3, vjust = -1) +
+  scale_y_continuous(limits = c(0, 100),
+                     breaks = seq(0, 100, 10),
+                     labels = function(x) paste0(x, "%")) +
+  labs(x = "",
+       y = "",
+       caption = "Fuente: Dirección Nacional de Mercados y Estadística en base a la Encuesta de Viajes y Turismo de los Hogares (EVyTH).") +
+  theme_minimal()
+```
+
+
+
+
+### PRINCIPALES REGIONES ELEGIDAS PARA REALIZAR TURISMO.
+
+```{r}
+evyth_tabla_4 <- read.csv("/srv/DataDNMYE/turismo_perfiles/turismo_cultura/tablas/evyth/evyth_tabla_4.csv")
+
+tabla_4_bolas <- evyth_tabla_4 %>% 
+  filter(variable == "Región de destino")
+
+packing <- packcircles::circleProgressiveLayout(tabla_4_bolas$turistas_cultura, sizetype='area')
+
+tabla_4_bolas_cultura <- cbind(tabla_4_bolas, packing)
+
+dat.gg <- packcircles::circleLayoutVertices(packing, npoints=50)
+
+
+destinos_cultura <- 
+  ggplot() + 
+  geom_polygon(data = dat.gg, aes(x, y, group = id, fill=as.factor(id), color = as.factor(id)), alpha = 0.6) +
+  geom_text(data = tabla_4_bolas_cultura, aes(x, y, label = categoria), vjust = -.5, size = 3) +
+  geom_text(data = tabla_4_bolas_cultura, aes(x, y, label = paste0(turistas_cultura,"%")),vjust = 1, size = 3) +
+  scale_size_continuous(range = c(1,4)) +
+  comunicacion::scale_fill_dnmye(palette = "c10_todos")+
+  comunicacion::scale_color_dnmye(palette = "c10_todos")+
+  labs(title = str_wrap("PRINCIPALES REGIONES ELEGIDAS PARA REALIZAR TURISMO DE CULTURA.", width = 30),
+       subtitle = "AÑO 2019.") +     
+  theme_void() + 
+  theme(legend.position="none",
+        title = element_text(size = 10)) +
+  coord_equal()
+```
+
+```{r}
+packing_totales <- packcircles::circleProgressiveLayout(tabla_4_bolas$turistas_totales, sizetype='area')
+
+tabla_4_bolas_totales <- cbind(tabla_4_bolas, packing_totales)
+
+dat.gg_totales <- packcircles::circleLayoutVertices(packing_totales, npoints=50)
+
+
+destinos_totales <- ggplot() + 
+  geom_polygon(data = dat.gg_totales, aes(x, y, group = id, fill=as.factor(id), color = as.factor(id) ), alpha = 0.6) +
+  geom_text(data = tabla_4_bolas_totales, aes(x, y, label = categoria), vjust = -.5, size = 3) +
+  geom_text(data = tabla_4_bolas_totales, aes(x, y, label = paste0(turistas_totales,"%")), vjust = 1,
+            size = 3) +
+  scale_size_continuous(range = c(1,4)) +
+  comunicacion::scale_fill_dnmye(palette = "c10_todos")+
+  comunicacion::scale_color_dnmye(palette = "c10_todos")+
+  labs(title = str_wrap("PRINCIPALES REGIONES ELEGIDAS PARA REALIZAR TURISMO.", width = 30),
+       subtitle = "AÑO 2019.") +
+  theme_void() + 
+  theme(legend.position="none",
+        title = element_text(size = 10)) +
+  coord_equal()
+```
+
+```{r}
+destinos_totales + destinos_cultura
+```
+
+```{r}
+evyth_tabla_3 <- read.csv("/srv/DataDNMYE/turismo_perfiles/turismo_cultura/tablas/evyth/evyth_tabla_3.csv")
+
+evyth_tabla_3 %>% 
+  filter(anio <= 2019) %>% 
+  select(-c(3, 6)) %>% 
+  gt() %>% 
+  tab_header(
+    title = md("__Estadía y gasto*__")) %>% 
+  tab_source_note(
+    source_note = md("__* Gasto en $ constante en pesos de febrero 2022 (IPC Turístico)__")) %>% 
+  cols_label(
+    anio = "",
+    estadia_media_total = "Estadía media",
+    #gasto_promedio = "Gasto promedio",
+    gasto_diario = "Gasto diario",
+    estadia_media_cultura = "Estadía media",
+    #gasto_promedio_cultura = "Gasto promedio",
+    gasto_diario_cultura = "Gasto diario") %>% 
+  cols_align(
+    align = "center",
+    columns = everything())  %>%
+  tab_spanner(
+    label = md("**Turistas Totales**"),
+    columns = c(2:3)) %>%
+  tab_spanner(
+    label = md("**Turistas de Cultura**"),
+    columns = c(4:5)) %>% 
+  opt_table_font(
+    font = list(
+      google_font(name = "Encode Sans"))) %>% 
+  fmt_number(columns = c(2,4), decimals = 1, dec_mark = ",", sep_mark = ".") %>% 
+  fmt_currency(currency = "dollar", columns = -c(1,2,4), decimals = 0, sep_mark = ".")
+```
+
