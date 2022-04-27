@@ -35,6 +35,10 @@ library(patchwork)
 
 Con la reciente publicación del [Informe de Naturaleza](https://tableros.yvera.tur.ar/institucional/turismo-naturaleza/informe_tur_nat.pdf), la [Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación](https://www.yvera.tur.ar/sinta/) inaugura una secuencia de documentos con el objetivo de caracterizar a los diferentes perfiles turísticos que se desarrollan en Argentina. En esta oportunidad, se pone a disposición el informe de [**Turismo de Cultura**](https://tableros.yvera.tur.ar/institucional/turismo-cultura/informe_cultura.pdf), un conjunto de estadísticas relacionadas con las **prácticas turísticas en entornos culturales**.
 
+
+> [**Acceso al informe**](https://tableros.yvera.tur.ar/institucional/turismo-cultura/informe_cultura.pdf)
+
+
 Las principales fuentes de información con la que se elaboró el informe, sea para el turismo nacional como el internacional, son:
 
 - La **Encuesta de Viajes y Turismo de los Hogares (EVyTH)**, a partir de la cual se releva información sociodemográfica de los residentes en argentina y de las principales caraceterísticas de sus viajes. 
@@ -202,7 +206,7 @@ evyth_tabla_1 %>%
 
 
 
-### PRINCIPALES REGIONES ELEGIDAS PARA REALIZAR TURISMO.
+### PRINCIPALES REGIONES ELEGIDAS PARA REALIZAR TURISMO. AÑO 2019
 
 ```{r}
 evyth_tabla_4 <- read.csv("/srv/DataDNMYE/turismo_perfiles/turismo_cultura/tablas/evyth/evyth_tabla_4.csv")
@@ -225,8 +229,7 @@ destinos_cultura <-
   scale_size_continuous(range = c(1,4)) +
   comunicacion::scale_fill_dnmye(palette = "c10_todos")+
   comunicacion::scale_color_dnmye(palette = "c10_todos")+
-  labs(title = str_wrap("PRINCIPALES REGIONES ELEGIDAS PARA REALIZAR TURISMO DE CULTURA.", width = 30),
-       subtitle = "AÑO 2019.") +     
+  labs(title = str_wrap("Turismo de Cultura", width = 30)) +     
   theme_void() + 
   theme(legend.position="none",
         title = element_text(size = 10)) +
@@ -249,8 +252,7 @@ destinos_totales <- ggplot() +
   scale_size_continuous(range = c(1,4)) +
   comunicacion::scale_fill_dnmye(palette = "c10_todos")+
   comunicacion::scale_color_dnmye(palette = "c10_todos")+
-  labs(title = str_wrap("PRINCIPALES REGIONES ELEGIDAS PARA REALIZAR TURISMO.", width = 30),
-       subtitle = "AÑO 2019.") +
+  labs(title = str_wrap("Turismo Total", width = 30)) +
   theme_void() + 
   theme(legend.position="none",
         title = element_text(size = 10)) +
