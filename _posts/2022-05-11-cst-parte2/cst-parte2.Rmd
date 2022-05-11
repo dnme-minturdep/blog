@@ -31,7 +31,15 @@ sobre el Marco Conceptual (CST:RMC,
 elaborado por *Naciones Unidas, EUROSTAT, Organización Mundial del
 Turismo* y *OCDE*, propone la elaboración de 10 Tablas en una CST:
 
-![](entradas/B2_CST-A_1.png)
+
+```{r echo = FALSE}
+
+knitr::include_graphics("entradas/B2_CST-A_1.png")
+
+
+```
+
+
 
 En base a ellas, cada una de las Tablas de la CST-A posee información
 novedosa, que se elabora a partir de reunir y consistir un conjunto de
