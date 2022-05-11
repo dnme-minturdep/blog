@@ -125,11 +125,7 @@ turísticas. Estas cuentas exponen el valor de la producción, el valor de
 los consumos intermedios para su elaboración y valor agregado como
 diferencia entre estos dos ítems.
 
-La importancia de la **Tabla 5** radica en, por un lado, conocer la
-dimensión y las relaciones sectoriales de los productores
-característicos del turismo, y por otro, en función de la apertura
-lograda en las actividades características impactar en la calidad de la
-medición del valor agregado generado por el consumo del visitante.
+La importancia de la *Tabla 5* radica en que permite conocer la dimensión y las relaciones sectoriales de los productores característicos del turismo. Por otro lado, en función de la apertura lograda en las actividades características,  impacta en la calidad de la medición del valor agregado generado por el consumo del visitante.
 
 La CST:RMC, 2008 propone una selección de industrias características del
 turismo (que le suma lo "internacionalmente comparable") con base en la
@@ -272,6 +268,15 @@ indicadores síntesis para los años 2020 y 2021.
 
 **CST**: Cuenta Satélite de Turismo
 
+**VABDT**: valor agregado bruto directo turístico
+
+**PIBDT**: producto interior bruto directo turístico
+
+**VBPIT**: valor bruto de producción de la industria del
+turismo
+
+**VABIT**: _valor agregado de la industria del turismo
+
 **CST-A**: Cuenta Satélite de Turismo de la Argentina
 
 **CST:RMC, 2008**: Cuenta Satélite de Turismo: Recomendaciones sobre el
@@ -281,9 +286,6 @@ Marco Conceptual 2008, Estudios de métodos, F(80) (ONU 2010)
 
 **EVyTH**: Encuesta de Viajes y Turismo de los Hogares
 
-**INDEC**: Instituto Nacional de Estadística y Censos
-
-**MINTURDEP**: Ministerio de Turismo y Deportes
 
 ## Recursos - CST-A
 
