@@ -1,0 +1,210 @@
+---
+title: "Publicación de microdatos de la Encuesta de Viajes y Turismo de los Hogares (EVyTH) - Serie 2012-2021"
+description: |
+ La Dirección Nacional de Mercados y Estadísticas pone a disposición la base de microdatos de la EVyTH-MINTURDEP con información desde los inicios del operativo hasta el último trimestre disponible.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Los estudios de caracterización de la demanda turística o de perfil del visitante (turista y/o excursionista) como el monitoreo de su evolución constituyen un insumo esencial a la hora de conocer las características de los visitantes que arriban a un destino (sea un país, una provincia, un municipio o una localidad), aportando herramientas para la generación y gestión de políticas públicas relativas al turismo. Adicionalmente, constituyen una fuente de información privilegiada para analizar el gasto turístico que realizan los diferentes tipos de visitantes, sirviendo como insumo para la estimación del impacto económico de la actividad.
+
+La principal herramienta con la que se cuenta para obtener información es la Encuesta de Viajes y Turismo de  los Hogares (EVyTH). Este es un operativo por muestreo cuyo principal objetivo es proporcionar información sobre los viajes turísticos de los residentes en Argentina hacia dentro y fuera del país: cuándo viajan, hacia dónde viajan, qué medios de transporte utilizan, dónde se alojan, cuáles son los motivos por los que viajan, cómo organizan sus viajes, qué actividades turísticas realizan, cuánto gastan, etc.
+
+En este sentido, tal y como se lo propuso con el desarrollo del [SINTA](https://www.yvera.tur.ar/sinta/), la Dirección Nacional de Mercados y Estadística pone a disposición del público general el conjunto de datos relevados por la **Encuesta Viajes y Turismo de los Hogares (EVyTH-MINTURDEP)**. Se podrá acceder y descargar a dicha información a través de la sección del [Portal de Datos Abiertos](https://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos) que contiene los DATASETS referidos al **Turismo Interno**, junto al resto de los recursos que la DNMyE publica periódicamente (Sector Hotelero, Turismo Internacional, etc.).
+
+Este operativo se trata de una encuesta a hogares, en la que se indaga por los viajes turísticos (viajes con pernocte y/o visitas de un día) realizados por todas las personas que componen el hogar a lugares ubicados fuera de su entorno habitual. El universo bajo estudio abarca a hogares residentes en los aglomerados urbanos definidos para la Encuesta Permanente a Hogares del INDEC -EPH- (62% del total de la población argentina, aproximadamente), excluyendo de este modo a los residentes en ciudades medianas y pequeñas, en pueblos y en zonas rurales. En cambio, el análisis de los resultados por destino contempla a todas las ciudades o localidades del país.
+
+
+```{r}
+### Cargo librerías
+library(tidyverse)
+library(readr)
+library(comunicacion)
+library(scales)
+
+options(scipen = 999)
+```
+
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Carga de la base de datos  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/645e5505-68ee-4cfa-90f9-fcc9a4a34a85/download/evyth_microdatos.csv"
+
+b_evyth <- read_csv(file = url)
+
+source("metadata.R")
+```
+
+
+
+## Explorando la base de datos
+
+Entre las primeras posibilidades que provee la disponibilidad de la base es la de tener un diagnóstico completo del comportamiento turístico, al menos para el período desde el cual existe el operativo que recauda dicha información.
+
+### Cantidad de visitantes por tipo de visitante. 31 aglomerados urbanos.
+#### Información trimestral. Período 2012-2021.
+
+```{r fig.height=4, fig.width=8}
+### Armo tabla con serie de tiempo de visitantes por tipo de visitante
+tabla <- b_evyth %>% 
+  count(anio, trimestre, tipo_visitante, wt = pondera) %>% 
+  mutate(periodo_estival = case_when(trimestre == 1 ~ "estival",
+                                     TRUE ~ "no estival"),
+         periodo = paste0(anio, trimestre))
+
+ggplot(data = tabla, aes(x = trimestre, 
+                         y = n, 
+                         fill = tipo_visitante)) +
+  geom_col(alpha = ifelse(tabla$periodo_estival == "estival", 1, 0.5)) +
+  scale_fill_manual(values = c(dnmye_colores("azul verde"),
+                               dnmye_colores("pera"))) +
+  scale_y_continuous(labels = label_number(big.mark = ".", decimal.mark = ",")) +
+  geom_hline(yintercept = 0) +
+  facet_wrap(facets = "anio", ncol = 10) +
+  theme_minimal() +
+  theme(
+    panel.grid.minor.x = element_blank(), 
+    axis.text.x = element_text(size = 8)) +
+  labs(fill = "Tipo de visitante", x = "Trimestre", y = "Cantidad de visitantes")
+```
+
+
+
+## 
+
+
+
+La base de datos se encuentra disponible en distintas extensiones de archivo (_.txt_, _.csv_, _.sav_, _.dta_, _.xlsx_). Asimismo, se publica también el diccionario de registro con el conjunto de nombres y etiquetas para todas las columnas con sus respectivas categorías de respuesta.
+
+Los pasos a seguir son la continua publicación de la información trimestral y avanzar con la apertura de datos y procesos.
+
+
+
+
+```{r}
+
+library(eph)
+library(tidyverse)
+library(sf)
+library(geoAr)
+library(datawizard)
+library(ggbump)
+
+### 
+
+total_turistas_2021 <- sum(b_evyth$pondera[b_evyth$anio == 2021 & b_evyth$tipo_visitante == "Turistas"])
+
+tabulado_2021 <- b_evyth %>%
+  filter(anio == 2021 & tipo_visitante == "Turistas") %>% 
+  count(localidad_destino, wt = pondera) %>% 
+  top_n(n = 15) %>% 
+  mutate(porc = round(n / total_turistas * 100,2),
+         localidad_destino = as.factor(localidad_destino)) %>% 
+  select(localidad_destino, porc) %>% 
+  left_join(select(b_evyth, codigo_2010, localidad_destino), by = "localidad_destino") %>% 
+  distinct(localidad_destino, porc, codigo_2010)
+
+
+
+### Cargo base con geometrias de localidades indec
+prueba <- geo_localidades_indec <- sf::st_read("/srv/DataDNMYE/evyth/nomenclatura_geo/Codgeo_Pais_x_loc_con_datos/indec_cods/pxlocdatos.shp") 
+
+
+lat_long_top15 <- tabulado_2021 %>% 
+  left_join(select(prueba, link, geometry), by = c("codigo_2010" = "link"))
+
+### Mapitash
+
+aglos <- sf::st_read('data/aglomerados_eph.json')
+
+mapa_arg <- get_geo("ARGENTINA", level = "provincia")
+
+
+centroides_aglomerados <-  aglos %>%
+  filter(!st_is_empty(geometry)) %>%
+  group_by(eph_codagl) %>%
+  summarise(AGLOMERADO = as.integer(paste(unique(eph_codagl))),
+            nombre_aglomerado = unique(eph_aglome)[1]) %>%
+  st_centroid() %>% 
+  st_transform('+proj=longlat +datum=WGS84')
+
+centroides_aglomerados <- centroides_aglomerados %>% 
+  bind_cols(
+    sf::st_coordinates(centroides_aglomerados) %>%
+      as_tibble() %>%
+      rename(lon=X, lat=Y)) %>%
+  as_tibble()
+
+
+
+tabla_graf <- centroides_aglomerados %>% 
+  mutate(AGLOMERADO = as.factor(AGLOMERADO)) %>%
+  left_join(tabulado) %>% 
+  mutate(
+    col_y = rank(-porc) %>% 
+      data_rescale(to=c(-15, -65)),
+    sigmoid_end = 22,
+    col_x_start = 25,
+    col_x_end = porc %>%  
+      data_rescale(to=c(25, 110), range = c(0, max(porc))),
+    area_label = paste0(round(porc, 1), "%")
+  )
+
+
+ggplot(tabla_graf) +
+  geom_sf(data=mapa_arg, size = .3, fill = "transparent", color = "gray40") +
+  geom_point(aes(x=lon, y=lat, color=porc)) +
+  geom_sigmoid(
+    aes(x=lon, y=lat, xend=sigmoid_end, yend=col_y, group=nombre_aglomerado, color=porc)
+  ) +
+  geom_text(
+    aes(label=nombre_aglomerado, x=sigmoid_end, y=col_y, color=porc), 
+    hjust=1, size=4, vjust=0, nudge_y = 0.5, alpha=0.8,
+  ) +
+  geom_segment(
+    aes(x=col_x_start, xend=col_x_end, y=col_y, yend=col_y, color=porc), 
+    size = 4.2, alpha = .9, size = 1, 
+    lineend = "round"
+  ) +
+  geom_text(
+    aes(label=area_label, x=col_x_end, y=col_y, color=porc), 
+    hjust=-0.1, size=4, nudge_x = .3
+  ) +
+  labs(
+    title="Porcentaje de personas (+18) solteras",
+    subtitle = "31 principales aglomerados. 2do rimestre de 2021",
+    caption = "Elaboración propia en base a la EPH-INDEC"
+  ) +
+  coord_sf(clip = "off") +
+  #scale_fill_viridis_c() +
+  dnmye::scale_fill_dnmye(discrete = F) +
+  #scale_color_viridis_c() +
+  dnmye::scale_color_dnmye(discrete = F) +
+  theme_void() +
+  theme(plot.margin = margin(.5, 1, .5, .5, "cm"),
+        legend.position = "none",
+        plot.background = element_rect(fill = "black"),
+        plot.caption = element_text(color = "gray40", size = 15),
+        plot.title = element_text(color = "gray40", size = 35, family = "Helvetica", face = "bold"),
+        plot.subtitle = element_text(color = "gray40", size = 20))
+
+ggsave("salidas/ranking_porcs.png",width = 25, height = 10, dpi = 300)
+
+
+
+```
+
