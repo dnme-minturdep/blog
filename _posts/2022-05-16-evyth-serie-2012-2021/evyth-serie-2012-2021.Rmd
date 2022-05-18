@@ -173,7 +173,6 @@ ggplot(tabla_graf) +
     hjust=-0.1, size=4, nudge_x = .3
   ) +
   labs(
-    title="20 principales destinos turísticos según cantidad de turistas recibidos",
     subtitle = "Viajes realizados por residentes de los 31 principales aglomerados. Año 2021",
     caption = "EVyTH-MINTURDEP"
   ) +
@@ -192,6 +191,8 @@ ggplot(tabla_graf) +
 
 ggsave("salidas/ranking_localidades.png",width = 25, height = 10, dpi = 300)
 ```
+
+### 20 principales destinos turísticos según cantidad de turistas recibidos
 
 ![](salidas/ranking_localidades.png)
 
