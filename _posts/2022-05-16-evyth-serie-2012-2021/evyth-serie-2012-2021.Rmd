@@ -13,10 +13,12 @@ editor_options:
     wrap: 72
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+
+> [**Acceso a los microdatos**](https://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos)
 
 Los estudios de caracterización de la demanda turística o de perfil del visitante (turista y/o excursionista) como el monitoreo de su evolución constituyen un insumo esencial a la hora de conocer las características de los visitantes que arriban a un destino (sea un país, una provincia, un municipio o una localidad), aportando herramientas para la generación y gestión de políticas públicas relativas al turismo. Adicionalmente, constituyen una fuente de información privilegiada para analizar el gasto turístico que realizan los diferentes tipos de visitantes, sirviendo como insumo para la estimación del impacto económico de la actividad.
 
@@ -33,6 +35,12 @@ library(tidyverse)
 library(readr)
 library(comunicacion)
 library(scales)
+library(eph)
+library(tidyverse)
+library(sf)
+library(geoAr)
+library(datawizard)
+library(ggbump)
 
 options(scipen = 999)
 ```
@@ -84,116 +92,96 @@ ggplot(data = tabla, aes(x = trimestre,
 
 
 
-## 
-
-
-
-La base de datos se encuentra disponible en distintas extensiones de archivo (_.txt_, _.csv_, _.sav_, _.dta_, _.xlsx_). Asimismo, se publica también el diccionario de registro con el conjunto de nombres y etiquetas para todas las columnas con sus respectivas categorías de respuesta.
-
-Los pasos a seguir son la continua publicación de la información trimestral y avanzar con la apertura de datos y procesos.
-
-
-
-
-```{r}
-
-library(eph)
-library(tidyverse)
-library(sf)
-library(geoAr)
-library(datawizard)
-library(ggbump)
-
-### 
-
+```{r include=FALSE}
 total_turistas_2021 <- sum(b_evyth$pondera[b_evyth$anio == 2021 & b_evyth$tipo_visitante == "Turistas"])
 
 tabulado_2021 <- b_evyth %>%
   filter(anio == 2021 & tipo_visitante == "Turistas") %>% 
-  count(localidad_destino, wt = pondera) %>% 
-  top_n(n = 15) %>% 
-  mutate(porc = round(n / total_turistas * 100,2),
-         localidad_destino = as.factor(localidad_destino)) %>% 
-  select(localidad_destino, porc) %>% 
-  left_join(select(b_evyth, codigo_2010, localidad_destino), by = "localidad_destino") %>% 
-  distinct(localidad_destino, porc, codigo_2010)
-
+  count(provincia_destino, localidad_destino, wt = pondera) %>% 
+  top_n(n = 20) %>% 
+  select(provincia_destino, localidad_destino, n) %>% 
+  left_join(
+    b_evyth %>% 
+      select(codigo_2010, provincia_destino, localidad_destino) %>% 
+      distinct(codigo_2010, provincia_destino, localidad_destino),
+    by = c("provincia_destino", "localidad_destino")) %>% 
+  mutate(codigo_2010 = case_when(localidad_destino == "Ciudad de Buenos Aires" ~ "02000010",
+                                 TRUE ~ codigo_2010))
 
 
 ### Cargo base con geometrias de localidades indec
-prueba <- geo_localidades_indec <- sf::st_read("/srv/DataDNMYE/evyth/nomenclatura_geo/Codgeo_Pais_x_loc_con_datos/indec_cods/pxlocdatos.shp") 
+geo_localidades_indec <- sf::st_read("/srv/DataDNMYE/evyth/nomenclatura_geo/Codgeo_Pais_x_loc_con_datos/indec_cods/pxlocdatos.shp") 
 
 
-lat_long_top15 <- tabulado_2021 %>% 
-  left_join(select(prueba, link, geometry), by = c("codigo_2010" = "link"))
+tabulado_2021 <- tabulado_2021 %>% 
+  left_join(
+    geo_localidades_indec %>% 
+      select(link, geometry), 
+    by = c("codigo_2010" = "link"))
 
 ### Mapitash
 
-aglos <- sf::st_read('data/aglomerados_eph.json')
+#aglos <- sf::st_read('aglomerados_eph.json')
 
 mapa_arg <- get_geo("ARGENTINA", level = "provincia")
 
 
-centroides_aglomerados <-  aglos %>%
-  filter(!st_is_empty(geometry)) %>%
-  group_by(eph_codagl) %>%
-  summarise(AGLOMERADO = as.integer(paste(unique(eph_codagl))),
-            nombre_aglomerado = unique(eph_aglome)[1]) %>%
-  st_centroid() %>% 
+centroides_localidades <- tabulado_2021 %>%
+  filter(!st_is_empty(geometry)) %>% 
+  st_as_sf() %>% 
+  st_centroid() %>%
   st_transform('+proj=longlat +datum=WGS84')
 
-centroides_aglomerados <- centroides_aglomerados %>% 
+centroides_localidades <- centroides_localidades %>%
   bind_cols(
-    sf::st_coordinates(centroides_aglomerados) %>%
+    sf::st_coordinates(centroides_localidades) %>%
       as_tibble() %>%
       rename(lon=X, lat=Y)) %>%
   as_tibble()
 
 
-
-tabla_graf <- centroides_aglomerados %>% 
-  mutate(AGLOMERADO = as.factor(AGLOMERADO)) %>%
-  left_join(tabulado) %>% 
+tabla_graf <- centroides_localidades %>% 
+  mutate(localidad_destino = as.factor(localidad_destino)) %>%
   mutate(
-    col_y = rank(-porc) %>% 
+    col_y = rank(-n) %>% 
       data_rescale(to=c(-15, -65)),
     sigmoid_end = 22,
     col_x_start = 25,
-    col_x_end = porc %>%  
-      data_rescale(to=c(25, 110), range = c(0, max(porc))),
-    area_label = paste0(round(porc, 1), "%")
+    col_x_end = n %>%  
+      data_rescale(to=c(25, 110), range = c(0, max(n))),
+    area_label = format(n, big.mark = ".", decimal.mark = ",")
   )
 
 
 ggplot(tabla_graf) +
   geom_sf(data=mapa_arg, size = .3, fill = "transparent", color = "gray40") +
-  geom_point(aes(x=lon, y=lat, color=porc)) +
+  geom_point(aes(x=lon, y=lat, color=n)) +
   geom_sigmoid(
-    aes(x=lon, y=lat, xend=sigmoid_end, yend=col_y, group=nombre_aglomerado, color=porc)
+    aes(x=lon, y=lat, xend=sigmoid_end, yend=col_y, group=localidad_destino, color=n)
   ) +
   geom_text(
-    aes(label=nombre_aglomerado, x=sigmoid_end, y=col_y, color=porc), 
+    aes(label=localidad_destino, x=sigmoid_end, y=col_y, color=n), 
     hjust=1, size=4, vjust=0, nudge_y = 0.5, alpha=0.8,
   ) +
   geom_segment(
-    aes(x=col_x_start, xend=col_x_end, y=col_y, yend=col_y, color=porc), 
+    aes(x = col_x_start, xend = col_x_end, y = col_y, yend = col_y, color = n), 
     size = 4.2, alpha = .9, size = 1, 
     lineend = "round"
   ) +
   geom_text(
-    aes(label=area_label, x=col_x_end, y=col_y, color=porc), 
+    aes(label=area_label, x=col_x_end, y=col_y, color=n), 
     hjust=-0.1, size=4, nudge_x = .3
   ) +
   labs(
-    title="Porcentaje de personas (+18) solteras",
-    subtitle = "31 principales aglomerados. 2do rimestre de 2021",
-    caption = "Elaboración propia en base a la EPH-INDEC"
+    title="20 principales destinos turísticos según cantidad de turistas recibidos",
+    subtitle = "Viajes realizados por residentes de los 31 principales aglomerados. Año 2021",
+    caption = "EVyTH-MINTURDEP"
   ) +
   coord_sf(clip = "off") +
   #scale_fill_viridis_c() +
-  dnmye::scale_fill_dnmye(discrete = F) +
+  comunicacion::scale_fill_dnmye(discrete = F) +
   #scale_color_viridis_c() +
-  dnmye::scale_color_dnmye(discrete = F) +
+  comunicacion::scale_color_dnmye(discrete = F) +
   theme_void() +
   theme(plot.margin = margin(.5, 1, .5, .5, "cm"),
         legend.position = "none",
@@ -202,9 +190,20 @@ ggplot(tabla_graf) +
         plot.title = element_text(color = "gray40", size = 35, family = "Helvetica", face = "bold"),
         plot.subtitle = element_text(color = "gray40", size = 20))
 
-ggsave("salidas/ranking_porcs.png",width = 25, height = 10, dpi = 300)
-
-
-
+ggsave("salidas/ranking_localidades.png",width = 25, height = 10, dpi = 300)
 ```
 
+![](salidas/ranking_localidades.png)
+
+## Recursos EVyTH
+
+- [INFORMES](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth)
+
+- [TABLERO](https://tableros.yvera.tur.ar/interno.html)
+
+- [DATOS ABIERTOS](https://datos.yvera.gob.ar/): 
+  
+  - [Recursos](https://datos.yvera.gob.ar/dataset/encuesta-viajes-turismo-hogares-evyth) 
+  - [Microdatos](https://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos)
+
+- La EVyTH en el marco de la [ARMONIZACION ESTADÍSTICA](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html#evyth)
