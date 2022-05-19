@@ -41,7 +41,7 @@ library(sf)
 library(geoAr)
 library(datawizard)
 library(ggbump)
-
+source("funciones.R")
 options(scipen = 999)
 ```
 
@@ -119,12 +119,7 @@ tabulado_2021 <- tabulado_2021 %>%
       select(link, geometry), 
     by = c("codigo_2010" = "link"))
 
-### Mapitash
-
-#aglos <- sf::st_read('aglomerados_eph.json')
-
 mapa_arg <- get_geo("ARGENTINA", level = "provincia")
-
 
 centroides_localidades <- tabulado_2021 %>%
   filter(!st_is_empty(geometry)) %>% 
@@ -154,14 +149,14 @@ tabla_graf <- centroides_localidades %>%
 
 
 ggplot(tabla_graf) +
-  geom_sf(data=mapa_arg, size = .3, fill = "transparent", color = "gray40") +
+  geom_sf(data=mapa_arg, size = .5, fill = "transparent", color = "gray40") +
   geom_point(aes(x=lon, y=lat, color=n)) +
   geom_sigmoid(
     aes(x=lon, y=lat, xend=sigmoid_end, yend=col_y, group=localidad_destino, color=n)
   ) +
   geom_text(
     aes(label=localidad_destino, x=sigmoid_end, y=col_y, color=n), 
-    hjust=1, size=4, vjust=0, nudge_y = 0.5, alpha=0.8,
+    hjust=1, size=10, vjust=0, nudge_y = 0.5, alpha=0.8,
   ) +
   geom_segment(
     aes(x = col_x_start, xend = col_x_end, y = col_y, yend = col_y, color = n), 
@@ -170,31 +165,30 @@ ggplot(tabla_graf) +
   ) +
   geom_text(
     aes(label=area_label, x=col_x_end, y=col_y, color=n), 
-    hjust=-0.1, size=4, nudge_x = .3
+    hjust=-0.1, size=10, nudge_x = .3
   ) +
   labs(
     subtitle = "Viajes realizados por residentes de los 31 principales aglomerados. Año 2021",
     caption = "EVyTH-MINTURDEP"
   ) +
   coord_sf(clip = "off") +
-  #scale_fill_viridis_c() +
-  comunicacion::scale_fill_dnmye(discrete = F) +
-  #scale_color_viridis_c() +
-  comunicacion::scale_color_dnmye(discrete = F) +
+  scale_fill_dnmye2(discrete = F) +
+  scale_color_dnmye2(discrete = F) +
   theme_void() +
   theme(plot.margin = margin(.5, 1, .5, .5, "cm"),
         legend.position = "none",
-        plot.background = element_rect(fill = "black"),
-        plot.caption = element_text(color = "gray40", size = 15),
-        plot.title = element_text(color = "gray40", size = 35, family = "Helvetica", face = "bold"),
-        plot.subtitle = element_text(color = "gray40", size = 20))
+        plot.background = element_rect(fill = "transparent"),
+        plot.caption = element_text(color = "gray40", size = 25),
+        plot.title = element_text(color = "gray40", size = 55, family = "Helvetica", face = "bold"),
+        plot.subtitle = element_text(color = "gray40", size = 40))
 
-ggsave("salidas/ranking_localidades.png",width = 25, height = 10, dpi = 300)
+ggsave("salidas/ranking_localidades.png",width = 35, height = 25, dpi = 150)
 ```
 
 ### 20 principales destinos turísticos según cantidad de turistas recibidos
 
 ![](salidas/ranking_localidades.png)
+
 
 ## Recursos EVyTH
 
