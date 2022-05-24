@@ -1,5 +1,5 @@
 ---
-title: "Encuesta de Ocupación Hotelera (EOH)"
+title: "Fuentes de datos: Encuesta de Ocupación Hotelera (EOH)"
 description: |
  Caracteristicas principales del relevamiento y pontenciales usos de la información generada.
 output:
