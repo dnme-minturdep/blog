@@ -1,0 +1,512 @@
+---
+title: "Encuesta de Ocupación Hotelera (EOH)"
+description: |
+ Caracteristicas principales del relevamiento y pontenciales usos de la información generada.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(magrittr)
+library(janitor)
+library(lubridate)
+library(haven)
+library(dplyr)
+library(glue)
+library(comunicacion)
+library(gt)
+library(ggplot2)
+library(ggtext)
+library(extrafont)
+library(hrbrthemes)
+library(tidytext)
+library(webshot)
+library(patchwork)
+library(here)
+library(sf)
+library(herramientas)
+library(ggrepel)
+#install.packages("cowplot")
+library(cowplot)
+library(plotly)
+library(geoAr)
+```
+
+
+
+```{r}
+#Levanto las tablas de la EOH  del server
+eoh_tg1 <- read_csv("/srv//DataDNMYE/eoh/bitacora/tablas/eoh_tg1.csv")
+eoh_tg2 <- read_csv("/srv//DataDNMYE/eoh/bitacora/tablas/eoh_tg2.csv")
+eoh_tg3 <- read_csv("/srv//DataDNMYE/eoh/bitacora/tablas/eoh_tg3.csv")
+eoh_tg4 <- read_csv("/srv//DataDNMYE/eoh/bitacora/tablas/eoh_tg4.csv")
+eoh_tg4b <- read_csv("/srv//DataDNMYE/eoh/bitacora/tablas/eoh_tg4b.csv")
+eoh_tg5 <- read_csv("/srv//DataDNMYE/eoh/bitacora/tablas/eoh_tg5.csv")
+eoh_tg6 <- read_csv("/srv//DataDNMYE/eoh/bitacora/tablas/eoh_tg6.csv")
+```
+
+# ¿PARA QUÉ SIRVE LA ENCUESTA DE OCUPACIÓN HOTELERA?
+
+[**Acceso a los datos**](https://datos.yvera.gob.ar/dataset/encuesta-ocupacion-hotelera-parahotelera-eoh)
+
+# Introducción
+
+Desde la *Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación* nos proponemos, con este post, dar a conocer la **Encuesta de Ocupación Hotelera y Parahotelera (EOH)** y mostrar todos los datos que produce, siendo una fuente de información muy importante para el sector. Se mostrarán las principales características de la encuesta como también los resultados más relevantes.
+
+Primero, lo primero…
+
+## ¿Qué es la Encuesta de Ocupación Hotelera (EOH)? {-}
+
+La EOH es un relevamiento coordinado entre el *Ministerio de Turismo y Deportes de la Nación* y el *Instituto Nacional de Estadísticas y Censos (INDEC)* que se realiza de manera continua desde el año 2004 hasta la actualidad.
+
+El **principal objetivo** es la medición del impacto del turismo internacional e interno en los establecimientos hoteleros y para-hoteleros del país. Para ello, se encuesta todos los meses a una muestra de más de 3 mil hoteles del país.
+
+Uno de los datos interesantes para analizar de la EOH es la **estacionalidad**, propia de la actividad turística. En el siguiente gráfico se muestra la evolución mensual de los viajeros hospedados y pernoctes (noches) en los alojamientos hoteleros y parahoteleros de nuestro país para los años 2018-2019:
+
+
+```{r, fig.width=11, fig.height=5}
+###GRÁFICO 1: Evolución de los viajeros y las pernoctaciones
+#Gráfico
+eoh_graf_1 <-  eoh_tg1 %>% 
+  ggplot(aes(group = indicador, x = indice_de_tiempo,
+             y = total, color = indicador,
+             text=glue("{total} millones")))+
+  geom_line(size=2)+
+  geom_point(size=3) +
+  geom_hline(yintercept = 0, color = "grey", alpha =0.7, size = 0.5) +
+  labs(title = "Viajeros y pernoctes hospedados en establecimientos hoteleros\ny parahoteleros.",
+       subtitle = "En millones. Total País. 2018-2019.",
+       x = "",
+       y = "millones",
+       colour="",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).") +
+  theme_minimal()+
+  scale_y_continuous(limits = c(0, 7),
+                     breaks = seq(0, 7, 0.5))+
+  scale_color_manual(values = c("viajeros" = dnmye_colores("cian"), "pernoctes" = dnmye_colores("naranja")))+
+  theme(plot.title = element_markdown(halign = .5),
+        plot.caption  = element_text(hjust = 0),
+        panel.grid = element_blank(),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.text.x = element_text(angle = 90),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")))+
+  scale_x_date(date_breaks = "1 months",
+               date_labels = "%b %y",
+               expand = c(0,10))
+#Plotly
+plot_1 <- eoh_graf_1 %>%   
+  ggplotly(tooltip = "text") %>% 
+  layout(title = list(text = paste0('Viajeros hospedados y pernoctes.',
+                                    '<br>',
+                                    '<sup>',
+                                    'En millones. Establecimientos hoteleros y parahoteleros del país. 2018-2019.',
+                                    '</sup>')),
+         annotations = 
+           list(x = 1, y = -0.2, text = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).", 
+                showarrow = F, xref='paper', yref='paper', 
+                xanchor='right', yanchor='auto', xshift=0, yshift=0))
+plot_1
+```
+
+Allí vemos como en los meses de temporada de verano la actividad turística crece en comparación con el resto del año. Los hoteles de los destinos turísticos más importantes del país alojan a miles de turistas durante los meses de enero, febrero y marzo mientras en el resto del año, la actividad merma. No obstante, también en las vacaciones de invierno, se puede observar otro pico de actividad, siendo julio el mes de mayor dinamismo, producto del receso escolar que se disfruta en todas las provincias de nuestro país.
+
+De la misma manera, esto se puede apreciar en la **tasa de ocupación hotelera**, otro indicador que nos ofrece la encuesta, en las 49 localidades turísticas relevadas por la EOH; entre ellas, podemos mencionar la localidad costera de Villa Gesell con una estacionalidad marcada en verano para luego descender en el resto del año; También en S. C. de Bariloche, con una ocupación elevada en el verano, pero aún más durante los meses de invierno donde el turismo de nieve pasa a ser una actividad muy importante para los destinos de la Patagonia, siendo así que la ocupación en dichos meses supera la registrada en la temporada estival. En otras localidades, como es el caso de S. M. de Tucumán, se observa una actividad hotelera y parahotelera más constante durante todo el año. 
+
+
+```{r, fig.width=11, fig.height=5}
+###GRÁFICO 2: Evolución de la top en el año por localidad
+#Gráfico
+eoh_graf_2 <- eoh_tg2 %>%  
+  ggplot(aes(group = localidad, x = indice_de_tiempo,
+             y = top, color = localidad,
+             text=paste0(format(top, big.mark = ".",decimal.mark = ",", digits = 1),"%")))+
+  geom_line(size=2)+
+  geom_point(size=3)+
+  geom_hline(yintercept = 0, color = "grey", alpha =0.7, size = 0.5) +
+  labs(title = "Tasa de ocupación en plazas, según mes.",
+       subtitle = "Villa Gesell, Tucumán, Bariloche. Año 2019.",
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).") +
+  theme_minimal()+
+  scale_color_manual(values = c("Bariloche" = dnmye_colores("rosa"), "Tucumán" = dnmye_colores("naranja"),"Villa Gesell" = dnmye_colores("purpura")))+
+  scale_y_continuous(limits = c(0, 100),
+                     breaks = seq(0, 100, 10),
+                     labels = function(x) paste0(x,"%"))+
+  theme(plot.caption  = element_text(hjust = 0,"bold"),
+        plot.title=element_text(hjust = 0),
+        panel.grid = element_blank(),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.text.x = element_text(angle = 90),
+        legend.position = "bottom")+
+  scale_x_date(date_breaks = "1 months",
+               date_labels = "%b %y",
+               expand = c(0,10))
+#Plotly
+plot_2 <- eoh_graf_2 %>% 
+  ggplotly(tooltip = "text") %>% 
+  layout(title = list(text = paste0('Tasa de ocupación en plazas, según mes.',
+                                    '<br>',
+                                    '<sup>',
+                                    'Villa Gesell, Tucumán, Bariloche. Año 2019.',
+                                    '</sup>')),
+         annotations = 
+           list(x = 1, y = -0.2, text = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).", 
+                showarrow = F, xref='paper', yref='paper', 
+                xanchor='right', yanchor='auto', xshift=0, yshift=0))
+plot_2
+  
+```
+
+Además de analizar la tasa de ocupación de plazas del mes, la EOH nos brinda información de la ocupación de los fines de semana. En algunas localidades, ambos porcentajes son similares, no mostrando una actividad turística diferente durante la semana y el fin de semana. De lo contrario, en otras localidades, la ocupación entre ambos periodos difiere, siendo la ocupación del mes más alta a la del fin de semana (Corrientes, por ejemplo). Esos casos representan lo que ocurre generalmente en los centros urbanos, donde se ve una mayor actividad durante la semana y luego cae durante los fines de semana. Por el contrario, se encuentran destinos que durante el fin de semana la actividad se incrementa (Villa General Belgrano, por ejemplo) en comparación con el resto de la semana, generando entonces tasas de ocupación mensuales más bajas a las del fin de semana. 
+
+```{r, fig.width=9, fig.height=5}
+###GRÁFICO 3: Tasa de ocupación en localidades comparando mes vs fds
+eoh_tg3 %>% 
+  ggplot(aes(group = indicador, x = localidad,
+             y = top, color = indicador))+
+  geom_point(size=3)+
+  geom_text_repel(aes(label=paste0(format(top, big.mark = ".",decimal.mark = ",", digits = 1),"%")), size = 4) +
+  labs(title = "Tasa de ocupación en plazas mensual y en fines de semana.",
+       subtitle = "Año 2019.",
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).") +
+  theme_minimal()+
+  scale_y_continuous(limits = c(0, 100),
+                     breaks = seq(0, 100, 25),
+                     labels = function(x) paste0(x,"%"))+
+  scale_color_manual(values = c("mensual" = dnmye_colores("gris oscuro"), "fds" = dnmye_colores("rosa")))+
+  theme(plot.title = element_markdown(halign = .5),
+        plot.caption  = element_text(hjust = 0,"bold"),
+        plot.subtitle = element_text(colour = dnmye_colores("gris oscuro")))
+```
+
+## ¿Qué localidades forman parte del relevamiento? {-}
+
+Cuando comenzó el operativo en el año 2004, se relevaban 17 localidades, seleccionadas en función de la relevancia turística. Con el objetivo de obtener representatividad de datos a **nivel regional**, en el año 2005, la cantidad de localidades relevadas ascendieron a 39. Con el paso de los años se sumaron más destinos hasta llegar a las **49 localidades que forman parte de la EOH en la actualidad**, las cuales podemos apreciar en el siguiente mapa
+
+```{r mapa localidades, fig.width=9, fig.height=9}
+# definir tamaño deseado del mapa en las opciones del chunk arriba ↑
+#mapa eoh
+# leo eoh
+eoh <-  read_csv2(glue("{here()}/_posts/2022-05-24-intro-eoh/entradas/Localidades EOH.csv"))
+# leo tabla localidades indec con coordenas
+geo_localidades_indec <- st_read("/srv/DataDNMYE/evyth/nomenclatura_geo/Codgeo_Pais_x_loc_con_datos/indec_cods/pxlocdatos.shp", quiet = TRUE)
+# limpio los nombres de eoh para que coincidan con nombres de localidad indec
+eoh <- eoh %>% 
+  mutate(localidad_limpio = case_when(localidad == "CABA" ~ "Ciudad Autónoma de Buenos Aires",
+                                      localidad == "Catamarca" ~ "San Fernando del Valle de Catamarca",
+                                      localidad == "Bariloche" ~ "San Carlos de Bariloche",
+                                      localidad == "Calafate" ~ "El Calafate",
+                                      localidad == "Carlos Paz" ~ "Villa Carlos Paz",
+                                      localidad == "Jujuy" ~ "San Salvador de Jujuy",
+                                      localidad == "La Angostura" ~ "Villa La Angostura",
+                                      localidad == "Malargue-Las Leñas" ~ "Malargüe", # en algunos casos hubo que decidir a qué localidad asignar
+                                      localidad == "Mar Chiquita" ~ "Miramar", # incluso cuando la localidad eoh sea un área
+                                      localidad == "Termas" ~ "Termas de Río Hondo", # verificar
+                                      localidad == "Tucumán" ~ "San Miguel de Tucumán",
+                                      localidad == "Valle de Uco" ~ "Tupungato", # verificar
+                                      T ~ localidad),
+         # idem para provincia
+         provincia = case_when(provincia == "Ciudad Aut. de Bs. As." ~ "Ciudad Autónoma de Buenos Aires",
+                               provincia == "Tierra del Fuego" ~ "Tierra del Fuego, Antártida e Islas del Atlántico Sur
+",
+                               T ~ provincia))
+# limpiar texto de tildes, mayusculas etc.
+eoh <- eoh %>% mutate(localidad_limpio = herramientas::limpiar_texto(localidad_limpio) %>% str_replace_all("  ", " "),
+                      provincia_limpio = herramientas::limpiar_texto(provincia) %>% str_replace_all("  ", " "))
+# tmb para los datos de indec para poder hacer el join
+geo_localidades_indec <- geo_localidades_indec %>% mutate(localidad_limpio = herramientas::limpiar_texto(localidad),
+                                                          provincia_limpio = herramientas::limpiar_texto(provincia))
+# guardo el crs de los datos indec (seria el indicador de la proyeccion geografica)
+crs_indec <- st_crs(geo_localidades_indec)
+# hago el join por provincia y localidad
+# me queda la tabla eoh con las coordenadas y algunas variables extra de la tabla indec
+eoh_con_geom <- left_join(eoh, geo_localidades_indec, by = c("provincia_limpio" = "provincia_limpio", "localidad_limpio" = "localidad_limpio")) %>% 
+  st_as_sf(crs = crs_indec) %>% 
+  st_simplify()
+# vamos a hacer igual para tener la tabla de regiones con geometrias
+# datos de geometria por provincia del paquete geoAr
+provincias <- geoAr::get_geo("ARGENTINA", level = "provincia") %>% # descarga geometrias
+  left_join(geoAr::geo_metadata %>% distinct(codprov_censo, name_iso)) %>%  # join con tabla de nombes de provincias
+  # cambio el nombre de tierra del fuego para que coincida con cómo lo dejé antes
+  mutate(provincia_limpio = limpiar_texto(case_when(name_iso == "Tierra del Fuego" ~ "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+                                                    T ~ name_iso))) 
+# guardo el crs de los datos de geoAr (seria el indicador de la proyeccion geografica)
+crs_geoar <- st_crs(provincias)
+# armo tabla de provs ~ regiones
+regiones <- eoh %>% distinct(región, provincia_limpio) %>% 
+  # hago el join con geometría de provincias
+  left_join(provincias) %>% st_as_sf(crs = crs_geoar)
+# este paso no es imprescindible pero es más prolijo
+# se pueden comentar la lineas y correr el script igual
+regiones <- regiones %>% 
+  group_by(región) %>%  # agrupo por región
+  summarise(geometry = st_combine(geometry)) %>% # para cada región combino las geometrías de las provincias
+  st_make_valid() %>% 
+  st_simplify() 
+aglomerado_gba <- c("AVELLANEDA","BERAZATEGUI","ESCOBAR","ESTEBAN ECHEVERRIA",
+                    "EZEIZA","FLORENCIO VARELA","GENERAL RODRIGUEZ","GENERAL SAN MARTIN",
+                    "HURLINGHAM","ITUZAINGO","JOSE C. PAZ","LA MATANZA","LANUS",
+                    "LOMAS DE ZAMORA","MALVINAS ARGENTINAS","MARCOS PAZ",
+                    "MERLO","MORENO","MORON","PILAR","PRESIDENTE PERON","QUILMES",
+                    "SAN FERNANDO","SAN ISIDRO","SAN MIGUEL","SAN VICENTE",
+                    "TIGRE","TRES DE FEBRERO","VICENTE LOPEZ", "ALMIRANTE BROWN")
+aglomerado_gba <- geoAr::get_geo(geo = "PBA") %>% 
+  left_join(geoAr::geo_metadata) %>% 
+  filter(nomdepto_censo %in% aglomerado_gba)
+# esto resulta en una tabla de 7 regiones cada una con su geometría unificada
+gg_eoh <- eoh_con_geom %>% 
+  filter(localidad.x !=  "CABA") %>% 
+  ggplot() + 
+  geom_sf(data = provincias, fill = "white", size = .1, color = "black")+
+  geom_sf(data = regiones, aes(fill = región), alpha = 0.4) +
+  geom_sf(color = "black", alpha = 1, size = .8) +
+  scale_fill_dnmye() +
+  theme_void() +
+  theme(legend.position = "bottom", ) +
+  labs(title = "Mapa de localidades relevadas por la EOH.",
+       subtitle = "Año 2019.",
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).") 
+# las labels sobrecargar el mapa pero para que puedan ver como queda
+labels_eoh <- eoh_con_geom %>% 
+  mutate(x = as.numeric(map(.x =geometry, ~ unlist(.x)[[1]])), # tomo las coordenadas x de geometry
+         y = as.numeric(map(.x =geometry, ~ unlist(.x)[[2]])))  #tomo las coord y de geometry
+gg_eoh_labels <- gg_eoh + #usar geom_label_repel para etiquetas que evitan superponerse
+  geom_label_repel(data = filter(labels_eoh, localidad.x != "CABA" ),
+                   aes(label = localidad.x, x = x, y = y), seed = 3,
+                   size = 2,
+                   max.overlaps = Inf, # dice si se eliminan etiquetas con overlaps
+                   label.padding = 0.1, force = 3, min.segment.length = 0, fontface = "bold") 
+#### sub plot caba ####
+gg_eoh_caba <- eoh_con_geom %>% 
+  filter(localidad.x == "CABA") %>% 
+  ggplot() + 
+  geom_sf(data = aglomerado_gba,
+          fill = dnmye_paletas(palette = 'c10_todos')(7)[[1]],
+          size = .1, color = "black", alpha = 0.4)+
+  geom_sf(data = filter(regiones, `región` == "CABA"), 
+          fill = dnmye_paletas(palette = 'c10_todos')(7)[[2]],
+          alpha = 0.4) +
+  geom_sf(color = "black", alpha = 1, size = .8) +
+  theme_void() +
+  labs(x = "",
+       y = "",
+       colour="") 
+gg_eoh_labels_caba <- gg_eoh_caba + #usar geom_label_repel para etiquetas que evitan superponerse
+  geom_label_repel(data = filter(labels_eoh, localidad.x == "CABA"),
+                   aes(label = localidad.x, x = x, y = y), seed = 3,
+                   size = 2,
+                   max.overlaps = Inf, # dice si se eliminan etiquetas con overlaps
+                   label.padding = 0.1, force = 3, min.segment.length = 0, fontface = "bold") 
+#### composicion de plot ggdraw ####
+eoh_localidades_map <-  cowplot::ggdraw() +
+  coord_equal(xlim = c(0, 20), ylim = c(0, 20), expand = FALSE) +
+  annotation_custom(ggplotGrob(gg_eoh_labels_caba), xmin =12.5, xmax = 17.5, ymin =10, ymax = 15) +
+  annotation_custom(ggplotGrob(gg_eoh_labels), xmin = 0, xmax = 20, ymin = 0, ymax = 20)#+ 
+eoh_localidades_map
+```
+
+
+Otro de los datos interesantes que la EOH produce es la cantidad de viajeros y pernoctes según el *origen de dichos viajeros*, distinguiendo entre residentes y no residentes. 
+
+En los gráficos a continuación se ve el porcentaje de participación de los pernoctes de los viajeros residentes y no residentes para el año 2019 en diferentes localidades relevadas por la encuesta.  
+
+
+```{r, fig.width=9, fig.height=5}
+###GRÁFICO 4: Distribución de los pernoctes por origen
+  
+eoh_tg4 %>%
+  mutate(localidad=factor(localidad,
+                          levels = c("CABA","Ushuaia", "Puerto Iguazú","Resistencia","Carlos Paz","Las Grutas"))) %>% 
+  ggplot()+
+  geom_col(aes(x=localidad,y=peso,fill=residencia))+
+  geom_text(aes(x=localidad,y=peso,label=paste0(format(peso, big.mark = ".",decimal.mark = ",", digits = 0),"%"),
+                group=residencia),position = position_stack(vjust = .5))+
+  labs(title = "Distribución de los pernoctes según residencia.",
+       subtitle = "CABA, Carlos Paz, Las Grutas, Puerto Iguazú, Resistencia, Ushuaia. Año 2019.",
+       x = "",
+       y = "",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).") +
+  scale_fill_manual(values = c("Residentes" = dnmye_colores("cian"),"No residentes" = dnmye_colores("gris medio")))+
+  scale_y_continuous(limits = c(0, 101),
+                     breaks = seq(0, 100, 25),
+                     labels = function(x) paste0(x,"%"))+
+  scale_x_discrete()+
+  theme_minimal()+
+  theme(plot.caption  = element_text(hjust = 0,"bold"),
+        plot.title=element_text(hjust = 0,"bold"),
+        plot.subtitle = element_text(colour = dnmye_colores("gris oscuro")),
+        legend.title = element_blank(),
+        panel.grid = element_blank())
+```
+
+Hay ciertos destinos turísticos que reciben, en gran medida, turismo internacional como es el caso de la Ciudad de Buenos Aires, Puerto Iguazú y Ushuaia. La participación de los viajeros no residentes hospedados en los hoteles y parahoteles en estos destinos representan un alto porcentaje del total de pernoctes registrados. Por ejemplo, en Ushuaia casi 3 de cada 5 turistas que pernoctan allí en los alojamientos hoteleros y parahoteleros, son no residentes.
+
+Por el contrario, destinos como Villa Carlos Paz, Resistencia, Las Grutas son lugares con mayor cantidad de turistas internos. En este caso, el turismo receptivo representa una pequeña proporción mientras que el turismo doméstico, explica más del 90% de los pernoctes registrados en el sector hoteleros y parahotelero. 
+
+Esto también se puede analizar a un nivel más agregado, por regiones turísticas: 
+
+```{r, fig.width=9, fig.height=5}
+###GRÁFICO 4b: Distribución de los pernoctes por origen según región
+eoh_tg4b %>%
+  mutate(region_de_destino=factor(region_de_destino,
+                                  levels = c("CABA","Patagonia","Cuyo","Litoral","Norte","Córdoba","Buenos Aires"))) %>% 
+  ggplot()+
+  geom_col(aes(x=region_de_destino,y=peso,fill=residencia))+
+  geom_text(aes(x=region_de_destino,y=peso,label=paste0(format(peso, big.mark = ".",decimal.mark = ",", digits = 1),"%"),group=residencia),position = position_stack(vjust = .5))+
+  labs(title = "Distribución de los pernoctes según residencia, por región de destino",
+       subtitle = "Año 2019.",
+       x = "",
+       y = "",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).") +
+  scale_fill_manual(values = c("Residentes" = dnmye_colores("cian"),"No residentes" = dnmye_colores("gris medio")))+
+  scale_y_continuous(limits = c(0, 101),
+                     breaks = seq(0, 100, 25),
+                     labels = function(x) paste0(x,"%"))+
+  scale_x_discrete()+
+  theme_minimal()+
+  theme(plot.caption  = element_text(hjust = 0,"bold"),
+        plot.title=element_text(hjust = 0,"bold"),
+        plot.subtitle = element_text(colour=dnmye_colores("gris oscuro")),
+        legend.title = element_blank(),
+        panel.grid = element_blank())
+```
+
+
+## ¿Qué tipo de establecimientos forman parte del universo de relevamiento de la EOH? {-}
+Se encuestan a:
+
+**Establecimientos Hoteleros:**
+
+- Hoteles de 1 a 5 estrellas
+- Apart Hoteles
+- Hoteles Boutiques
+
+**Establecimientos Para-hoteleros:**
+
+- Albergues/hostels
+- Cabañas / Bungalows
+- Hoteles Sindicales
+- Hospedajes / residenciales
+- Hosterías
+
+La EOH permite conocer la cantidad de noches y viajeros hospedados *por diferentes categorías hoteleras*. A nivel nacional y regional se puede analizar los datos según las siguientes categorías hoteleras:
+
+_- Establecimientos Hoteleros:_
+
+-	Hotel 1 y 2 estrellas
+-	Hotel 3 estrellas, boutique y apart hotel
+-	Hotel 4 y 5 estrellas
+
+_- Establecimientos Para-hoteleros_
+
+Y para las localidades, la apertura de publicación de los datos es más agregada: 
+
+-	Establecimientos Hoteleros
+-	Establecimientos Para-hoteleros
+
+En el gráfico a continuación se muestra el total de pernoctes del año 2019 según la participación porcentual de las diferentes categorías hoteleras. También se puede analizar esto mismo para cada región turística. 
+
+```{r, fig.width=9, fig.height=5}
+###GRÁFICO 5: Pernoctes totales por categoría
+eoh_tg5 %>%
+  mutate(categoria=factor(categoria,
+                          levels = c("1 y 2 estrellas","Para Hoteles","4 y 5 estrellas","3 estrellas/boutiques/aparts"))) %>% 
+  ggplot(aes(x=categoria,y=pernoctes_totales,fill=categoria))+
+  geom_col()+ coord_flip()+
+  geom_text(aes(label=paste0(format(pernoctes_totales,big.mark = ".",decimal.mark = ",",digits=3),"%")),
+            position=position_stack(vjust=0.5))+
+  scale_y_continuous(limits = c(0, 40),
+                     breaks = seq(0, 40, 10),
+                     labels = function(x) paste0(x,"%"))+
+  theme_minimal()+ 
+  scale_fill_manual(values = c(dnmye_colores("purpura"),dnmye_colores("gris oscuro"),
+                               dnmye_colores("gris medio"),dnmye_colores("cian")))+
+  labs(title = "Distribución de los pernoctes según categoría del establecimiento.",
+       subtitle = "Total país. Año 2019.",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).",
+       x="Categoría",
+       y="Participación sobre el total de pernoctes")+
+  theme(plot.caption  = element_text(hjust = 0,"bold"),
+        plot.title = element_text("bold"),
+        plot.subtitle =element_text(colour=dnmye_colores("gris oscuro")),
+        panel.grid = element_blank(),
+        legend.position='none',
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+```
+
+Los hoteles de 3 estrellas, Aparts y hoteles boutiques acumularon la mayor cantidad de noches (31% del total), siguiéndole los hoteles de 4 y 5 estrellas (28,8%). 
+
+Sin embargo, cuando se mira a nivel regional, la situación es diferente en cada una de ellas. En la región Buenos Aires y Córdoba, la participación de los hoteles 4 y 5 estrellas es la más baja comparativamente al resto de las regiones (16% y 10%, respectivamente) mientras que en CABA y en Litoral, su participación asciende significativamente (47% y 36%, respectivamente). Los hoteles de 1 y 2 estrellas toman fuerza en la región Córdoba (34%), los parahoteleros, en la región Buenos Aires (34%)y los hoteles de 3 estrellas, Aparts y Boutiques, en la región Cuyo (37%) 
+
+
+```{r, fig.width=9, fig.height=5}
+#GRÁFICO 6:Pernoctes por categoría y región
+eoh_tg6 %>% 
+  ggplot()+
+  geom_col(aes(x=region_de_destino,y=distribucion_pernoctes,fill=categoria))+
+  geom_text(aes(x=region_de_destino,y=distribucion_pernoctes,
+                label=paste0(format(distribucion_pernoctes, big.mark = ".",decimal.mark = ",", digits = 1),"%"),
+                group=categoria),position = position_stack(vjust = .5),
+            size=4)+
+  labs(title = "Distribución porcentual de los pernoctes según categoria, por región.",
+       subtitle = "Año 2019.",
+       x = "",
+       y = "",
+       caption = "Fuente: Encuesta de Ocupación Hotelera (EOH) - (DNMyE e INDEC).") +
+  scale_fill_manual(values = c(dnmye_colores("purpura"),dnmye_colores("cian"),
+                               dnmye_colores("gris medio"),dnmye_colores("gris oscuro")))+
+  scale_y_continuous(limits = c(0, 101),
+                     breaks = seq(0, 100, 20),
+                     labels = function(x) paste0(x,"%"))+
+  theme_minimal()+
+  theme(plot.caption  = element_text(hjust = 0,"bold"),
+        plot.title=element_text(hjust = 0, "bold"),
+        plot.subtitle = element_text(colour=dnmye_colores("gris oscuro")),
+        legend.title = element_blank(),
+        panel.grid = element_blank())
+```
+
+## Principales indicadores que se pueden producir a partir de la EOH {-}
+
+Además de todo lo que mostramos hasta ahora ( _cantidad de viajeros alojados_, _pernoctaciones_, _tasas de ocupación en habitaciones/unididades y plazas_), también se puede encontrar otros indicadores: 
+
+- **Estadía promedio:** cantidad de noches promedio por viajero hospedado.
+
+- **Facturación total en pesos:** ingresos percibidos por los establecimientos por la totalidad de servicios ofrecidos (a valores expresados en pesos argentinos).
+
+- **Ingresos por habitación disponible:** tarifa promedio por cada habitación disponible (lo que se conoce en inglés como *RevPar* -revenue per available room-).
+
+- **Tarifa media diaria:** tarifa promedio por cada habitación ocupada (también conocido como *ADR* -average daily room-).
+
+- **Puestos de trabajo totales:** cantidad de puestos de trabajo empleados en los establecimientos.
+
+- **Puestos de trabajo equivalentes:** cantidad de puestos de trabajo empleados en los establecimientos, que se calculan tomando como referencia una jornada a tiempo completo (45 horas semanales).
+
+## Sobre la publicación de los informes {-}
+
+Por último, es importante que sepas dónde podes encontrar todos la info de la EOH. Los resultados son publicados 50 días (aproximadamente) posteriores al mes vencido. 
+
+Podes encontrarlos en tanto en el [Sistema de Información Turística de la Arge
+ntina (SINTA)](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-ocupacion-hotelera-eoh), como en el sitio del [INDEC](https://www.indec.gob.ar/indec/web/Institucional-Indec-InformesTecnicos-56).
+
+A su vez, se encuentra disponible mucha info en formato abierto para que puedas descargarlos fácilmente en nuestro portal de [Datos Abiertos](https://datos.yvera.gob.ar/dataset/encuesta-ocupacion-hotelera-parahotelera-eoh). 
+
