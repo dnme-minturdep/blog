@@ -1,7 +1,7 @@
 ---
 title: "Fuentes de datos: Encuesta de Ocupación Hotelera (EOH)"
 description: |
- Caracteristicas principales del relevamiento y pontenciales usos de la información generada.
+ Características principales del relevamiento y potenciales usos de la información generada.
 output:
   distill::distill_article:
     self_contained: true
