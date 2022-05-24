@@ -67,7 +67,7 @@ Primero, lo primero…
 
 ## ¿Qué es la Encuesta de Ocupación Hotelera (EOH)? {-}
 
-La EOH es un relevamiento coordinado entre el *Ministerio de Turismo y Deportes de la Nación* y el *Instituto Nacional de Estadísticas y Censos (INDEC)* que se realiza de manera continua desde el año 2004 hasta la actualidad.
+La EOH es un relevamiento coordinado entre el *Ministerio de Turismo y Deportes de la Nación* y el *Instituto Nacional de Estadística y Censos (INDEC)* que se realiza de manera continua desde el año 2004 hasta la actualidad.
 
 El **principal objetivo** es la medición del impacto del turismo internacional e interno en los establecimientos hoteleros y para-hoteleros del país. Para ello, se encuesta todos los meses a una muestra de más de 3 mil hoteles del país.
 
