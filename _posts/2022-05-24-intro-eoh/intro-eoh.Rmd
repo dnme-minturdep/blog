@@ -240,8 +240,8 @@ eoh_con_geom <- left_join(eoh, geo_localidades_indec, by = c("provincia_limpio" 
   st_simplify()
 # vamos a hacer igual para tener la tabla de regiones con geometrias
 # datos de geometria por provincia del paquete geoAr
-provincias <- geoAr::get_geo("ARGENTINA", level = "provincia") %>% # descarga geometrias
-  left_join(geoAr::geo_metadata %>% distinct(codprov_censo, name_iso)) %>%  # join con tabla de nombes de provincias
+provincias <- geoAr::get_geo("ARGENTINA", level = "provincia", simplified = FALSE) %>% # descarga geometrias
+  left_join(geoAr::geo_metadata %>% distinct(codprov_censo, name_iso)) %>%  # join con tabla de nombres de provincias
   # cambio el nombre de tierra del fuego para que coincida con cómo lo dejé antes
   mutate(provincia_limpio = limpiar_texto(case_when(name_iso == "Tierra del Fuego" ~ "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
                                                     T ~ name_iso))) 
@@ -265,7 +265,7 @@ aglomerado_gba <- c("AVELLANEDA","BERAZATEGUI","ESCOBAR","ESTEBAN ECHEVERRIA",
                     "MERLO","MORENO","MORON","PILAR","PRESIDENTE PERON","QUILMES",
                     "SAN FERNANDO","SAN ISIDRO","SAN MIGUEL","SAN VICENTE",
                     "TIGRE","TRES DE FEBRERO","VICENTE LOPEZ", "ALMIRANTE BROWN")
-aglomerado_gba <- geoAr::get_geo(geo = "PBA") %>% 
+aglomerado_gba <- geoAr::get_geo(geo = "BUENOS AIRES") %>% 
   left_join(geoAr::geo_metadata) %>% 
   filter(nomdepto_censo %in% aglomerado_gba)
 # esto resulta en una tabla de 7 regiones cada una con su geometría unificada
