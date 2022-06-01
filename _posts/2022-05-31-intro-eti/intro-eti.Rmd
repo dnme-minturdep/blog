@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### Introducción
 
-Desde la *Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE – MINTURDEP)* nos proponemos seguir dando a conocer otra de las fuentes de información más importantes a nivel nacional del turismo en Argentina. En esta oportunidad nos ocuparemos de la **Encuesta de Turismo Internacional (ETI) y de la Estimación Nacional del turismo internacional en Argentina**. En este post nos focalizaremos sólo en el turismo receptivo (turistas no residentes que visitan Argentina) para luego, en otra ocasión, avocarnos al turismo emisivo. Se mostrarán los principales datos, el perfil de los turistas no residentes que visitan la Argentina y los aspectos más relevantes del operativo encuesta. 
+Desde la *Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE – MINTURDEP)* nos proponemos seguir dando a conocer otra de las fuentes de información más importantes a nivel nacional del turismo en Argentina. En esta oportunidad nos ocuparemos de la **Encuesta de Turismo Internacional (ETI) y de la Estimación Nacional del turismo internacional en Argentina**. En este post nos focalizaremos sólo en el turismo receptivo (turistas no residentes que visitan Argentina) para luego, en otra ocasión, avocarnos al turismo emisivo. Se mostrarán los principales datos, el perfil de los turistas no residentes que visitan la Argentina y los aspectos más relevantes del operativo. 
 
 ## ¿Cuántos turistas no residentes recibe la Argentina por año?
 
@@ -74,7 +74,7 @@ source("armo_tablas_eti.R")
 
 graf_serie_via_ti <- ggplot(tabla_serie_via_ti, aes(periodo, turistas, fill =via,
                                                     group = via,
-                                                    text=paste0(format(turistas, big.mark = ".",decimal.mark = ",", digits = 1)," turistas")
+                                                    text=paste0(format(periodo,'%B %Y'),"\n",format(turistas, big.mark = ".",decimal.mark = ",", digits = 1)," turistas")
                                                     ))+
   geom_area() +
   scale_fill_dnmye() + 
@@ -102,7 +102,7 @@ plot_1 <- graf_serie_via_ti %>%
   layout(title = list(text = paste0('Evolución mensual del turismo internacional receptivo, por medio de transporte',
                                     '<br>',
                                     '<sup>',
-                                    glue ("Enero 2016-{Mes_ult}-2021"),
+                                    glue ("Enero 2016-{Mes_ult} 2021"),
                                     '</sup>'),
                       font = list(size = 15)),
          legend = list(x = 0.85, y = 0.99, font = list (size = 12)),
@@ -128,7 +128,7 @@ En el año 2019, antes del colapso de la pandemia, Argentina recibió **7,4 mill
 
 En el gráfico se muestra la evolución mensual del turismo receptivo, donde es posible observar la estacionalidad propia de la actividad turística: los picos del verano, la temporada baja y el repunte en invierno por la llegada de turistas internacionales a los principales destinos de nieve. También vemos allí la caída estrepitosa en los años 2020 y 2021 producto de la pandemia.
 
-A partir del mes de octubre de 2021 se observa que el número de turistas internacionales ¡vuelven a mostrar signos de vida y comienza a tener mayor dinamismo! 
+A partir del mes de octubre de 2021 se observa que el número de turistas internacionales ¡vuelve a mostrar signos de vida y comienza a tener mayor dinamismo! 
 
 También nos podemos preguntar, *cuál es el principal mercado que nos visita*. Y para ello, analizaremos los datos según los principales países de residencia de los turistas extranjeros según el medio de transporte utilizado. Veamos el siguiente gráfico: 
 
@@ -145,7 +145,7 @@ graf_pais_ti <- ggplot(tabla_pais_ti) +
         axis.text.y = element_text(size = 12),
         legend.text = element_text (size =12),
         plot.caption =  element_text (size =12, hjust = 0.0)) +
-  labs(title = "Turismo internacional receptivo por país de residemcia según medio de transporte",
+  labs(title = "Turismo internacional receptivo por país de residencia según medio de transporte",
        subtitle = "Total país. Año 2019",
        y = "", 
        x = "", 
@@ -166,7 +166,7 @@ Para seguir analizando y respondiendo otras preguntas del turismo internacional 
 
 Para conocer un poco más sobre el *perfil del turista receptivo*, nos enfocaremos en la **Encuesta de Turismo Internacional (ETI)**. Este relevamiento es coordinado entre el *Ministerio de Turismo y Deportes de la Nación y el Instituto Nacional de Estadística y Censos (INDEC)* desde el año 2004 hasta la actualidad. El **principal objetivo** es conocer las características tanto de los viajes (el motivo, la duración, el/los destino/s, el/los tipos de alojamientos utilizados, etc.) como de los viajeros (lugar de residencia, conformación del grupo familiar que viaja, etc.), como también los gastos que realizó durante su estadía (en alojamiento, alimentación, entre otros).
 
-La ETI se releva, principalmente, en pasos aéreos: **Aerop. Internacional de Ezeiza, Aeroparque J. Newbery, Aerop internacional de Córdoba y de Mendoza**. También se releva en el **Puerto de Buenos Aires** y en el paso fronterizo terrestre **Cristo Redentor** que limita con Chile. En su conjunto, representó aproximadamente el movimiento del 46% del total del turismo receptivo en la Argentina (año 2019). 
+La ETI se releva, principalmente, en pasos aéreos: **Aerop. Internacional de Ezeiza, Aeroparque J. Newbery, Aerop. internacional de Córdoba y de Mendoza**. También se releva en el **Puerto de Buenos Aires** y en el paso fronterizo terrestre **Cristo Redentor** que limita con Chile. En su conjunto, representó aproximadamente el movimiento del 46% del total del turismo receptivo en la Argentina (año 2019). 
 
 A partir de la información que nos brinda la ETI, y a modo de resumen, te presentamos el **perfil del turista no residente promedio**. Allí se sintetiza la información de las principales características de los turistas no residentes durante el año 2019. 
 
@@ -277,7 +277,7 @@ g_eti_aspectos <- ggplot(tabla_eti_aspectos, aes(x= aspectos, y = porc, fill = a
   geom_col() +
   geom_text (aes(label=paste0(round(porc *100,1),"%")), position=position_stack(vjust=0.5))+
   geom_hline(yintercept = 0, color = "grey", alpha =0.7, size = 0.5) + 
-  coord_flip()+
+  coord_flip(clip="off")+
   scale_fill_dnmye() + 
   scale_y_continuous(labels = scales::percent_format()) + 
   scale_x_discrete(limits = tabla_eti_aspectos$aspectos[order(tabla_eti_aspectos$porc)] )+
@@ -287,7 +287,7 @@ g_eti_aspectos <- ggplot(tabla_eti_aspectos, aes(x= aspectos, y = porc, fill = a
         axis.text.x =element_text (size =12, vjust = 0.7),
         axis.text.y = element_text(size = 12),
         legend.text = element_blank(),
-        plot.caption =  element_text (size =12, hjust = 0.0)) +
+        plot.caption =  element_text (size =12, hjust = 1)) +
   labs(title = "Aspectos que influyeron en la decisión de viajar a Argentina",
        subtitle = "Año 2019. Pasos ETI",
        y = "", 
@@ -322,7 +322,7 @@ graf_eti_actividades <- tabla_eti_actividades %>%
   theme(
     #text = element_text(family = "Encode Sans Normal"), 
     legend.position = "none",
-    plot.caption  = element_text(size = 4),
+    plot.caption  = element_text(size = 12),
     strip.text.y  = element_text(size = 3, face = "bold"),
     axis.text.x   = element_text(size = 3),
     axis.text.y   = element_text(size = 3),
