@@ -4,10 +4,11 @@ description: |
  Características principales del relevamiento y potenciales usos de la información generada.
 output:
   distill::distill_article:
+    code_folding: true
     self_contained: true
     toc: true
     toc_floate: true
-draft: true    
+draft: false    
 editor_options: 
   markdown: 
     wrap: 72
@@ -24,27 +25,36 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Desde la *Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE – MINTURDEP)* nos proponemos seguir dando a conocer otra de las fuentes de información más importantes a nivel nacional del turismo en Argentina. En esta oportunidad nos ocuparemos de la **Encuesta de Turismo Internacional (ETI) y de la Estimación Nacional del turismo internacional en Argentina**. En este post nos focalizaremos sólo en el turismo receptivo (turistas no residentes que visitan Argentina) para luego, en otra ocasión, avocarnos al turismo emisivo. Se mostrarán los principales datos, el perfil de los turistas no residentes que visitan la Argentina y los aspectos más relevantes del operativo encuesta. 
 
+## ¿Cuántos turistas no residentes recibe la Argentina por año?
 
-```{r}
+Para responder esta pregunta tenemos que referirnos a los datos que se elaboran desde la *DNMyE* correspondientes a la **Estimación Nacional del total de turistas no residentes en Argentina** por todos los medios de transporte utilizados, estos son: aéreos, terrestres y fluviales/marítimos. 
+
+La fuente principal de dichos números son los **registros migratorios** de 225 pasos internacionales, provistos por la Dirección Nacional de Migraciones del Ministerio del Interior, y la **Encuesta de Turismo Internacional** (de la cual hablaremos un poco más adelante). Con dicha información, y siguiendo las recomendaciones internacionales de la *Organización Mundial de Turismo (OMT)*, elaboramos las cifras del turismo receptivo y emisivo de Argentina. 
+
+<aside> 📝 [VER DOCUMENTO METODOLÓGICO](https://www.yvera.tur.ar/sinta/informe/documentos/descarga/5dc0460bcfa3e053142696.pdf)
+</aside>
+
+
+
+```{r fig.height=5, fig.width=10}
+
 ### Cargo librerías
-library(tidyverse) 
-library(data.table)
-library(haven)
-library(readxl)
-library(comunicacion)
-library(glue) 
-library(plotly)
-library(lubridate) 
-library(treemapify)
-library(sf)
+library(tidyverse) # Easily Install and Load the 'Tidyverse' 
+library(data.table) # Extension of `data.frame`
+library(haven) # Import and Export 'SPSS', 'Stata' and 'SAS' Files
+library(readxl) # Read Excel Files
+library(comunicacion) # DNMyE - Comunicación
+library(glue) # Interpreted String Literals 
+library(plotly) # Create Interactive Web Graphics via 'plotly.js'
+library(lubridate) # Make Dealing with Dates a Little Easier 
+library(treemapify) # Draw Treemaps in 'ggplot2'
+library(sf) # Simple Features for R
 
 
 #saco notacion cientifica
 options(scipen = 999)
-```
 
 
-```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Carga de la base de datos  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,18 +70,6 @@ base_eti_2019 <- read_sav("ETI E 2019.sav") %>%
 source("armo_tablas_eti.R")
 
 
-```
-
-## ¿Cuántos turistas no residentes recibe la Argentina por año?
-
-Para responder esta pregunta tenemos que referirnos a los datos que se elaboran desde la *DNMyE* correspondientes a la **Estimación Nacional del total de turistas no residentes en Argentina** por todos los medios de transporte utilizados, estos son: aéreos, terrestres y fluviales/marítimos. 
-
-La fuente principal de dichos números son los **registros migratorios** de 225 pasos internacionales y la **Encuesta de Turismo Internacional** (de la cual hablaremos un poco más adelante). Con dicha información, y siguiendo las recomendaciones internacionales de la *Organización Mundial de Turismo (OMT)*, elaboramos las cifras del turismo receptivo y emisivo de Argentina [Ver documento metodológico](https://www.yvera.tur.ar/sinta/informe/documentos/descarga/5dc0460bcfa3e053142696.pdf) 
-
-Ahora sí, contestemos la pregunta mirando el gráfico a continuación: 
-
-
-```{r fig.height=5, fig.width=10}
 #grafico serie turismo internacional por via
 
 graf_serie_via_ti <- ggplot(tabla_serie_via_ti, aes(periodo, turistas, fill =via,
@@ -123,8 +121,6 @@ plot_1 <- graf_serie_via_ti %>%
 
 plot_1
 
-#*falta ver como alinear nota.
-
 
 ```
 
@@ -132,7 +128,7 @@ En el año 2019, antes del colapso de la pandemia, Argentina recibió **7,4 mill
 
 En el gráfico se muestra la evolución mensual del turismo receptivo, donde es posible observar la estacionalidad propia de la actividad turística: los picos del verano, la temporada baja y el repunte en invierno por la llegada de turistas internacionales a los principales destinos de nieve. También vemos allí la caída estrepitosa en los años 2020 y 2021 producto de la pandemia.
 
-Luego de dichos años, en octubre de 2021, se observa que el número de turistas internacionales ¡vuelven a mostrar signos de vida y comienza a tener mayor dinamismo! 
+A partir del mes de octubre de 2021 se observa que el número de turistas internacionales ¡vuelven a mostrar signos de vida y comienza a tener mayor dinamismo! 
 
 También nos podemos preguntar, *cuál es el principal mercado que nos visita*. Y para ello, analizaremos los datos según los principales países de residencia de los turistas extranjeros según el medio de transporte utilizado. Veamos el siguiente gráfico: 
 
@@ -162,7 +158,7 @@ graf_pais_ti
 
 ```
 
-**Brasil ocupó el primer lugar** y representó el 20% del total de las llegadas del año 2019, principalmente utilizando medios de transporte aéreos. Luego, se ubica **Chile** (15%) pero la vía terrestre es el medio principal para este mercado. Los turistas europeos son otro mercado de importancia (14%), principalmente por los medios aéreos. 
+**Brasil ocupó el primer lugar** y representó el 20% del total de las llegadas del año 2019, principalmente utilizando medios de transporte aéreos. Luego, se ubica **Chile** (15%) pero la vía terrestre es el medio principal para este mercado. Los **turistas europeos** son otro mercado de importancia (14%), principalmente por los medios aéreos. 
 
 Para seguir analizando y respondiendo otras preguntas del turismo internacional en Argentina, te invitamos a que juegues con el [Tablero de datos del turismo internacional](https://tableros.yvera.tur.ar/turismo_internacional/), en el cual podrás filtrar la información que desees y conocer más sobre el movimiento de turistas no residentes en nuestro país (año, mes, país de residencia, paso, entre otras variables). 
 
@@ -226,7 +222,7 @@ g_motivo_ta
 
 ```
 
-Otro dato que nos permite ver la ETI es el **gasto promedio** de los turistas según el país de residencia y su **estadía promedio** en Argentina. Europa presenta la mayor estadía, casi 20 días en promedio en el año 2019, con un gasto promedio por viajero de USD 1370. Los países que incluye la categoría *Resto de América* son los que también presentaron estadías largas; 18,8 en promedio, con un gasto por viajero promedio de USD 1107. Los países limítrofes permanecen menos tiempo, siendo Bolivia el que registró una mayor estadía promedio (12 días promedio) con un gasto por viajero de USD 730. EE.UU. y Canadá son los que registraron el mayor **gasto diario** promedio (USD 97,4) y, en menor medida, los turistas brasileños (USD 97,1). 
+Otro dato que nos permite ver la ETI es el **gasto promedio** de los turistas según el país de residencia y su **estadía promedio** en Argentina. Europa presenta la mayor estadía, casi 20 días en promedio en el año 2019, con un gasto promedio por viajero de $USD 1370$. Los países que incluye la categoría *Resto de América* son los que también presentaron estadías largas; 18,8 en promedio, con un gasto por viajero promedio de $USD 1107$. Los países limítrofes permanecen menos tiempo, siendo Bolivia el que registró una mayor estadía promedio (12 días promedio) con un gasto por viajero de $USD 730$. EE.UU. y Canadá son los que registraron el mayor **gasto diario** promedio ($USD 97,4$) y, en menor medida, los turistas brasileños ($USD 97,1$). 
 
 ```{r fig.height=4, fig.width=8}
 
@@ -347,27 +343,26 @@ graf_eti_actividades
 
 ## ¡Quiero más! 
 
-Toda esta info y mucho más vas a poder encontrarla en nuestro portal [Sistema de Información Turística de la Argentina](https://www.yvera.tur.ar/sinta/). 
-
-Algunas cosas que vas a poder encontrar....
+Esta información y mucho más vas a poder encontrarla en el [Sistema de Información Turística de la Argentina](https://www.yvera.tur.ar/sinta/). Algunas cosas que vas a poder encontrar...
 
 ### Informes: 
 
 Sobre la **Estimación Nacional del turismo internacional**: son los documentos mensuales que producimos con los datos del total del turismo internacional de Argentina a nivel nacional.
 
-Sobre **ETI**: son los documentos que publica el INDEC todos los meses, aproximadamente 40 días luego del periodo de referencia de los datos. Mensualmente se publican los principales datos de Ezeiza y Aeroparque y, en los trimestres, se adiciona info del resto de los pasos con las variables de perfil.
-
-Ambos los encontrarás en el mismo link, [AQUÍ](https://www.yvera.tur.ar/sinta/informe/info/turismo-internacional) 
+Sobre **ETI**: son los documentos que publica el INDEC todos los meses, aproximadamente 40 días luego del periodo de referencia de los datos. Mensualmente se publican los principales datos de Ezeiza y Aeroparque y, en los trimestres, se adiciona info del resto de los pasos con las variables de perfil. Ambos los encontrarás en el **[siguiente enlace](https://www.yvera.tur.ar/sinta/informe/info/turismo-internacional)**. 
 
 ### Tablero de turismo internacional
 
-Es la info del turismo internacional en formato de tabla dinámica para que puedas cruzar los datos por diferentes variables de interés. [AQUI](https://tableros.yvera.tur.ar/turismo_internacional)
+Desde **[acá](https://tableros.yvera.tur.ar/turismo_internacional)** se puede acceder a la información del turismo internacional en formato de tabla dinámica interactiva para que puedas cruzar los datos por diferentes variables de interés. 
 
 ### Datos Abiertos
 
-Son archivos en formato *.csv* para que puedas levantar desde cualquier programa que utilices (Excel, SPSS, R, etc) tanto de la ETI como de la estimación nacional. 
+Son archivos en formato `.csv` para que puedas levantar desde cualquier programa que utilices (_Excel, SPSS, R_, etc) tanto de la ETI como de la estimación nacional. 
 
-[Dataset de turismo internacional](https://datos.yvera.gob.ar/dataset/turismo-internacional-total-pais) 
+* [Dataset de turismo internacional](https://datos.yvera.gob.ar/dataset/turismo-internacional-total-pais) 
 
-[Dataset de la ETI](https://datos.yvera.gob.ar/dataset/encuesta-turismo-internacional)
+* [Dataset de la ETI](https://datos.yvera.gob.ar/dataset/encuesta-turismo-internacional)
+
+
+
 
