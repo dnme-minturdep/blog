@@ -59,11 +59,11 @@ options(scipen = 999)
 ##  ~ Carga de la base de datos  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-base_tur_internac <- readRDS("turismo_internacional_pais.rds")
+base_tur_internac <- readRDS("/srv/DataDNMYE/turismo_internacional/turismo_internacional_pais.rds")
 
 source("armo_tablas_turismo_internacional.R")
 
-base_eti_2019 <- read_sav("ETI E 2019.sav") %>% 
+base_eti_2019 <- read_sav("/srv/DataDNMYE/eti/ETI E 2019.sav") %>% 
   zap_label() %>% 
   zap_labels()
 									
@@ -132,7 +132,7 @@ A partir del mes de octubre de 2021 se observa que el número de turistas intern
 
 También nos podemos preguntar, *cuál es el principal mercado que nos visita*. Y para ello, analizaremos los datos según los principales países de residencia de los turistas extranjeros según el medio de transporte utilizado. Veamos el siguiente gráfico: 
 
-```{r fig.height=4, fig.width=8}
+```{r  fig.height=4, fig.width=8, layout="l-body-outset", preview=TRUE}
 
 graf_pais_ti <- ggplot(tabla_pais_ti) +   
   geom_bar(aes(x= pais_agrupado, weight= turistas_porc, fill =via))+
@@ -271,7 +271,7 @@ Otra de las preguntas que se les realiza a los viajeros cuando finalizan su viaj
 
 # ETI. Aspectos	
 
-tabla_eti_aspectos <- read_xlsx("eti_2019_tur_aspectos_activ.xlsx", sheet = "aspectos" ) 			
+tabla_eti_aspectos <- read_xlsx("/srv/DataDNMYE/eti/bitacora/eti_2019_tur_aspectos_activ.xlsx", sheet = "aspectos") 			
 
 g_eti_aspectos <- ggplot(tabla_eti_aspectos, aes(x= aspectos, y = porc, fill = aspectos)) +   
   geom_col() +
@@ -307,7 +307,7 @@ Por último, te mostramos otro dato interesante de la ETI: las **principales act
 
 #ETI.Actividades.
 
-tabla_eti_actividades <- read_xlsx(here::here("_posts", "2022-05-31-intro-eti", "eti_2019_tur_aspectos_activ.xlsx"), sheet = "actividades" ) 									
+tabla_eti_actividades <- read_xlsx("/srv/DataDNMYE/eti/bitacora/eti_2019_tur_aspectos_activ.xlsx", sheet = "actividades") 									
 
 graf_eti_actividades <- tabla_eti_actividades %>% 
   ggplot(.,aes(area= Suma,

@@ -2,7 +2,7 @@
 
 # codigos	
 
-codigos <- read_xlsx(here::here("_posts", "2022-05-31-intro-eti", "codigos_pais_prov_ciudad.xlsx")) %>% 									
+codigos <- read_xlsx("/srv/DataDNMYE/eti/codigos_pais_prov_ciudad.xlsx") %>% 									
   janitor::clean_names(.) %>% 									
   mutate (cod_loc = paste (tipo, id_provincia_pais, id_ciudad, sep = "_"),
           cod_prov = paste (tipo, id_provincia_pais, sep = "_"))
