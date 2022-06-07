@@ -8,42 +8,12 @@ output:
     self_contained: true
     toc: true
     toc_floate: true
-draft: true    
+draft: false    
 editor_options: 
   markdown: 
     wrap: 72
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
-```
-
-```{r}
-### Cargo librerías
-library(comunicacion)
-library(tidyverse)
-library(data.table)
-library(ggrepel)
-library(gt)
-library(gtExtras)
-source("funciones.R")
-
-# Saco notacion cientifica
-options(scipen = 999)
-```
-
-
-```{r}
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Carga de la base de datos  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/645e5505-68ee-4cfa-90f9-fcc9a4a34a85/download/evyth_microdatos.csv"
-
-b_orig <- read_csv(url)
-
-source("metadata.R")
-```
 
 ## ¿CON QUÉ INFORMACIÓN CONTAMOS DEL TURISMO NACIONAL EN NUESTRO PAIS?
 
@@ -56,7 +26,7 @@ A partir de esta encuesta se obtiene información desagregada del comportamiento
 
 ### Principales objetivos
 
-Este operativo tiene como principales objetivos en los grandes aglomerados urbanos de la Argentina:
+Este operativo tiene como principales objetivos medir:
 
 - La evolución de los viajes realizados por los hogares en el periodo de referencia
 
@@ -84,15 +54,15 @@ Siguiendo las definiciones habituales y las recomendaciones internacionales de l
 
 El marco conceptual antes definido permite obtener conclusiones a partir de diversas unidades de análisis. A continuación, se las repasan junto con una breve descripción de cada una de ellas:
 
-1.	Hogar: es la persona o grupo de personas, parientes o no, que habitan bajo un mismo techo en un régimen de tipo familiar; es decir, comparten sus gastos en alimentación con cargo a un mismo presupuesto.
+1.	**Hogar:** es la persona o grupo de personas, parientes o no, que habitan bajo un mismo techo en un régimen de tipo familiar; es decir, comparten sus gastos en alimentación con cargo a un mismo presupuesto.
     
-1.	Persona: cada uno de los individuos integrantes de un hogar.
+1.	**Persona:** cada uno de los individuos integrantes de un hogar.
     
-1.	Turista: significa el desplazamiento que realiza una persona fuera del entorno habitual, con una duración inferior al año, pernoctando en el/los lugar/es de destino, por cualquier motivo excepto de ser empleado por una unidad residentes.
+1.	**Turista:** significa el desplazamiento que realiza una persona fuera del entorno habitual, con una duración inferior al año, pernoctando en el/los lugar/es de destino, por cualquier motivo excepto de ser empleado por una unidad residentes.
 
-1.	Visita de un día: es el recorrido de una persona fuera del entorno habitual sin pernoctar en el lugar de destino.
+1.	**Visita de un día:** es el recorrido de una persona fuera del entorno habitual sin pernoctar en el lugar de destino.
 
-1.	Pernoctación: se trata de una noche de alojamiento de una persona.
+1.	**Pernoctación:** se trata de una noche de alojamiento de una persona.
 
 
 ### Principales características de la encuesta
@@ -109,7 +79,37 @@ Estos y muchos más aspectos se pueden profundizar en el recientemente publicado
 
 
 
-### ¿Cuántas personas residentes en Argentina hacen turismo por año?
+### ¿Cuántos viajes turísticos por año realizan las personas residentes en Argentina?
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+### Cargo librerías
+library(comunicacion)
+library(tidyverse)
+library(data.table)
+library(ggrepel)
+library(gt)
+library(gtExtras)
+source("funciones.R")
+
+# Saco notacion cientifica
+options(scipen = 999)
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Carga de la base de datos  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/645e5505-68ee-4cfa-90f9-fcc9a4a34a85/download/evyth_microdatos.csv"
+
+b_orig <- read_csv(url)
+
+### Cargo operaciones de limpieza / armado de la base de datos
+source("metadata.R", encoding = "UTF-8")
+```
 
 Este es uno de los principales objetivos a cumplir por el relevamiento de la EVyTH. Y para alcanzarlo se realizan entrevistas de forma mensual en aras de relevar si en los hogares se ha realizado algún viaje en los últimos dos meses. En caso de haberlo hecho, se indaga por las características del mismo como así también por las de las personas que han participado. Veamos algunos resultados en base a la [base de microdatos](https://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos) disponible en el [Portal de Datos Abiertos](https://datos.yvera.gob.ar/) del Ministerio de Turismo y Deportes de la Nación
 
@@ -121,6 +121,7 @@ tabla_1 <- b_evyth %>%
   group_by(anio, tipo_visitante_etiq) %>% 
   summarise(cantidad = sum(pondera)) %>% ungroup()
 
+### Gráfico - Cantidad de visitantes por tipo de visitante
 tabla_1 %>% 
   ggplot(aes(x = anio, y = cantidad, group = tipo_visitante_etiq, colour = tipo_visitante_etiq)) +
   geom_line() +
@@ -152,6 +153,7 @@ Independientemente de la coyuntura, la cantidad de viajeros durante el año pres
 
 #### Cantidad de viajeros por trimestre. Comparación anual. Años 2012 - 2021.
 ```{r}
+### Tabla - Conteo de visitantes por año y trimestre
 tabla_2 <- b_evyth %>% 
   group_by(anio, trimestre) %>% 
   summarise(cantidad = sum(pondera)) %>% 
@@ -162,7 +164,7 @@ tabla_2 <- b_evyth %>%
                                       TRUE ~ NA_character_))
 
 
-
+### Gráfico - Estacionalidad de visitantes por año y trimestre
 tabla_2 %>% 
   ggplot(aes(x = trimestre, y = cantidad, group = anio, colour = anios_relevantes)) +
   geom_segment(
@@ -214,6 +216,7 @@ tabla_2 %>%
 La EVyTH permite dar cuenta de los principales destinos elegidos con pernocte por los y las residentes turistas de los 32 principales aglomerados urbanos.
 
 ```{r}
+### Tabla - Ranking de localidades más visitadas - 2019
 rank_2019 <- b_evyth %>% 
   filter(anio == 2019 & tipo_visitante == 1) %>% 
   group_by(localidad_destino) %>% 
@@ -221,6 +224,7 @@ rank_2019 <- b_evyth %>%
   top_n(25) %>% 
   mutate(ranking_2019 = rank(-cantidad))
 
+### Tabla - Ranking de localidades más visitadas - 2021
 rank_2021 <- b_evyth %>% 
   filter(anio == 2021 & tipo_visitante == 1) %>% 
   group_by(localidad_destino) %>% 
@@ -228,6 +232,7 @@ rank_2021 <- b_evyth %>%
   top_n(25) %>% 
   mutate(ranking_2021 = rank(-cantidad))
 
+### Gráfico - Ranking de localidades más visitadas - 2019_2021
 rank_2019 %>% 
   left_join(rank_2021, by = "localidad_destino") %>% 
   filter(ranking_2019 <= 10) %>% 
@@ -259,6 +264,7 @@ Otro de los aspecto que indaga la Encuesta de Viajes y Turismo de los Hogares re
 En los siguientes cuadros se presenta cómo ha evolucionado la participación de cada una de las categorías de estos indicadores, pudiendo así evaluar cambios y posibles causas que los estén propiciando:
 
 ```{r}
+### Tabla - Evolución de las categórías para Tipo de transporte
 tabla_transporte <- b_evyth %>% 
   filter(tipo_visitante == 1) %>% 
   group_by(anio, transporte) %>% 
@@ -267,6 +273,7 @@ tabla_transporte <- b_evyth %>%
   mutate(porcentaje = round(cantidad / sum(cantidad) * 100, 1)) %>% 
   filter(transporte != "Ns./ Nr.")
 
+### Gráfico - Tipo de transporte
 tabla_transporte %>% 
   tufte_sort(x="anio", y="porcentaje", group="transporte", method="tufte", min.space=0.05) %>% 
   transform(x=factor(x), y=round(y,1)) %>% 
@@ -279,6 +286,7 @@ tabla_transporte %>%
 ```
 
 ```{r}
+### Tabla - Evolución de las categórías para Motivo del viaje
 tabla_motivo <- b_evyth %>% 
   filter(tipo_visitante == 1) %>% 
   group_by(anio, motivo) %>% 
@@ -287,6 +295,7 @@ tabla_motivo <- b_evyth %>%
   mutate(porcentaje = round(cantidad / sum(cantidad) * 100, 1)) %>% 
   filter(motivo != "Ns./ Nr.")
 
+### Gráfico - Motivo del viaje
 tabla_motivo %>% 
   tufte_sort(x="anio", y="porcentaje", group="motivo", method="tufte", min.space=0.05) %>% 
   transform(x=factor(x), y=round(y,1)) %>% 
@@ -299,6 +308,7 @@ tabla_motivo %>%
 ```
 
 ```{r}
+### Tabla - Evolución de las categórías para Tipo de alojamiento
 tabla_alojamiento <- b_evyth %>% 
   filter(tipo_visitante == 1) %>% 
   group_by(anio, tipo_alojamiento) %>% 
@@ -307,12 +317,13 @@ tabla_alojamiento <- b_evyth %>%
   mutate(porcentaje = round(cantidad / sum(cantidad) * 100, 1)) %>% 
   filter(tipo_alojamiento != "Ns./ Nr.")
 
+### Gráfico - Tipo de alojamiento
 tabla_alojamiento %>% 
   tufte_sort(x="anio", y="porcentaje", group="tipo_alojamiento", method="tufte", min.space=0.05) %>% 
   transform(x=factor(x), y=round(y,1)) %>% 
   plot_slopegraph(fontsize = 2.3) + 
   labs(
-    title = str_wrap("Evolución de la participación de los tipo de alojamiento elegidos para hospedarse",60),
+    title = str_wrap("Evolución de la participación de los tipos de alojamiento elegidos para hospedarse",60),
     subtitle = "Años 2012 - 2021",
     caption = str_wrap("Fuente: Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística - MINTURyDEP", 80)) +
   theme_slope()
