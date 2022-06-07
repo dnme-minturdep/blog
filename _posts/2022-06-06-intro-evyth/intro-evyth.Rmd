@@ -88,12 +88,11 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 ```{r}
 ### Cargo librerías
-library(comunicacion)
-library(tidyverse)
-library(data.table)
-library(ggrepel)
-library(gt)
-library(gtExtras)
+library(comunicacion) # DNMyE - Comunicación, [github::dnme-minturdep/comunicacion] v0.0.0.9
+library(tidyverse) # Easily Install and Load the 'Tidyverse', CRAN v1.3.1
+library(ggrepel) # Automatically Position Non-Overlapping Text Labels with 'ggplot2', CRAN v0.9.1
+library(gt) # Easily Create Presentation-Ready Display Tables, CRAN v0.6.0
+library(gtExtras) # Extending 'gt' for Beautiful HTML Tables, [github::jthomasmock/gtExtras] v0.4.0
 source("funciones.R")
 
 # Saco notacion cientifica
@@ -152,7 +151,7 @@ En el año 2019, antes del colapso de la pandemia, **`r round(tabla_1[tabla_1$an
 Independientemente de la coyuntura, la cantidad de viajeros durante el año presenta una fuerte estacionalidad apreciable en el siguiente gráfico. Allí se puede ver cómo se comporta la cantidad de viajeros durante los trimestres bajo los cuales se releva información. Se ve también el comportamiento similar para todos los años, con las particularidades del 2020 y 2021, siendo el 2020 el año en el cual la pandemia impactó a partir del segundo trimestre y el 2021 un período de recuperación.
 
 #### Cantidad de viajeros por trimestre. Comparación anual. Años 2012 - 2021.
-```{r}
+```{r, layout="l-body-outset", preview=TRUE}
 ### Tabla - Conteo de visitantes por año y trimestre
 tabla_2 <- b_evyth %>% 
   group_by(anio, trimestre) %>% 
@@ -354,4 +353,5 @@ Desde **[acá](https://tableros.yvera.tur.ar/interno.html)** se puede acceder a 
 - La EVyTH en el marco de la [ARMONIZACION ESTADÍSTICA](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html#evyth)
 
 - [Documento Metodológico](https://d4t4tur.github.io/evyth_metodologia/) de la EVyTH
+
 
