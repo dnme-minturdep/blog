@@ -1,0 +1,346 @@
+---
+title: "Fuentes de datos: Encuesta de Viajes y Turismo de los Hogares"
+description: |
+ Características principales del relevamiento y potenciales usos de la información generada.
+output:
+  distill::distill_article:
+    code_folding: true
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: true    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+### Cargo librerías
+library(comunicacion)
+library(tidyverse)
+library(data.table)
+library(ggrepel)
+library(gt)
+library(gtExtras)
+source("funciones.R")
+
+# Saco notacion cientifica
+options(scipen = 999)
+```
+
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Carga de la base de datos  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/645e5505-68ee-4cfa-90f9-fcc9a4a34a85/download/evyth_microdatos.csv"
+
+b_orig <- read_csv(url)
+
+source("metadata.R")
+```
+
+## ¿CON QUÉ INFORMACIÓN CONTAMOS DEL TURISMO NACIONAL EN NUESTRO PAIS?
+
+### Introducción
+
+Desde la *Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE – MINTURDEP)* nos proponemos seguir dando a conocer otra de las fuentes de información más importantes a nivel nacional del turismo en Argentina. En esta oportunidad nos ocuparemos de la **Encuesta de Viajes y Turismo de los Hogares (EVyTH)**. 
+
+A partir de esta encuesta se obtiene información desagregada del comportamiento turístico de los hogares de nuestro país y permite tomar dimensión, en términos económicos, del peso del turismo interno en el conjunto del consumo de bienes y servicios turísticos en la Argentina. Con dicha información se pueden efectuar estudios analíticos de los diferentes determinantes de la actividad turística de los residentes en nuestro país y, por tanto, diseñar e implementar políticas públicas sectoriales con mayor eficacia y eficiencia.
+
+
+### Principales objetivos
+
+Este operativo tiene como principales objetivos en los grandes aglomerados urbanos de la Argentina:
+
+- La evolución de los viajes realizados por los hogares en el periodo de referencia
+
+- Las características de los recorridos turísticos (lugares visitados, forma de alojamiento, estadías, utilización de paquete turístico, medios de transporte, etc.)
+    
+- Los viajes a segundas viviendas
+    
+- El gasto de cada uno de los viajes
+
+- Los aspectos socio-demográficos de los hogares viajeros (ingreso total del hogar, ocupación principal del jefe de hogar, etc.).
+
+
+### Marco conceptual: definición de viaje turístico
+
+Siguiendo las definiciones habituales y las recomendaciones internacionales de la Organización Mundial del Turismo, a los efectos del relevamiento de la EVyTH, se define como viaje de turismo a todo aquel desplazamiento realizado por todos, algunos o al menos uno de los miembros del hogar fuera de su entorno habitual (las segundas viviendas por definición no forman parte). Debe tenerse en cuenta que: 
+
+1.	Debe tener una duración inferior a un año y quien viajó no haber fijado su residencia en el lugar de destino.
+
+1.	Comprende los traslados, estancias y todas las actividades que las personas realizan en el lugar de destino.
+
+1.	Puede haber ido a un sólo destino o haber tenido varias etapas.
+    
+
+### Unidades de análisis
+
+El marco conceptual antes definido permite obtener conclusiones a partir de diversas unidades de análisis. A continuación, se las repasan junto con una breve descripción de cada una de ellas:
+
+1.	Hogar: es la persona o grupo de personas, parientes o no, que habitan bajo un mismo techo en un régimen de tipo familiar; es decir, comparten sus gastos en alimentación con cargo a un mismo presupuesto.
+    
+1.	Persona: cada uno de los individuos integrantes de un hogar.
+    
+1.	Turista: significa el desplazamiento que realiza una persona fuera del entorno habitual, con una duración inferior al año, pernoctando en el/los lugar/es de destino, por cualquier motivo excepto de ser empleado por una unidad residentes.
+
+1.	Visita de un día: es el recorrido de una persona fuera del entorno habitual sin pernoctar en el lugar de destino.
+
+1.	Pernoctación: se trata de una noche de alojamiento de una persona.
+
+
+### Principales características de la encuesta
+
+La EVyTH es una encuesta por muestreo, cuya captación se lleva adelante bajo la metodología CATI (*Computer Assisted Telephone Interviewing*). El **universo bajo estudio** de la encuesta son los grandes aglomerados urbanos definidos en la EPH del INDEC. Por lo tanto, se consideran 32 aglomerados agrupados en 8 regiones (Ciudad Autónoma de Buenos Aires, Partidos del Gran Buenos Aires, Resto de la Provincia de Buenos Aires, Córdoba, región del Litoral, Norte, Cuyo y Patagónica). 
+
+El **tamaño de muestra** mensual es de 2.600 hogares distribuidos entre todos los aglomerados. La **ventana de observación** es bimensual, esto es, se indaga por los viajes realizados durante los últimos dos meses. De esta forma, con el mecanismo de períodos de referencia y ventanas de observación implementados se logra que, para un mes determinado, se disponga de 5.200 casos para realizar las estimaciones de ese mes.
+
+Estos y muchos más aspectos se pueden profundizar en el recientemente publicado [Documento Metodológico](https://d4t4tur.github.io/evyth_metodologia/).
+
+<aside> 
+📝 [VER DOCUMENTO METODOLÓGICO](https://d4t4tur.github.io/evyth_metodologia/)
+</aside>
+
+
+
+### ¿Cuántas personas residentes en Argentina hacen turismo por año?
+
+Este es uno de los principales objetivos a cumplir por el relevamiento de la EVyTH. Y para alcanzarlo se realizan entrevistas de forma mensual en aras de relevar si en los hogares se ha realizado algún viaje en los últimos dos meses. En caso de haberlo hecho, se indaga por las características del mismo como así también por las de las personas que han participado. Veamos algunos resultados en base a la [base de microdatos](https://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos) disponible en el [Portal de Datos Abiertos](https://datos.yvera.gob.ar/) del Ministerio de Turismo y Deportes de la Nación
+
+##### Cantidad de Turistas y Excursionistas por año. Años 2012 - 2021
+
+```{r}
+### Tabla 1 - Cantidad de visitantes por tipo
+tabla_1 <- b_evyth %>% 
+  group_by(anio, tipo_visitante_etiq) %>% 
+  summarise(cantidad = sum(pondera)) %>% ungroup()
+
+tabla_1 %>% 
+  ggplot(aes(x = anio, y = cantidad, group = tipo_visitante_etiq, colour = tipo_visitante_etiq)) +
+  geom_line() +
+  geom_point(data = . %>% filter(anio == max(anio)),
+            mapping = aes(x = anio, y = cantidad),
+            color = "red") +
+  geom_hline(data = . %>% filter(anio == max(anio)),
+            mapping = aes(yintercept = cantidad), linetype = 2) +
+  scale_color_dnmye(palette = "c2_contraste") +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     breaks = seq(0, 45000000, 5000000),
+                     limits = c(0, 40000000)) +
+  scale_x_continuous(breaks = c(min(b_evyth$anio):max(b_evyth$anio))) +
+  facet_wrap(facets = "tipo_visitante_etiq", nrow = 2) +
+  theme_minimal() +
+    theme(
+    legend.position = "none"
+  ) +
+  labs(title = "",
+       subtitle = "32 aglomerados urbanos",
+       x = "", y = "",
+       caption = "Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística")
+  
+```
+
+En el año 2019, antes del colapso de la pandemia, **`r round(tabla_1[tabla_1$anio == 2019 & tabla_1$tipo_visitante_etiq == "Turista", "cantidad"] / 1000000, digits = 1)`** millones de turistas residentes viajaron a lo largo y ancho del país, mientras que para el año 2020 ese valor cayó a `r round(tabla_1[tabla_1$anio == 2020 & tabla_1$tipo_visitante_etiq == "Turista", "cantidad"] / 1000000, digits = 1)`
+
+Independientemente de la coyuntura, la cantidad de viajeros durante el año presenta una fuerte estacionalidad apreciable en el siguiente gráfico. Allí se puede ver cómo se comporta la cantidad de viajeros durante los trimestres bajo los cuales se releva información. Se ve también el comportamiento similar para todos los años, con las particularidades del 2020 y 2021, siendo el 2020 el año en el cual la pandemia impactó a partir del segundo trimestre y el 2021 un período de recuperación.
+
+#### Cantidad de viajeros por trimestre. Comparación anual. Años 2012 - 2021.
+```{r}
+tabla_2 <- b_evyth %>% 
+  group_by(anio, trimestre) %>% 
+  summarise(cantidad = sum(pondera)) %>% 
+  ungroup() %>% 
+  mutate(anios_relevantes = case_when(anio == 2019 ~ "2019",
+                                      anio == 2020 ~ "2020",
+                                      anio == 2021 ~ "2021",
+                                      TRUE ~ NA_character_))
+
+
+
+tabla_2 %>% 
+  ggplot(aes(x = trimestre, y = cantidad, group = anio, colour = anios_relevantes)) +
+  geom_segment(
+    data = tibble(y = seq(0, 30000000, by = 5000000), x1 = 1, x2 = 4),
+    aes(x = x1, xend = x2, y = y, yend = y),
+    inherit.aes = FALSE,
+    color = "grey91",
+    size = .6) +
+  geom_line(size = ifelse(is.na(tabla_2$anios_relevantes), 1, 2)) +
+  geom_text_repel(
+    data = tabla_2 %>% 
+      filter(trimestre == 4),
+    aes(color = anios_relevantes, label = anios_relevantes),
+    size = 5, direction = "y", xlim = c(4.1, NA), hjust = 0, 
+    segment.linetype = "dotted", fontface = "bold") +
+  coord_cartesian(
+    clip = "off",
+    ylim = c(-0, 25000000)) +
+  scale_colour_manual(values = c("2019" = dnmye_colores("azul verde"),
+                                 "2020" = dnmye_colores("rosa"),
+                                 "2021" = dnmye_colores("naranja")),
+                                 na.value = "#d3d3d3") +
+  scale_x_continuous(expand = c(0, 0), 
+                     limits = c(1, 4.5), 
+                     breaks = seq(1, 4, by = 1)) +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     breaks = seq(0, 30000000, 5000000),
+                     limits = c(0, 30000000)) +
+  labs(x = "Trimestre", y = "") +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_text(size = 11, color = "grey40", margin = margin(t = 5)),
+    axis.text = element_text(color = "grey40"),
+    axis.text.x = element_text(size = 10, margin = margin(t = 5)),
+    axis.text.y = element_text(size = 10, margin = margin(r = 5)),
+    axis.ticks = element_line(color = "grey91", size = .5),
+    axis.ticks.length.x = unit(1.3, "lines"),
+    axis.ticks.length.y = unit(.7, "lines"),
+    panel.grid = element_blank(),
+    plot.margin = margin(20, 40, 20, 40),
+    plot.background = element_rect(fill = "transparent", color = "grey98"),
+    panel.background = element_rect(fill = "transparent", color = "grey98"),
+    legend.position = "none"
+  )
+```
+
+#### Ranking de destinos más visitados
+
+La EVyTH permite dar cuenta de los principales destinos elegidos con pernocte por los y las residentes turistas de los 32 principales aglomerados urbanos.
+
+```{r}
+rank_2019 <- b_evyth %>% 
+  filter(anio == 2019 & tipo_visitante == 1) %>% 
+  group_by(localidad_destino) %>% 
+  summarise(cantidad = sum(pondera)) %>% 
+  top_n(25) %>% 
+  mutate(ranking_2019 = rank(-cantidad))
+
+rank_2021 <- b_evyth %>% 
+  filter(anio == 2021 & tipo_visitante == 1) %>% 
+  group_by(localidad_destino) %>% 
+  summarise(cantidad = sum(pondera)) %>% 
+  top_n(25) %>% 
+  mutate(ranking_2021 = rank(-cantidad))
+
+rank_2019 %>% 
+  left_join(rank_2021, by = "localidad_destino") %>% 
+  filter(ranking_2019 <= 10) %>% 
+  #filter(ranking_2019 %in% c(1:10) | ranking_2021 %in% c(1:10)) %>% 
+  mutate(dif = ranking_2019 - ranking_2021) %>% 
+  select(localidad_destino, cantidad_2019 = cantidad.x, ranking_2019, 
+         cantidad_2021 = cantidad.y, ranking_2021, dif) %>% 
+  arrange(ranking_2019) %>% 
+  gt() %>% 
+  cols_label(
+    localidad_destino = md("**Localidad**"),
+    cantidad_2019 = md("**Cant. de Turistas - 2019**"),
+    ranking_2019 = md("**Ranking - 2019**"),
+    cantidad_2021 = md("**Cant. de Turistas - 2021**"),
+    ranking_2021 = md("**Ranking - 2021**"),
+    dif = md("**2019 vs 2021**")
+  ) %>% 
+  cols_align(align = "center", columns = 2:6) %>% 
+  fmt_number(columns = 2:6, sep_mark = ".", dec_mark = ",", decimals = 0) %>% 
+  gt_fa_rank_change(dif, font_color = "match") %>% 
+  tab_header(title = md("**Ranking de localidades más visitadas. Años 2019 y 2021**"))
+```
+
+
+### Caracterización de los viajes
+
+Otro de los aspecto que indaga la Encuesta de Viajes y Turismo de los Hogares refiere a las características del viaje, tal como lo son el **motivo** del mismo, el **transporte** utilizado para llegar al destino o el **tipo de alojamiento** elegido para pasar la o las noches en el destino.
+
+En los siguientes cuadros se presenta cómo ha evolucionado la participación de cada una de las categorías de estos indicadores, pudiendo así evaluar cambios y posibles causas que los estén propiciando:
+
+```{r}
+tabla_transporte <- b_evyth %>% 
+  filter(tipo_visitante == 1) %>% 
+  group_by(anio, transporte) %>% 
+  summarise(cantidad = sum(pondera)) %>% ungroup() %>% 
+  group_by(anio) %>% 
+  mutate(porcentaje = round(cantidad / sum(cantidad) * 100, 1)) %>% 
+  filter(transporte != "Ns./ Nr.")
+
+tabla_transporte %>% 
+  tufte_sort(x="anio", y="porcentaje", group="transporte", method="tufte", min.space=0.05) %>% 
+  transform(x=factor(x), y=round(y,1)) %>% 
+  plot_slopegraph(fontsize = 2.3) + 
+  labs(
+    title = str_wrap("Evolución de la participación de los medios de transportes utilizados para viajar",60),
+    subtitle = "Años 2012 - 2021",
+    caption = str_wrap("Fuente: Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística - MINTURyDEP", 80)) +
+  theme_slope()
+```
+
+```{r}
+tabla_motivo <- b_evyth %>% 
+  filter(tipo_visitante == 1) %>% 
+  group_by(anio, motivo) %>% 
+  summarise(cantidad = sum(pondera)) %>% ungroup() %>% 
+  group_by(anio) %>% 
+  mutate(porcentaje = round(cantidad / sum(cantidad) * 100, 1)) %>% 
+  filter(motivo != "Ns./ Nr.")
+
+tabla_motivo %>% 
+  tufte_sort(x="anio", y="porcentaje", group="motivo", method="tufte", min.space=0.05) %>% 
+  transform(x=factor(x), y=round(y,1)) %>% 
+  plot_slopegraph(fontsize = 2.3) + 
+  labs(
+    title = str_wrap("Evolución de la participación de los motivos de viaje",60),
+    subtitle = "Años 2012 - 2021",
+    caption = str_wrap("Fuente: Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística - MINTURyDEP", 80)) +
+  theme_slope()
+```
+
+```{r}
+tabla_alojamiento <- b_evyth %>% 
+  filter(tipo_visitante == 1) %>% 
+  group_by(anio, tipo_alojamiento) %>% 
+  summarise(cantidad = sum(pondera)) %>% ungroup() %>% 
+  group_by(anio) %>% 
+  mutate(porcentaje = round(cantidad / sum(cantidad) * 100, 1)) %>% 
+  filter(tipo_alojamiento != "Ns./ Nr.")
+
+tabla_alojamiento %>% 
+  tufte_sort(x="anio", y="porcentaje", group="tipo_alojamiento", method="tufte", min.space=0.05) %>% 
+  transform(x=factor(x), y=round(y,1)) %>% 
+  plot_slopegraph(fontsize = 2.3) + 
+  labs(
+    title = str_wrap("Evolución de la participación de los tipo de alojamiento elegidos para hospedarse",60),
+    subtitle = "Años 2012 - 2021",
+    caption = str_wrap("Fuente: Encuesta de Viajes y Turismo de los Hogares - Dirección Nacional de Mercados y Estadística - MINTURyDEP", 80)) +
+  theme_slope()
+
+```
+
+
+## ¡Quiero más! 
+
+Esta información y mucho más vas a poder encontrarla en el [Sistema de Información Turística de la Argentina](https://www.yvera.tur.ar/sinta/). Algunas cosas que vas a poder encontrar...
+
+### Informes: 
+
+Sobre **EVyTH** y el **Turismo Interno**: son los documentos que publica la DNMyE-MINTURDEP de forma trimestral. Tanto la última publicación como la de los períodos anteriores las encontrarás en el **[siguiente enlace](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth)**. 
+
+
+### Tablero de turismo interno
+
+Desde **[acá](https://tableros.yvera.tur.ar/interno.html)** se puede acceder a la información del turismo interno en formato web para que puedas cruzar los datos por diferentes variables de interés. 
+
+### La EVyTH en formato abierto:
+
+- [DATOS ABIERTOS](https://datos.yvera.gob.ar/): 
+  
+  - [Recursos](https://datos.yvera.gob.ar/dataset/encuesta-viajes-turismo-hogares-evyth) 
+  - [Microdatos](https://datos.yvera.gob.ar/dataset/encuesta-de-viajes-y-turismo-de-los-hogares-evyth-microdatos)
+
+- La EVyTH en el marco de la [ARMONIZACION ESTADÍSTICA](https://dnme-minturdep.github.io/DT1_medicion_turismo/encuestas-nacionales.html#evyth)
+
+- [Documento Metodológico](https://d4t4tur.github.io/evyth_metodologia/) de la EVyTH
+
