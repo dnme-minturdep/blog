@@ -2,6 +2,7 @@
 title: "Fuentes de datos: Estimación Nacional del Turismo Internacional y Encuesta de Turismo Internacional (ETI)"
 description: |
  Características principales del relevamiento y potenciales usos de la información generada.
+date: 05-31-2022
 output:
   distill::distill_article:
     code_folding: true
