@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = F, message = F, warning = F,
 library(tidyverse)
 library(gt)
 library(ggtext)
-library(dnmye)
+library(comunicacion)
 library(glue)
 ```
 
@@ -146,7 +146,7 @@ consumo_interior$part = consumo_interior$`2019`/consumo_interior[consumo_interio
 grafico_consumo_interior <- consumo_interior %>% 
   filter(rubro!= "Consumo turístico Interior") %>% 
   ggplot(aes(x=reorder(rubro,part),y=part))+
-  geom_col(fill=dnmye::dnmye_col(1)[[1]]) +
+  geom_col(fill=comunicacion::dnmye_colores(1)) +
  geom_text(aes(x = reorder(rubro,part), y = part, label = paste0(format(round(100*part,1),decimal.mark=",",big.mark="."),"%")),
         size = 4,  
             fontface = "bold",
@@ -287,10 +287,10 @@ grafico_pibdt_paises <- pibdt_paises %>%
         #family = familia_fuente
             #position=position_dodge(width = 0.9)
             ) +
-  scale_fill_manual(values = c("si"=dnmye_col(1)[[1]],
-                               "no" = dnmye_col(5)[[1]] ))+
-  scale_color_manual(values = c("si"=dnmye_col(1)[[1]],
-                               "no" = dnmye_col(5)[[1]] ))+
+  scale_fill_manual(values = c("si"=dnmye_colores(1),
+                               "no" = dnmye_colores(5) ))+
+  scale_color_manual(values = c("si"=dnmye_colores(1),
+                               "no" = dnmye_colores(5) ))+
   coord_flip(clip="off")+
   scale_y_continuous(limits = c(0,max(pibdt_paises$pbidt_ultimo_ano_disponible*1.15)))+
   theme_minimal() +
@@ -403,10 +403,10 @@ grafico_vab_sectores <- vab_sectores %>%
         #family = familia_fuente
             #position=position_dodge(width = 0.9)
             ) +
-  scale_fill_manual(values = c("si"=dnmye_col(1)[[1]],
-                               "no" = dnmye_col(5)[[1]] ))+
-  scale_color_manual(values = c("si"=dnmye_col(1)[[1]],
-                               "no" = dnmye_col(5)[[1]] ))+
+  scale_fill_manual(values = c("si"=dnmye_colores(1),
+                               "no" = dnmye_colores(5) ))+
+  scale_color_manual(values = c("si"=dnmye_colores(1),
+                               "no" = dnmye_colores(5) ))+
   coord_flip(clip="off")+
   scale_y_continuous(limits = c(0,max(vab_sectores$part*1.15)))+
   theme_minimal() +
@@ -446,7 +446,7 @@ empleo <- data.frame(
             indicador = c("Empleo industrias turísticas","Empleo economía total",
                           "(%) Empleo IT / Empleo"),
             `2004` = c(931, 14911, 6.2),
-            `2016` = c(1246, 20020 6.2),
+            `2016` = c(1246, 20020, 6.2),
             `2017` = c(1274, 20345, 6.3),
             `2018` = c(1271, 20573, 6.2),
             `2019` = c(1260, 20855, 6.0)
@@ -522,10 +522,10 @@ grafico_empleo_sectores <- empleo %>%
         #family = familia_fuente
             #position=position_dodge(width = 0.9)
             ) +
-  scale_fill_manual(values = c("si"=dnmye_col(1)[[1]],
-                               "no" = dnmye_col(5)[[1]] ))+
-  scale_color_manual(values = c("si"=dnmye_col(1)[[1]],
-                               "no" = dnmye_col(5)[[1]] ))+
+  scale_fill_manual(values = c("si"=dnmye_colores(1),
+                               "no" = dnmye_colores(5) ))+
+  scale_color_manual(values = c("si"=dnmye_colores(1),
+                               "no" = dnmye_colores(5) ))+
   coord_flip(clip="off")+
   scale_y_continuous(limits = c(0,max(empleo$puestos*1.15)))+
   theme_minimal() +
