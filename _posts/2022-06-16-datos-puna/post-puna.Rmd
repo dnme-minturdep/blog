@@ -226,14 +226,14 @@ ggplot(data = data_gg3) +
 
 Se encuentra disponible para su consulta y descarga en el [portal de datos abiertos](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento) del Sistema de Información Turística de la Argentina ([SINTA](https://www.yvera.tur.ar/sinta/)) los siguientes recursos:
 
-- Cantidad de plazas, habitaciones y establecimientos de alojamiento turístico colectivo por provincia.
+- [Cantidad de plazas, habitaciones y establecimientos de alojamiento turístico colectivo por provincia](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/67727a58-7a43-450d-a685-a9fba9218b20).
 
-- Cantidad de plazas, habitaciones y establecimientos de alojamiento turístico colectivo por provincia según categoría.
+- [Cantidad de plazas, habitaciones y establecimientos de alojamiento turístico colectivo por provincia según categoría](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/d948548d-bc56-4462-b5cd-cc425fedf0e7).
 
-- Cantidad de plazas y establecimientos de cadenas hoteleras según tipo de cadena hotelera.
+- [Cantidad de plazas y establecimientos de cadenas hoteleras según tipo de cadena hotelera](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/f7f748b8-5852-4ca5-bc05-fe7dedafa254).
 
-- Base de alojamientos turísticos colectivos agrupada por provincia, departamento y localidad según clasificación y tipo de alojamiento del Padrón Único Nacional de Alojamiento (PUNA) con detalle de cantidad de establecimientos, unidades, habitaciones y plazas.
+- [Base de alojamientos turísticos colectivos agrupada por provincia, departamento y localidad según clasificación y tipo de alojamiento del Padrón Único Nacional de Alojamiento (PUNA) con detalle de cantidad de establecimientos, unidades, habitaciones y plazas](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/01d23e57-ba58-48ed-a1c9-e1604ae78a1d).
 
-- Ficha técnico metodológica del PUNA
+- [Ficha técnico metodológica del PUNA](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/3aef82ad-ab6a-455a-a9dc-2bcb39755959)
 
 
