@@ -224,7 +224,13 @@ ggplot(data = data_gg3) +
 
 ## RECURSOS DISPONIBLES PARA CONSULTA
 
-Se encuentra disponible para su consulta y descarga en el [portal de datos abiertos](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento) del Sistema de Información Turística de la Argentina ([SINTA](https://www.yvera.tur.ar/sinta/)) los siguientes recursos:
+### Tablero Interactivo
+
+Desde **[acá](https://tableros.yvera.tur.ar/puna/)** se puede acceder a la información del PUNA en formato de tabla dinámica interactiva para que puedas cruzar los datos por diferentes variables de interés.
+
+
+### Datos Abiertos
+Además se encuentra disponible para su consulta y descarga en el [portal de datos abiertos](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento) del Sistema de Información Turística de la Argentina ([SINTA](https://www.yvera.tur.ar/sinta/)) los siguientes recursos:
 
 - [Cantidad de plazas, habitaciones y establecimientos de alojamiento turístico colectivo por provincia](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/67727a58-7a43-450d-a685-a9fba9218b20).
 
