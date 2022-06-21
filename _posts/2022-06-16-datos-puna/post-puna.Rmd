@@ -34,7 +34,7 @@ puna <- read_csv("http://datos.yvera.gob.ar/dataset/c9dc110e-2a09-4b51-ac0a-a2db
 El Padrón Único Nacional de Alojamiento (PUNA) es el resultado de un proceso de armonización y consolidación de la información aportada por los organismos provinciales y municipales de turismo a través de sus registros administrativos y por el INDEC a partir del registro del marco poblacional de la Encuesta de Ocupación hotelera y Parahotelera (EOH).
 
 
-Los diferentes organismos de turismo de cada provincia o municipio cuentan con la información del número de establecimientos hoteleros, parahoteleros y otros alojamientos colectivos de turismo, resultante del proceso de habilitación que realizan las correspondientes dependencias para la prestación del servicios de alojamiento. A su vez, a partir de la informacion que recoge la EOH en las localidades muestradas, para la construccion del marco muestral de interés, se incorporan dichos registros al padrón de alojamiento.
+Los diferentes organismos de turismo de cada provincia o municipio cuentan con la información del número de establecimientos hoteleros, parahoteleros y otros alojamientos colectivos de turismo, resultante del proceso de habilitación que realizan las correspondientes dependencias para la prestación del servicios de alojamiento. A su vez, a partir de la información que recoge la EOH en las localidades muestradas, para la construcción del marco muestral de interés, se incorporan dichos registros al padrón de alojamiento.
 
 Como resultado el PUNA reúne la información de los establecimientos de alojamiento turístico colectivo de la Argentina, detallando las principales variables de cada uno.
 
