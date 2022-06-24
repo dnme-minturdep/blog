@@ -1,0 +1,245 @@
+---
+title: "Fuentes de datos: Padrón Único Nacional de Alojamiento (PUNA)"
+description: |
+ Siguiendo con la política de apertura de datos, la Dirección Nacional de Mercados y Estadística pone a disposición principales indicadores y la base de datos agregada de alojamientos colectivos 2020 del PUNA.
+output:
+  distill::distill_article:
+    code_folding: true
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(comunicacion)
+library(herramientas)
+library(geoAr)
+library(sf)
+library(datawizard)
+library(ggbump)
+
+source("funciones_auxiliares.R")
+
+puna <- read_csv("http://datos.yvera.gob.ar/dataset/c9dc110e-2a09-4b51-ac0a-a2db2ca76fbb/resource/01d23e57-ba58-48ed-a1c9-e1604ae78a1d/download/puna2020_base_agregada.csv", locale = locale(encoding = 'Latin1')) 
+```
+
+## ¿QUÉ ES EL PADRÓN ÚNICO NACIONAL DE ALOJAMIENTO?
+
+El Padrón Único Nacional de Alojamiento (PUNA) es el resultado de un proceso de armonización y consolidación de la información aportada por los organismos provinciales y municipales de turismo a través de sus registros administrativos y por el INDEC a partir del registro del marco poblacional de la Encuesta de Ocupación hotelera y Parahotelera (EOH).
+
+
+Los diferentes organismos de turismo de cada provincia o municipio cuentan con la información del número de establecimientos hoteleros, parahoteleros y otros alojamientos colectivos de turismo, resultante del proceso de habilitación que realizan las correspondientes dependencias para la prestación del servicios de alojamiento. A su vez, a partir de la información que recoge la EOH en las localidades muestradas, para la construcción del marco muestral de interés, se incorporan dichos registros al padrón de alojamiento.
+
+Como resultado el PUNA reúne la información de los establecimientos de alojamiento turístico colectivo de la Argentina, detallando las principales variables de cada uno.
+
+
+## ¿QUÉ ES UN ALOJAMIENTO TURÍSTICO COLECTIVO?
+
+Los alojamientos turísticos colectivos son aquellos establecimientos de hospedaje que prestan servicios de alojamiento al viajero, ofreciendo habitaciones u otro acomodo, si bien el número de plazas debe ser superior a un mínimo determinado, para grupos de personas que sobrepasan la unidad familiar y debe disponer, aunque no tenga fines de lucro, de una administración de tipo comercial común para todas las plazas del establecimiento. Esta definición incluye a los establecimientos hoteleros, parahoteleros, especializados y otros establecimientos colectivos (como los alojamientos de vacaciones; alojamientos de camping turístico; puertos; establecimientos de alojamiento turístico social).
+
+
+## ¿QUÉ PERMITE ANALIZAR EL PUNA?
+
+Los datos del PUNA permiten conocer para `r length(unique(paste(puna$provincia,puna$localidad)))` localidades del país el stock de establecimientos, plazas y habitaciones disponibles según el tipo y categoría del establecimiento, número de establecimientos y plazas de cadenas hoteleras y origen de la cadena.
+
+Por ejemplo, a partir de la base de alojamientos turísticos colectivos agrupada podemos analizar cómo se distribuyó el stock de plazas de alojamiento colectivo a lo largo del país durante el 2020 por provincia.
+
+```{r mapa, fig.width= 14, fig.height=8}
+
+data_gg2 <- puna %>% 
+#  filter(tipo == "Hoteleros") %>% 
+  group_by(provincia) %>% 
+  summarise(plazas = sum(as.numeric(plazas))) %>% 
+  ungroup() %>% 
+ # mutate(orden = rank(-plazas)) %>% 
+  arrange(-plazas) %>% 
+  mutate(prov_limpio = limpiar_texto(provincia)) %>% 
+  filter(!is.na(plazas))
+
+
+mapa_arg <- get_geo("ARGENTINA", level = "provincia") %>% 
+  add_geo_codes() %>% 
+  mutate(prov_limpio = limpiar_texto(name_iso))
+
+data_gg2 <- right_join(mapa_arg, data_gg2)
+
+
+data_gg2 <- data_gg2 %>% 
+  st_centroid(of_largest_polygon = T) 
+
+data_gg2 <- data_gg2 %>% 
+  bind_cols(
+    sf::st_coordinates(data_gg2) %>%
+      as_tibble() %>%
+      rename(lon=X, lat=Y))
+
+# corregir centroide de salta
+data_gg2 <- data_gg2 %>% 
+  mutate(lon = ifelse(name_iso == "Salta", -64.59388437680094, lon),
+         lat = ifelse(name_iso == "Salta", -25.110770602277693, lat))
+
+data_gg2 <- datos_grafico_pablo(data_gg2, variable = plazas)
+
+
+ggplot(data_gg2) + #data
+  geom_sf(data=mapa_arg, size = .5, fill = "transparent", color = "gray40") + # mapa base
+  geom_point(aes(x=lon, y=lat, color=plazas)) + #data: puntos
+  geom_sigmoid(
+    aes(x=lon, y=lat, xend=sigmoid_end, yend=col_y, group=name_iso, color=plazas)
+  ) + #data: lineas
+  geom_text(
+    aes(label=name_iso, x=sigmoid_end, y=col_y
+        #color=plazas
+        ), color = "black", fontface = "bold",
+    hjust=1, size=4, vjust=0, nudge_y = 0.5, alpha=0.8,
+  ) + #data: etiquetas
+  geom_segment(
+    aes(x = col_x_start, xend = col_x_end, y = col_y, yend = col_y, color = plazas),
+    size = 4.2, alpha = .9, 
+    lineend = "round"
+  ) + #data: barras
+  geom_text(
+    aes(label=area_label, x=col_x_end, y=col_y, color=plazas),
+    hjust=-0.1, size=5, nudge_x = .3
+  ) + #data: valores
+  labs(
+    subtitle = "Plazas en alojamientos colectivos por provincia. Año 2020",
+    caption = "PUNA-MINTURDEP"
+  ) +
+  coord_sf(clip = "off") +
+  scale_fill_dnmye2(discrete = F) +
+  scale_color_dnmye2(discrete = F) +
+  theme_void() +
+  theme(plot.margin = margin(.5, 1, .5, .5, "cm"),
+        legend.position = "none",
+        plot.background = element_rect(fill = "transparent"),
+        plot.caption = element_text(color = "gray40", size = 10),
+        plot.title = element_text(color = "gray40", size = 25, family = "Helvetica", face = "bold"),
+        plot.subtitle = element_text(color = "gray40", size = 25))
+
+```
+
+También podemos hacer el análisis a nivel de localidad y consultar cuáles fueron las quince localidades del país con mayor stock de plazas totales.
+
+```{r fig.width= 14, fig.height=8}
+
+data_gg <- puna %>% 
+  filter(!is.na(plazas) & plazas != 0) %>% 
+  group_by(provincia, localidad) %>% 
+  summarise(plazas = sum(as.numeric(plazas))) %>% 
+  ungroup() %>% 
+  arrange(plazas) %>% 
+  mutate(localidad = as_factor(localidad),
+         orden = as.integer(rank(-plazas)))
+
+data_gg %>% 
+  slice_tail(n = 15) %>% 
+  ggplot() +
+    geom_segment(aes(x = localidad, xend = localidad,
+                     y = 0, yend = plazas, 
+                     color =provincia)) +
+  geom_point(aes(x = localidad, y = plazas, fill = provincia), color = "black",
+             size = 3, shape = 21) +
+  geom_text(aes(x = localidad, y = plazas+10000, 
+                label = scales::label_number(big.mark = ".", decimal.mark = ",", accuracy = 1)(plazas)
+), color = "black",
+             size = 5) +
+  coord_flip(clip = "off") +
+  theme_minimal()  +
+  scale_fill_dnmye2() +
+  scale_color_dnmye2() +
+  xlab("") +
+  ylab("") +
+  scale_y_continuous(labels = NULL) +
+  guides(fill = guide_legend(title = "Provincias"), color = "none") +
+  theme(plot.margin = margin(.5, 1, .5, .5, "cm"),
+        text = element_text(size = 20),
+        legend.position = "right",
+        plot.background = element_rect(fill = "transparent"),
+        plot.caption = element_text(color = "gray40", size = 10),
+        plot.title = element_text(color = "gray40", size = 25, family = "Helvetica", face = "bold", hjust = 0),
+        plot.subtitle = element_text(color = "gray40", size = 25)) +
+  labs(title = "Plazas de alojamiento turístico colectivo por localidad", subtitle = "Año 2020.", caption = "Fuente: PUNA-MINTURDEP") 
+  
+    
+
+```
+
+Además de analizar el stock de plazas es posible indagar en función de otras variables como el tipo de establecimiento o su clasificación. En el PUNA los establecimientos colectivos se clasifican en tres tipos: hoteleros, parahoteleros, y otros colectivos. Cada tipo a su vez tiene su propia clasificación, los alojamientos hoteleros se clasifican en diez categorías diferentes.
+
+Una posible lectura que aporta esto es conocer qué porcentaje de las plazas hoteleras de cada provincia conforman los hoteles sindicales o mutuales. En el siguiente gráfico se representa el total de plazas hoteleras, la suma de plazas hoteleras de clasificación mutual o sindical y qué porcentaje estas últimas representan sobre el total hotelero.
+
+```{r fig.width= 14, fig.height=8}
+data_gg3 <- puna %>% 
+  filter(tipo == "Hoteleros") %>% 
+  complete(provincia, clasificacion_minturdep) %>% 
+  group_by(provincia, clasificacion_minturdep) %>% 
+  summarise(plazas = sum(as.numeric(plazas), na.rm = T)) %>% 
+  ungroup() %>% 
+  group_by(provincia) %>%
+  mutate(porcentaje = plazas /sum(plazas, na.rm = T), 
+         total = sum(plazas)) %>% 
+  filter(clasificacion_minturdep == "Hotel sindical / mutual") %>% 
+  ungroup() %>% 
+  arrange(total) %>% 
+  mutate(provincia = as_factor(provincia))
+  
+
+ggplot(data = data_gg3) +
+  geom_col(aes(x = provincia, 
+               y = plazas,
+               fill = provincia), width = .6, color = "black" ) +
+  geom_col(aes(x = provincia, 
+               y = total,
+               fill = provincia), alpha = .5 ) +
+  geom_text(aes(x = provincia, 
+               y = plazas+10000,
+               label  = scales::label_percent(accuracy = 0.01)(porcentaje)),
+             size = 5) +
+  guides(fill = "none") +
+  coord_flip() +
+    theme_minimal()  +
+  scale_fill_dnmye2() +
+  scale_color_dnmye2() +
+  xlab("") +
+  ylab("Plazas") +
+ # guides(fill = guide_legend(title = "Provincias"), color = "none") +
+  theme(plot.margin = margin(.5, 1, .5, .5, "cm"),
+        text = element_text(size = 20),
+        legend.position = "none",
+        plot.background = element_rect(fill = "transparent"),
+        plot.caption = element_text(color = "gray40", size = 10),
+        plot.title = element_text(color = "gray40", size = 25, family = "Helvetica", face = "bold", hjust = 0),
+        plot.subtitle = element_text(color = "gray40", size = 25)) +
+  labs(title = "Plazas de alojamiento de hoteles sindicales/mutuales\ny plazas de alojamiento hotelero por provincia", subtitle = "Año 2020.", caption = "Fuente: PUNA-MINTURDEP") 
+    
+```
+
+
+## RECURSOS DISPONIBLES PARA CONSULTA
+
+### Tablero Interactivo
+
+Desde **[acá](https://tableros.yvera.tur.ar/puna/)** se puede acceder a la información del PUNA en formato de tabla dinámica interactiva para que puedas cruzar los datos por diferentes variables de interés.
+
+
+### Datos Abiertos
+Además se encuentra disponible para su consulta y descarga en el [portal de datos abiertos](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento) del Sistema de Información Turística de la Argentina ([SINTA](https://www.yvera.tur.ar/sinta/)) los siguientes recursos:
+
+- [Cantidad de plazas, habitaciones y establecimientos de alojamiento turístico colectivo por provincia](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/67727a58-7a43-450d-a685-a9fba9218b20).
+
+- [Cantidad de plazas, habitaciones y establecimientos de alojamiento turístico colectivo por provincia según categoría](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/d948548d-bc56-4462-b5cd-cc425fedf0e7).
+
+- [Cantidad de plazas y establecimientos de cadenas hoteleras según tipo de cadena hotelera](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/f7f748b8-5852-4ca5-bc05-fe7dedafa254).
+
+- [Base de alojamientos turísticos colectivos agrupada por provincia, departamento y localidad según clasificación y tipo de alojamiento del Padrón Único Nacional de Alojamiento (PUNA) con detalle de cantidad de establecimientos, unidades, habitaciones y plazas](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/01d23e57-ba58-48ed-a1c9-e1604ae78a1d).
+
+- [Ficha técnico metodológica del PUNA](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento/archivo/3aef82ad-ab6a-455a-a9dc-2bcb39755959)
+
+
