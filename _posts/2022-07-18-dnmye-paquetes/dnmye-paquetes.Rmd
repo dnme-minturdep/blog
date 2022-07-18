@@ -1,0 +1,154 @@
+---
+title: "{Herramientas} para el procesamiento de datos y {Comunicación} de la DNMyE"
+description: |
+  Presentación de los paquetes `{herramientas}` y `{comunicación}`, desarrollados por la Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación
+output:
+  distill::distill_article:
+    code_folding: false
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: true    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(scipen = 9999)
+```
+
+A lo largo del último año y medio, la DNMyE se ha puesto como objetivo mejorar los productos ya existentes, desarrollar nuevos y avanzar en la sistematización y automatización de los flujos de trabajo que hacen posible lo mencionado anteriormente. Un primer gran resultado que hemos alcanzado con este proyecto es la creación del **[Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/)**.
+
+En paralelo, esta oficina estadística se ha propuesto avanzar en la transparencia y apertura tanto de los datos que produce como de los procesos que se llevan adelante para la generación de información. En este camino hemos decidido incorporar como herramienta de trabajo para el procesamiento de datos (y más) al lenguaje de programación estadística **R**[^1] y la plataforma **Rstudio**[^2]. Esto nos permitió, por un lado, disponer del basto conjunto de librerías disponibles tanto para el procesamiento de datos en general como para todo aquello que lo rodea (validación y visualización de la información, diseño de plataformas para la presentación de los productos, organización de flujos de trabajo, entre otros).
+
+
+[^1]:  R Core Team (2022). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+
+[^2]: RStudio Team (2022). RStudio: Integrated Development Environment for R. RStudio, PBC, Boston, MA. URL http://www.rstudio.com/.
+
+
+Por otro lado, una de las potencialidades de los esquemas del software de código abierto con licencia libre es la capacidad que tienen las personas, institutos, empresas y también diferentes organismos del Estado para contribuir en el desarrollo de herramientas, sea tanto para uso interno como externo. Es en este sentido que desde la DNMyE avanzamos en la creación de dos librerías en R que nos faciliten el día a día en dos aspectos esenciales para la Dirección: el procesamiento de datos y la comunicación de la información.
+
+
+<br>
+
+## Paquete `{comunicacion}`
+
+```{r out.width="40%", fig.align='center'}
+knitr::include_graphics("https://github.com/dnme-minturdep/comunicacion/blob/master/man/figures/logo_comunicacion.png?raw=true")
+```
+
+
+`{comunicacion}` ofrece un set de funciones que facilitan la visualización y presentación de la información estadística en la DNMyE, basados en el conjunto de lineamientos del [Manual de marca institucional de Presidencia de la Nación Argentina](https://argob.github.io/poncho/identidad/presidencia/ID_Presidencia_Manual_v1-1.pdf), sea para logotipos, paletas de colores o piezas de comunicación. 
+
+### Funciones
+
+- Con **`crear_informes()`** ponemos a disposición un esqueleto de la estructura de nuestros informes. La idea es que los y las técnicas de la DNMyE no tengan que preocuparse por configuraciónes de formato, estética y se puedan enfocar, principalmente, en el procesamiento y análisis de la información.
+
+```{r out.width="80%", fig.align='center'}
+knitr::include_graphics("template_informe.png")
+```
+
+- Con **`scale_fill_dnmye()`** podemos alinear el conjunto de visualizaciones que producimos con los lineamientos del manual de estilo. Por ejemplo:
+
+```{r}
+#.........................Cargo librería.........................
+library(comunicacion)
+library(tidyverse)
+
+#........Cargo la base de juguete, contenida en el paquete.......
+url <- "http://datos.yvera.gob.ar/dataset/b5819e9b-5edf-4aad-bd39-a81158a2b3f3/resource/645e5505-68ee-4cfa-90f9-fcc9a4a34a85/download/evyth_microdatos.csv"
+b_evyth <- read_csv(file = url)
+
+b_evyth %>% 
+  filter(anio == 2021 & trimestre == 4) %>% 
+  count(tipo_visitante, wt = pondera) %>% 
+  mutate(tipo_visitante = case_when(tipo_visitante == 1 ~ "Turistas",
+                                    tipo_visitante == 2 ~ "Excursionistas")) %>% 
+  ggplot(aes(x = tipo_visitante, y = n, fill = tipo_visitante)) +
+  geom_col() +
+  geom_hline(yintercept = 0) + 
+  scale_fill_dnmye(palette = "c2_contraste") +
+  labs(title = "Cantidad de turistas por tipo de visitante. Año 2021, trimestre 4",
+       subtitle = "31 aglomerados urbanos.",
+       caption = "Fuente: EVyTH-MINTURyDEP", x = "", y = "") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+Además, creamos funciones para setear de forma manual los colores institucionales, como `dnmye_colores()` y otras para, por ejemplo, generar el código necesario que permita agrupar múltiples fragmentos de Rmarkdown en pestañas, como `rmdautotabs()` [^3].
+
+[^3]: Tomado del paquete [sknifedatar](https://github.com/rafzamb/sknifedatar)
+
+
+
+> [Repositorio en Github](https://github.com/dnme-minturdep/comunicacion)
+
+> [Documentación de la librería](https://dnme-minturdep.github.io/comunicacion/)
+
+
+
+<br>
+
+## Paquete `{herramientas}`
+
+
+```{r out.width="40%", fig.align='center'}
+knitr::include_graphics("https://github.com/dnme-minturdep/herramientas/raw/main/man/figures/logo.png")
+```
+
+El objetivo del paquete es proveer a la Dirección Nacional de Mercados y Estadísticas de un set de funciones para el procesamiento de datos. Entre las principales se pueden encontrar:
+
+-   **`remover_tildes()`**: Función que elimina tildes de las vocales y la letra “y”:
+
+```{r echo = TRUE}
+herramientas::remover_tildes("Uná oráción lléná de tíldes")
+```
+
+<br>
+
+-   **`numeros_en_palabras()`**: Función que transforma dígitos del 0 al 100 en palabras:
+
+```{r echo = TRUE}
+herramientas::numeros_en_palabras(c(1, 01, 54, "25 de mayo"))
+```
+
+<br>
+
+-   **`limpiar_texto()`**: Función que aplica limpieza general del texto:
+
+```{r echo = TRUE}
+herramientas::limpiar_texto("Téxtó lleno de tíldés mál puestás y eñes por todos ñados")
+```
+
+<br>
+
+#### Otras funciones:
+
+-   **`%out%`**: Valores no contenidos dentro de un conjunto.
+
+-   **`tasa_variacion()`**: Calcula la tasa de variación con respecto al período previo según se defina.
+
+-   **`set_user_srv()`:** Guía para la configuración de las credenciales en .Renviron
+
+-   **`archivo_plano_srv()`** Devuelve las líneas de una archivo plano en el server, es para usar junto a `read.csv()` y otras funciones de lectura de archivos plano.
+
+-   **`read_rds_srv()` y `read_sav_srv()`:** Leen especificamente esos tipo de archivos mediante `gzcon()` y `getBinaryURL()`
+
+-   **`write_file_srv`:** Hace una conexión a la ruta indicada dentro del servidor de la DNMyE y escribe un archivo .csv, .rds, .txt o .sav
+
+> [Repositorio en Github](https://github.com/dnme-minturdep/herramientas)
+
+> [Documentación de la librería](https://dnme-minturdep.github.io/herramientas/)
+
+Para facilitar el acceso a estas funciones a diferentes usuarios por fuera de la DNMyE, hemos abierto el repositorio desde el cual desarrollamos la librería y, también, hemos puesto a disposición la documentación correspondiente para entender y aplicar estas herramientas. También abrimos un espacio para que, quien lo desee, pueda contribuir con aportes al desarrollo de los paquetes. Para ello recomendamos leer la documentación del repositorio y la [guía para contribuir](https://github.com/dnme-minturdep/comunicacion#c%C3%B3mo-contribuir-con-el-proyecto)
+
+Con este camino recorrido, la DNMyE se ha propuesto avanzar en el desarrollo de herramientas para facilitar y mejorar el procesamiento de datos y, al mismo tiempo, continuar con la apertura de datos y procesos.
+
+
+
+
