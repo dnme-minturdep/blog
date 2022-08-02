@@ -7,7 +7,7 @@ output:
     self_contained: false
     toc: true
     toc_floate: true
-draft: true    
+draft: false    
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +26,7 @@ googlesheets4::gs4_deauth()
 
 # Introducción
 
-La Dirección Nacional de Mercados y Estadística (DNMyE) elabora mensualmente un informe que reúne los datos actualizados del turismo, nutriéndose de las estadísticas elaboradas por la Dirección a partir de los relevamientos períodicos (Encuesta de Turismo Internacional, Encuesta de Ocupación Hotelera, Encuesta de Viajes y Turismo de los Hogares), asi como fuentes externas que complementan los datos del sector (Migraciones, ANAC, INDEC, Organización Mundial del Turismo). En esta oportunidad, se publica para el público general el último Informe Mensual de Estadísticas de Turismo (IMET), correspondiente al mes de julio, y además se disponibilizan ediciones anteriores del informe.
+La Dirección Nacional de Mercados y Estadística (DNMyE) elabora mensualmente un informe que reúne los datos actualizados del turismo, nutriéndose de las estadísticas elaboradas por la Dirección a partir de los relevamientos períodicos (Encuesta de Turismo Internacional, Encuesta de Ocupación Hotelera, Encuesta de Viajes y Turismo de los Hogares), asi como fuentes externas que complementan los datos del sector (Migraciones, ANAC, INDEC, Organización Mundial del Turismo). En esta oportunidad, se publica para el público general el último Informe Mensual de Estadísticas de Turismo (IMET), correspondiente al mes de julio.
 
 ![](img_bitacora/tabla_resumen_imet.png)
 
@@ -423,4 +423,7 @@ A partir de información de la [ETI](https://www.yvera.tur.ar/sinta/informe/info
 Tomando los datos relevados por la [EVyTH](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth), se presentan las características de los turistas internos (distribución por quintil de ingresos, edad, región de origen y género), así como las características de sus viajes (medio de transporte utilizado, motivo de viaje, región de destino, tipo de alojamiento elegido), para el último trimestre relevado.
 
 ![](img_bitacora/caracteristicas_viaje_int.png)
+
+# JULIO 2022
+<iframe src="https://tableros.yvera.tur.ar/institucional/imet/imet_julio_final.pdf" width="800" height="900"></iframe>
 
