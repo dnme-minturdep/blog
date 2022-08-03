@@ -12,6 +12,8 @@ navbar:
       menu:
       - text: "Armonización"
         href: https://armonizacion.yvera.tur.ar/
+      - text: "Biblioteca"
+        href: https://biblioteca.yvera.tur.ar/
       - text: "Calendario"
         href: https://calendario.yvera.tur.ar/
       - text: "Datos Abiertos"
