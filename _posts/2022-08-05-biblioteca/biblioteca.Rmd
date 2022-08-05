@@ -1,7 +1,7 @@
 ---
 title: "BIBLIOTECA"
 description: |
-  Este nuevo micrositio del Sistema de Información Turística de la Aregntina (SINTA) reune investigaciones, documentos de trabajo, documentos metodológicos y de coyunutra del sector turístico producidos por la DNMyE
+  Este nuevo micrositio del Sistema de Información Turística de la Argentina (SINTA) reune investigaciones, documentos de trabajo, metodológicos y de coyuntura del sector turístico producidos por la DNMyE
 output:
   distill::distill_article:
     code_folding: false
@@ -22,14 +22,14 @@ knitr::opts_chunk$set(echo = FALSE)
 Desde la Dirección Nacional de Mercados y Estadística (DNMyE) venimos
 trabajando de manera sostenida en la apertura de datos, procesos y la
 generación de plataformas, con el propósito de hacer lo más accesible
-posible, la diversidad de recursos con los que trabajamos, para diversos
-públicos. Este progresivo desarrollo fue conformando lo que hoy
-conocemos como el [**Sistema de Información Turística de la Argentina
+posible, la diversidad de recursos, para diversos públicos. Este
+progresivo desarrollo fue conformando lo que hoy conocemos como el
+[**Sistema de Información Turística de la Argentina
 (SINTA)**](https://www.yvera.tur.ar/sinta/).
 
 **En esta ocasión presentamos un nuevo micrositio dentro del SINTA: la
-[BIBLIOTECA](https://biblioteca.yvera.tur.ar/)**. Así, mientras el
-sitio de [INFORMES](https://www.yvera.tur.ar/sinta/informe) tiene como
+[BIBLIOTECA](https://biblioteca.yvera.tur.ar/)**. Así, mientras el sitio
+de [INFORMES](https://www.yvera.tur.ar/sinta/informe) tiene como
 objetivo principal reunir los informes de prensa y reportes de los
 operativos estadísiticos o seguimiento de indicadores; o el [Portal de
 Datos Abiertos](https://datos.yvera.gob.ar/) es el espacio donde
@@ -88,3 +88,7 @@ sector turístico:
 
 1.  El *Informe Mensual de Estadísicas de Turismo (IMET)*
 2.  El *Panorama Económico del Turismo en Argentina*
+
+# Acceso a la BIBLIOTECA
+
+🔗 <https://biblioteca.yvera.tur.ar/>
