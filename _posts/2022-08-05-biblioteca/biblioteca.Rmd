@@ -27,11 +27,11 @@ públicos. Este progresivo desarrollo fue conformando lo que hoy
 conocemos como el [**Sistema de Información Turística de la Argentina
 (SINTA)**](https://www.yvera.tur.ar/sinta/).
 
-En esta ocasión presentamos un nuevo micrositio dentro del SINTA: la
-[**BIBLIOTECA**](https://biblioteca.yvera.tur.ar/). Así, mientras el
+**En esta ocasión presentamos un nuevo micrositio dentro del SINTA: la
+[BIBLIOTECA](https://biblioteca.yvera.tur.ar/)**. Así, mientras el
 sitio de [INFORMES](https://www.yvera.tur.ar/sinta/informe) tiene como
 objetivo principal reunir los informes de prensa y reportes de los
-operativos estadísitcos o seguimiento de indicadores; o el [Portal de
+operativos estadísiticos o seguimiento de indicadores; o el [Portal de
 Datos Abiertos](https://datos.yvera.gob.ar/) es el espacio donde
 publicamos series de indicadores o bases de microdatos, en este nuevo
 espacio tenemos como objetivo reunir y compartir Investigaciones,
@@ -55,7 +55,7 @@ navegación según el tema de interés: **"Documentos de Trabajo"**,
 Estos son documentos de investigación y análisis producidos en el marco
 de la Subsecretaría de Desarrollo Estratégico del cual depende esta
 DNMyE. Entre otros se pueden encontrar, [**por ejemplo, las propuestas y
-estrategías del programa La Ruta
+estrategias del programa La Ruta
 Natural**](https://larutanatural.gob.ar/)**;** o perfiles de turismo
 (tales como Naturaleza o Cultura) a partir de las encuestas de turismo
 interno e internacional cuyos cuestionarios permiten entender las
@@ -83,8 +83,8 @@ pronta publicación, y la reconstrucción de la serie para atras (2016 -
 
 El micrositio contiene además una [sección
 dedicada](https://biblioteca.yvera.tur.ar/coyuntura.html) a
-publicaciones periódicas de de seguimiento estadístico y economíco del
+publicaciones periódicas de seguimiento estadístico y económico del
 sector turístico:
 
 1.  El *Informe Mensual de Estadísicas de Turismo (IMET)*
-2.  El *Panorama Económico del Turismo en Argetntina*
+2.  El *Panorama Económico del Turismo en Argentina*
