@@ -46,14 +46,14 @@ knitr::include_graphics("sinta.png")
 
 La colección de documentos [que acá se
 publican](https://biblioteca.yvera.tur.ar/) fueron categorizados en tres
-grandes grupos con etiquetas para cada categoría que permiten una rápida
+grandes grupos con etiquetas para cada uno que permiten una rápida
 navegación según el tema de interés: **"Documentos de Trabajo"**,
 **"Metodología"** y **"Anuario Estadístico"**
 
 ### Documentos de Trabajo
 
 Estos son documentos de investigación y análisis producidos en el marco
-de la Subsecretaría de Desarrollo Estratégico del cual depende esta
+de la Subsecretaría de Desarrollo Estratégico de la cual depende esta
 DNMyE. Entre otros se pueden encontrar, [**por ejemplo, las propuestas y
 estrategias del programa La Ruta
 Natural**](https://larutanatural.gob.ar/)**;** o perfiles de turismo
@@ -73,10 +73,10 @@ insumos del proyecto de
 
 ### Anuario Estadístico
 
-Por último se rune bajo esta etiqueta los *Anuarios de Estadísticas de
+Por último, se rune bajo esta etiqueta los *Anuarios de Estadísticas de
 Turismo (AET)* de la serie 2006 - 2015, discontinuada en 2016. En la
 actualidad se está trabajando para su relanzamiento con el AET 2021 de
-pronta publicación, y la reconstrucción de la serie para atras (2016 -
+pronta publicación, y la reconstrucción de la serie para atrás (2016 -
 2020).
 
 ## COYUNTURA
