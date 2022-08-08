@@ -1,0 +1,658 @@
+---
+title: "Agencias de Viajes y de Turismo Estudiantil"
+description: |
+  Caracterización del sector en base al Registro de Agencias de Viajes de la Dirección Nacional de Agencias de Viajes (datos a marzo de 2022)
+author: 
+date: 2022-08-08
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, 
+                      fig.height=2, fig.width = 5)
+
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(gt)
+library(herramientas)
+library(comunicacion)
+library(sf)
+library(geoAr)
+library(cowplot)
+library(biscale)
+options(scipen = 999)
+
+fmt_enteros <- function(x) format(x, big.mark = ".", decimal.mark = ",", digits = 0)
+fmt_decimales <- function(x) format(x, big.mark = ".", decimal.mark = ",", digits = 2)
+fmt_porcentaje <- function(x, digits = 4) paste0(format(x*100, big.mark = ".", decimal.mark = ",", digits = digits), "%")
+
+# load data
+base_agencias <- readRDS("/srv/DataDNMYE/agencias/rlm/base_agencias.rds")
+
+n_total <- nrow(base_agencias)
+
+mixtas <- sum( base_agencias$receptivo == "Si" & base_agencias$emisivo == "Si", na.rm = T)
+emisivas <- sum( base_agencias$receptivo == "No" & base_agencias$emisivo == "Si", na.rm = T)
+receptivas <- sum( base_agencias$receptivo == "Si" & base_agencias$emisivo == "No", na.rm = T)
+internacional <- mixtas + emisivas + receptivas
+
+interno <-  sum(base_agencias$interno_tipo_de_turismo == "Si", na.rm = T)
+
+
+```
+
+<p style="font-size: 24px; text-align: justify">
+
+Según los datos del Registro de Agencias de Viajes de la Dirección Nacional de Agencias de Viajes al 15 de marzo de 2022 había registradas `r fmt_enteros(n_total)` en todo el país. En base a la información declarada por estas agencias se caracteriza el sector en relación a su distribución geográfica y el tipo de turismo con el que operan.
+
+</p>
+
+# TIPO DE TURISMO {.unnumbered}
+
+Las agencias de viajes y turismo pueden operar con turismo interno, turismo internacional, o ambas. De las `r n_total` agencias el `r fmt_porcentaje(internacional/n_total)`, es decir `r fmt_enteros(internacional)` agencias, opera con turismo internacional, ya sea receptivo y/o emisivo. Mientras que `r fmt_enteros(interno)` agencias declararon operar con turismo interno, representando un `r fmt_porcentaje(interno/n_total, digits = 3)` del universo considerado. 
+
+
+```{r out.width = "80%"}
+base_agencias %>%
+    summarise( 
+            internacional = sum(receptivo == "Si" | emisivo == "Si", na.rm = T),
+            interno = sum(interno_tipo_de_turismo == "Si", na.rm = T)
+            ) %>% 
+  pivot_longer(cols = everything(), names_to = "Tipo", values_to = "cantidad") %>% 
+  mutate(porcentaje = cantidad/n_total) %>% 
+  ggplot(aes(x = Tipo, y = porcentaje, label = cantidad)) +
+  geom_col(fill = dnmye_colores("cian"))+
+  geom_text(position = position_nudge(y = .05)) +
+  theme_minimal() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(labels = ~ str_to_title(.x)) +
+   labs(title = "Tipo de turismo", x = "", y = "", subtitle = "Cantidad y porcentaje de agencias. Año 2022")+
+  labs(caption = "Fuente: Elaboración de la DNMYE en base a datos del Registro\nde Agencias de Viajes de la Dirección Nacional de Agencias de Viajes") +
+  theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
+
+  
+
+```
+
+```{r}
+modalidad <- base_agencias %>%
+    summarise( 
+            receptivas = sum(emisivo == "No" & receptivo == "Si", na.rm = T),
+            "receptivo-emisivas" = sum(emisivo == "Si" & receptivo == "Si", na.rm =T),
+            emisivas = sum(emisivo == "Si" & receptivo == "No", na.rm = T)
+            ) %>% 
+  pivot_longer(cols = everything(), names_to = "Tipo", values_to = "cantidad") %>% 
+  mutate(porcentaje = cantidad/internacional)
+```
+
+Al analizar el tipo de turismo internacional, se puede ver que un `r format(round(modalidad[modalidad$Tipo=="emisivas","porcentaje"]*100,1), decimal.mark=",")`% declara comercializar solo turismo emisivo, mientras que un `r format(round(modalidad[modalidad$Tipo=="receptivo-emisivas","porcentaje"]*100,1), decimal.mark=",")`% realiza tanto operaciones de turismo receptivo como de turismo emisivo, y un `r format(round(modalidad[modalidad$Tipo=="receptivas","porcentaje"]*100,1), decimal.mark=",")`% opera turismo receptivo exclusivamente. 
+
+```{r out.width = "80%"}
+modalidad %>% 
+  mutate(Tipo = fct_reorder(as_factor(Tipo), .x = porcentaje) %>% fct_relevel("internas", after = 0)) %>% 
+  #filter(Tipo != "No especificado") %>% 
+  ggplot(aes(x =Tipo, y  = porcentaje, label = cantidad)) +
+  # ggplot(aes(reorder(Tipo, porcentaje), porcentaje)) +
+  geom_col(fill = dnmye_colores("cian")) + 
+  geom_text(position = position_nudge(y = .05)) +
+  labs(title = "Tipo de turismo internacional", x = "", y = "", subtitle = "Cantidad y porcentaje de agencias. Año 2022", caption = "Elaboración de la DNMYE en base a datos de la Registro de Agencias de Viajes\nde la Dirección Nacional de Agencias de Viajes") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(labels = ~ str_to_title(.x))+
+  coord_flip() +
+  theme_minimal() +
+  theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
+
+```
+
+Si bien en el agregado nacional hay un predominio de la actividad en torno al turismo emisivo, existen diferencias a nivel subnacional, tanto en relación a la cantidad de agencias como a su distribución según el tipo de turismo con el que operan.
+
+# GEOGRAFÍA DEL SECTOR {.unnumbered}
+
+```{r}
+datos_mapa <- base_agencias %>% 
+  filter(!provincia %in% c("sin informacion","otro lugar"))
+
+sin_geo <- nrow(base_agencias %>% 
+  filter(provincia %in% c("sin informacion","otro lugar")))
+
+provincias <- get_geo("ARGENTINA", "provincia") %>% 
+  add_geo_codes() %>%
+  mutate(provincia = herramientas::limpiar_texto(tolower(name_iso), enie = F))
+
+datos_mapa <- datos_mapa %>% 
+  group_by(provincia) %>% 
+  count() %>% 
+  ungroup() %>% 
+  left_join(provincias) %>% 
+  st_as_sf()
+
+agencias_pais <- ggplot() +
+  geom_sf(data= provincias, size = .1, fill = "white") +
+  geom_sf(data = datos_mapa, aes(fill = n)) +
+  scale_fill_distiller(type = "seq", direction = 1, palette = "Blues") +
+  theme_void() +
+  theme(legend.position = "left") +
+  labs(fill = "Cantidad de agencias")
+
+agencias_caba <- ggplot() +
+  geom_sf(data = datos_mapa %>% filter(provincia !="buenos aires"), 
+          aes(fill=n)) +
+  scale_fill_distiller(type = "seq", direction = 1, palette = "Blues",) +
+  coord_sf(xlim = c(-58.91218, -57.91353), ylim = c(-35.10866, -34.32291), expand = FALSE) +
+  theme_void() +
+  theme(legend.position = "none")
+
+ppales_prov <- sum(datos_mapa$n[datos_mapa$provincia %in% c("buenos aires", "cordoba", "ciudad autonoma de buenos aires", "santa fe")])
+
+```
+
+De las `r fmt_enteros(n_total)` agencias que se registran en el país, la mayor parte se concentra en la Ciudad Autónoma de Buenos Aires y en la provincia de Buenos Aires. En tercer y cuarto lugar según la cantidad de agencias registradas se ubican las provincias de Córdoba y Santa Fe. En conjunto estas cuatro provincias explican el `r fmt_porcentaje(ppales_prov/n_total)` del total del país.
+
+```{r fig.height=6}
+#Mapa completo
+ggdraw() + 
+  draw_label("Cantidad de agencias por provincia", fontface='bold', x = 0.5, y = .9) +
+  draw_plot(agencias_pais, 0, 0, 1, .8) + 
+  draw_plot(agencias_caba, 0.7, 0.3, 0.5, 0.5) 
+
+```
+
+Además de la concentración territorial descripta, se observa un comportamiento heterogéneo en cuanto al tipo de turismo operado por las agencias según provincia. El mapa a continuación representa la cantidad de agencias de viaje por provincia y la proporción de las mismas que realiza servicios de turismo interno.
+
+```{r}
+datos_map <- base_agencias %>% 
+  mutate(provincia_local_fisico = herramientas::limpiar_texto(tolower(provincia_local_fisico), enie = F),
+         provincia_local_virtual = herramientas::limpiar_texto(tolower(provincia_local_virtual), enie = F)) %>% 
+  mutate(provincia = case_when(local_fisico_virtual=="Local físico" ~ provincia_local_fisico,
+                               local_fisico_virtual=="Local virtual" ~ provincia_local_virtual,
+                               TRUE ~ local_fisico_virtual)) %>% 
+  mutate(provincia = case_when(provincia %in% c("ciudad de buenos aires",
+                                                "ciudad autonoma de bs as",
+                                                "ciudad autonoma buenos aires",
+                                                "ciudad autonoma de buenos aires caba",
+                                                "cdad aut buenos aires",
+                                                "caba","capital federal","ciudadbsas") ~ "ciudad autonoma de buenos aires",
+                               TRUE ~ provincia)) %>% 
+  mutate(provincia = case_when(!provincia %in% c(unique(provincias$provincia), "sin informacion") ~ "otro lugar",
+                               TRUE ~ provincia))
+
+
+datos_map <- datos_map %>%
+  select(provincia, interno_tipo_de_turismo) %>%
+  filter(!provincia %in% c("sin informacion","otro lugar"))
+
+# EMISIVO
+interno <- datos_map %>% 
+  group_by(provincia) %>% 
+  count(interno_tipo_de_turismo) %>% 
+  mutate(agencias_prov = sum(n)) %>% 
+  ungroup() %>% 
+  filter(interno_tipo_de_turismo == "Si") %>% 
+  mutate(proporcion = n/agencias_prov) %>% 
+  left_join(provincias) %>% 
+  st_as_sf()
+
+data_biscale_i <- bi_class(interno, x=n, y=proporcion, style="quantile",dim=4)
+
+pais_interno <- ggplot() +
+  #geom_sf(data=provincias) +
+  geom_sf(data = data_biscale_i, aes(fill=bi_class), color ="white", size = 0.1) +
+  bi_scale_fill(pal = "DkBlue2", dim = 4) +
+  #scale_fill_distiller(direction = 1, palette = "PuRd") +
+  theme_void() +
+  #labs(fill = "Proporción de \nagencias emisivas") +
+  theme(legend.position = "none",
+        text = element_text(size = 16)) +
+  labs(title = "Turismo Interno")
+
+legend_i <- bi_legend(pal="DkBlue2", dim=4, xlab="Cantidad", ylab="% interno", size=12)
+
+caba_interno <- ggplot() +
+  geom_sf(data = data_biscale_i %>% filter(provincia =="ciudad autonoma de buenos aires"), 
+          aes(fill=bi_class)) +
+  bi_scale_fill(pal = "DkBlue2", dim = 4) +
+  #scale_fill_distiller(direction = 1, palette = "PuRd") +
+  theme_void() +
+  theme(legend.position = "none")
+
+mapa_interno <- ggdraw() + 
+  draw_plot(pais_interno, 0, 0, 1, 1) + 
+  draw_plot(caba_interno, 0.58, 0.56, 0.09, 0.09) +
+  draw_plot(legend_i, 0.5, 0.1, 0.3, 0.3)
+  
+ggsave("interno_agencias_pais.png", width = 12, height = 9, bg ="white")
+
+knitr::include_graphics("interno_agencias_pais.png")
+
+```
+
+Se puede apreciar que la proporción de agencias que realiza turismo interno no se distribuye de forma análoga a la cantidad de agencias a lo largo de país. En el grupo de provincias con mayor peso de servicios de turismo interno, además de aparecer Ciudad Autónoma de Buenos Aires, Buenos Aires y Santa Fe, que suman `r  fmt_enteros(sum(datos_mapa$n[datos_mapa$provincia %in% c("buenos aires", "ciudad autonoma de buenos aires", "santa fe")]))` agencias, también se encuentran las provincias de Jujuy, La Pampa y Entre Ríos, provincias con menos de 100 agencias cada una. Por otra parte, provincias con una elevada cantidad de agencias como Mendoza y Salta se hallan entre las que tienen una menor proporción de agencias que realizan operaciones de turismo interno.
+
+```{r include=F}
+
+provincias <- get_geo("ARGENTINA", "provincia") %>% 
+  add_geo_codes() %>% 
+  mutate(name_iso = herramientas::limpiar_texto(tolower(name_iso), enie = F)) %>% 
+  rename(provincia = name_iso)
+
+# MAPAS TIPO TURISMO
+datos_map <- base_agencias %>% 
+  mutate(provincia_local_fisico = herramientas::limpiar_texto(tolower(provincia_local_fisico), enie = F),
+         provincia_local_virtual = herramientas::limpiar_texto(tolower(provincia_local_virtual), enie = F)) %>% 
+  mutate(provincia = case_when(local_fisico_virtual=="Local físico" ~ provincia_local_fisico,
+                               local_fisico_virtual=="Local virtual" ~ provincia_local_virtual,
+                               TRUE ~ local_fisico_virtual)) %>% 
+  mutate(provincia = case_when(provincia %in% c("ciudad de buenos aires",
+                                                "ciudad autonoma de bs as",
+                                                "ciudad autonoma buenos aires",
+                                                "ciudad autonoma de buenos aires caba",
+                                                "cdad aut buenos aires",
+                                                "caba","capital federal","ciudadbsas") ~ "ciudad autonoma de buenos aires",
+                               TRUE ~ provincia)) %>% 
+  mutate(provincia = case_when(!provincia %in% c(unique(provincias$provincia), "sin informacion") ~ "otro lugar",
+                               TRUE ~ provincia))
+
+
+datos_map <- datos_map %>%
+  select(provincia, emisivo, receptivo) %>%
+  filter(!provincia %in% c("sin informacion","otro lugar"))
+
+# EMISIVO
+emisivo <- datos_map %>% 
+  group_by(provincia) %>% 
+  count(emisivo) %>% 
+  mutate(agencias_prov = sum(n)) %>% 
+  ungroup() %>% 
+  filter(emisivo == "Si") %>% 
+  mutate(proporcion = n/agencias_prov) %>% 
+  left_join(provincias) %>% 
+  st_as_sf()
+
+data_biscale_e <- bi_class(emisivo, x=n, y=proporcion, style="quantile",dim=4)
+
+pais_emisivo <- ggplot() +
+  #geom_sf(data=provincias) +
+  geom_sf(data = data_biscale_e, aes(fill=bi_class), color ="white", size = 0.1) +
+  bi_scale_fill(pal = "DkBlue2", dim = 4) +
+  #scale_fill_distiller(direction = 1, palette = "PuRd") +
+  theme_void() +
+  #labs(fill = "Proporción de \nagencias emisivas") +
+  theme(legend.position = "none",
+        text = element_text(size = 16)) +
+  labs(title = "Agencias emisivas")
+
+legend_e <- bi_legend(pal="DkBlue2", dim=4, xlab="Cantidad", ylab="% emisivo", size=12)
+
+caba_emisivo <- ggplot() +
+  geom_sf(data = data_biscale_e %>% filter(provincia =="ciudad autonoma de buenos aires"), 
+          aes(fill=bi_class)) +
+  bi_scale_fill(pal = "DkBlue2", dim = 4) +
+  #scale_fill_distiller(direction = 1, palette = "PuRd") +
+  theme_void() +
+  theme(legend.position = "none")
+
+#Mapa completo
+mapa_emisivo <- ggdraw() + 
+  draw_plot(pais_emisivo, 0, 0, 1, 1) + 
+  draw_plot(caba_emisivo, 0.58, 0.56, 0.09, 0.09) +
+  draw_plot(legend_e, 0.5, 0.1, 0.3, 0.3)
+
+
+# RECEPTIVO
+receptivo <- datos_map %>% 
+  group_by(provincia) %>% 
+  count(receptivo) %>% 
+  mutate(agencias_prov = sum(n)) %>% 
+  ungroup() %>% 
+  filter(receptivo == "Si") %>% 
+  mutate(proporcion = n/agencias_prov) %>% 
+  left_join(provincias) %>% 
+  st_as_sf()
+
+data_biscale_r <- bi_class(receptivo, x=n, y=proporcion, style="quantile",dim=4)
+
+pais_receptivo <- ggplot() +
+  #geom_sf(data=provincias, color ="white", size = 0.1) +
+  geom_sf(data = data_biscale_r, aes(fill=bi_class), color ="white", size = 0.1) +
+  bi_scale_fill(pal = "DkBlue2", dim = 4) +
+  #scale_fill_distiller(direction = 1, palette = "PuRd") +
+  theme_void() +
+  #labs(fill = "Proporción de \nagencias emisivas") +
+  theme(legend.position = "none",
+        text = element_text(size = 16)) +
+  labs(title = "Agencias receptivas")
+
+legend_r <- bi_legend(pal="DkBlue2", dim=4, xlab="Cantidad", ylab="% receptivo", size=12)
+
+caba_receptivo <- ggplot() +
+  geom_sf(data = data_biscale_r %>% filter(provincia =="ciudad autonoma de buenos aires"), 
+          aes(fill=bi_class)) +
+  bi_scale_fill(pal = "DkBlue2", dim = 4) +
+  #scale_fill_distiller(direction = 1, palette = "PuRd") +
+  theme_void() +
+  theme(legend.position = "none")
+
+#Mapa completo
+mapa_receptivo <- ggdraw() + 
+  draw_plot(pais_receptivo, 0, 0, 1, 1) + 
+  draw_plot(caba_receptivo, 0.58, 0.56, 0.09, 0.09) +
+  draw_plot(legend_r, 0.5, 0.1, 0.3, 0.3)
+
+receptivo_emisivo <- ggdraw() + 
+  draw_plot(mapa_emisivo, -0.3, 0, 1, 1) + 
+  draw_plot(mapa_receptivo, 0.2, 0, 1, 1)
+
+ggsave("tipo_agencias_pais.png", width = 12, height = 9, bg ="white")
+```
+
+Si reproducimos el análisis anterior para los diferentes tipos de operaciones con turismo internacional podemos distinguir el peso del turismo receptivo y el turismo emisivo en el sector de agencias de viaje para cada provincia.
+
+```{r fig.height=12, fig.width=10}
+knitr::include_graphics("tipo_agencias_pais.png")
+```
+
+Así, por una parte se puede ver que las cinco provincias con mayor peso del turismo emisivo representan `r fmt_enteros(sum(slice_max(data_biscale_e, order_by = proporcion, n = 5)[["agencias_prov"]]))` agencias, con Buenos Aires, Santa Fe y Córdoba en el top tres según proporción del turismo emisivo. Mientras que por otra parte las cinco provincias con mayor peso del turismo receptivo suman `r fmt_enteros(sum(slice_max(data_biscale_r, order_by = proporcion, n = 5)[["agencias_prov"]]))` agencias, con Salta, Catamarca y Tierra del Fuego entre las tres primeras.
+
+# MERCADOS {.unnumbered}
+
+```{r}
+turismo_receptivo <- base_agencias %>% 
+  filter(receptivo=="Si") %>% 
+  select(bolivia:resto_del_mundo)
+
+no_declararon <- as.numeric(base_agencias %>% 
+  filter(receptivo=="Si") %>% 
+  count(bolivia, brasil_general, chile, paraguay, uruguay, ee_uu_y_canada,
+        resto_de_america, europa, china, resto_del_mundo) %>% 
+  filter(if_all(bolivia:resto_del_mundo, ~ . == "No")) %>% 
+  pull(n) %>% unique())
+
+declararon <- nrow(turismo_receptivo)-no_declararon
+
+no_declararon <- no_declararon/nrow(turismo_receptivo)
+
+receptivo <- turismo_receptivo %>%
+  pivot_longer(bolivia:resto_del_mundo,  names_to = "Tipo", values_to = "Aplica") %>% 
+  count(Tipo, Aplica) %>%
+  filter(Aplica == "Si") %>% 
+  mutate(porcentaje = n/declararon,
+         Tipo = str_to_title(Tipo),
+         Tipo = case_when(Tipo == "Brasil_general" ~ "Brasil",
+                          Tipo == "Resto_del_mundo" ~ "Resto del mundo",
+                          Tipo == "Ee_uu_y_canada" ~ "EE.UU. y Canadá",
+                          Tipo == "Resto_de_america" ~ "Resto de América",
+                          TRUE ~ Tipo))
+
+```
+
+Para un subconjunto de las agencias que realiza turismo receptivo (`r declararon` agencias) se puede analizar con qué mercados declararon trabajar. Para esta muestra de agencias la región con mayor participación es `r receptivo[receptivo$n == sort(receptivo$n)[length(receptivo$n)], "Tipo"]`, con la cual opera el `r format(round(receptivo[receptivo$n == sort(receptivo$n)[length(receptivo$n)], "porcentaje"]*100,1), decimal.mark=",")`% de las agencias de la muestra, en segundo lugar le sigue `r receptivo[receptivo$n == sort(receptivo$n)[length(receptivo$n)-1], "Tipo"]` operada por el `r format(round(receptivo[receptivo$n == sort(receptivo$n)[length(receptivo$n)-1], "porcentaje"]*100,1), decimal.mark=",")`% de las mismas. Por su lado, `r receptivo[receptivo$n == sort(receptivo$n)[length(receptivo$n)-(nrow(receptivo)-1)], "Tipo"]` es el mercado que cuenta con menor presencia, un `r format(round(receptivo[receptivo$n == sort(receptivo$n)[length(receptivo$n)-(nrow(receptivo)-1)], "porcentaje"]*100,1), decimal.mark=",")`% de las agencias declaró operar con él.
+
+```{r fig.height=3, out.width = "80%"}
+receptivo %>% 
+  ggplot(aes(reorder(Tipo, n), n, label = n)) +
+  geom_col(fill = dnmye_colores("cian")) +
+  geom_text(position = position_nudge(y = 25)) +
+  labs(title = "Agencias de turismo receptivo", subtitle = "Año 2022", 
+       x = "", y = "Cantidad de agencias por región/país", caption = "Elaboración de la DNMYE en base a datos de la Registro de Agencias de Viajes\nde la Dirección Nacional de Agencias de Viajes") +
+  coord_flip() +
+  theme_minimal() +
+  theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
+```
+
+Al analizar la distribución de agencias por cantidad de mercados que operan, se destaca que en mayor medida trabajan con una única región o con todas.
+
+```{r fig.height=3, out.width = "80%"}
+mercados <- base_agencias %>% 
+  filter(receptivo=="Si") %>% 
+  select(bolivia:resto_del_mundo) %>% 
+  filter(!if_all(bolivia:resto_del_mundo, ~ . == "No"))
+
+mercados_count <- mercados %>% 
+  mutate(count = across(.cols = everything(), .fns = str_count, "Si")) %>%
+  rowwise() %>%
+  mutate(mercados = across(.cols = contains("count"), .fns = sum)) %>% 
+  group_by(mercados) %>% 
+  summarise(cantidad = n(),
+            mercados = as.factor(unique(mercados$count)))
+
+mercados_count %>% 
+  ggplot() +
+  geom_col(aes(mercados, cantidad), fill = dnmye_colores("purpura")) +
+  theme_minimal() +
+  labs(x = "Cantidad de mercados", y = "Cantidad de agencias")+
+  labs(caption = "Fuente: Elaboración de la DNMYE en base a datos del Registro\nde Agencias de Viajes de la Dirección Nacional de Agencias de Viajes") +
+  theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0.5))
+```
+
+```{r}
+check <- mercados %>% 
+  mutate(count = across(.cols = everything(), .fns = str_count, "Si")) %>%
+  rowwise() %>%
+  mutate(mercados = across(.cols = contains("count"), .fns = sum)) %>% 
+  ungroup() %>% 
+  filter(mercados == 1) %>% 
+  select(bolivia:resto_del_mundo) %>%
+  pivot_longer(bolivia:resto_del_mundo) %>% 
+  filter(value == "Si") %>% 
+  count(name) %>% 
+  mutate(participacion = n/sum(n))
+```
+
+Poniendo foco en el grupo de agencias que opera un solo mercado se encuentra que el `r format(round(check[check$n==max(check$n), "participacion"]*100,1),decimal.mark=",")`% indicó "Resto del mundo" como única región.
+
+```{r}
+# check %>% 
+#   arrange(desc(n)) %>% 
+#   mutate(name = str_to_title(name),
+#          name = case_when(name == "Brasil_general" ~ "Brasil",
+#                           name == "Resto_del_mundo" ~ "Resto del mundo",
+#                           name == "Ee_uu_y_canada" ~ "EE.UU. y Canadá",
+#                           name == "Resto_de_america" ~ "Resto de América",
+#                           TRUE ~ name)) %>% 
+#   janitor::adorn_totals() %>% 
+#   gt() %>% 
+#   cols_label(
+#     name = md("**Mercado**"),
+#     n = md("**Cantidad**"),
+#     participacion = md("**%**")) %>% 
+#    fmt_percent(columns = c(3), decimals = 1, sep_mark = ".", dec_mark = ",") 
+```
+
+```{r}
+# registro_marzo2022 <- read_xlsx("/srv/DataDNMYE/agencias/rlm/anteriores/Version 15 de marzo - Copia de Registro Renovación de Garantia- Oficial .xlsx") %>% 
+#   clean_names()
+# legajos <- unique(as.character(registro_marzo2022$legajo))
+# turismo_estudiantil <- base_agencias %>% 
+#   filter(numero_de_legajo %in% legajos)
+  
+```
+
+## TURISMO ESTUDIANTIL {.unnumbered}
+
+```{r}
+turismo_estudiantil <- base_agencias %>% 
+  select(realiza_turismo_estudiantil:externo) %>% 
+  filter(realiza_turismo_estudiantil=="Si")
+
+turismo_estudiantil_tb1 <- turismo_estudiantil %>%
+  count(organizadora) %>% 
+  filter(organizadora=="Si")%>% 
+  rename(tipo = 1) %>% 
+  mutate(tipo = "organizadora")
+
+turismo_estudiantil_tb2 <- turismo_estudiantil %>%
+  count(comercializadora) %>% 
+  filter(comercializadora=="Si") %>% 
+  rename(tipo = 1) %>% 
+  mutate(tipo = "comercializadora")
+
+turismo_estudiantil_tb <- rbind(turismo_estudiantil_tb1,turismo_estudiantil_tb2) %>% 
+  mutate(n = n/nrow(turismo_estudiantil))
+
+te_tb <- turismo_estudiantil %>%
+  pivot_longer(viaje_de_estudios:externo, names_to = "Tipo", values_to = "Aplica") %>% 
+  count(Tipo, Aplica) %>% 
+  mutate(porcentaje = n/nrow(turismo_estudiantil)) %>% 
+  filter(Aplica == "Si") %>% 
+  mutate(categoria = case_when(Tipo == "externo" ~ "Tipo de turismo",
+                          Tipo == "interno_estudiantil" ~ "Tipo de turismo",
+                          Tipo == "viaje_de_egresados" ~ "Tipo de viaje",
+                          Tipo == "viaje_de_estudios" ~ "Tipo de viaje"),
+         Tipo = case_when(Tipo == "externo" ~ "Externo",
+                          Tipo == "interno_estudiantil" ~ "Interno",
+                          Tipo == "viaje_de_egresados" ~ "Viaje de egresados",
+                          Tipo == "viaje_de_estudios" ~ "Viaje de estudios")) 
+
+```
+
+Uno de los segmentos especializados es el de turismo estudiantil, el cual contabilizaba al 15 de marzo de 2022 un total de `r as.numeric(nrow(turismo_estudiantil))` agencias (`r format(round(nrow(turismo_estudiantil)/nrow(base_agencias)*100,1),decimal.mark=",")`% del total de agencias habilitadas). En relación al tipo de viaje ofrecido, un `r format(round(te_tb[te_tb$Tipo=="Viaje de estudios","porcentaje"]*100,1), decimal.mark=",")`% organiza o comercializa viajes de estudios, mientras que un `r format(round(te_tb[te_tb$Tipo=="Viaje de egresados","porcentaje"]*100,1), decimal.mark=",")`% distribuye viajes de egresados.
+
+```{r fig.height=4, out.width = "80%"}
+te_tb %>% 
+  ggplot(aes(Tipo, n)) +
+  geom_col(fill = dnmye_colores("cian")) +
+  labs(title = "Agencias de turismo estudiantil", subtitle = "Según tipo de viaje y tipo de turismo", x = "", y = "") +
+  coord_flip() +
+  facet_wrap(~ categoria, scales = "free") +
+  theme_minimal()+
+  labs(caption = "Fuente: Elaboración de la DNMYE en base a datos del Registro\nde Agencias de Viajes de la Dirección Nacional de Agencias de Viajes") +
+  theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0.5))
+
+externos <- as.numeric(turismo_estudiantil %>% 
+  count(externo, interno_estudiantil) %>% 
+  filter(externo=="Si", interno_estudiantil=="No") %>% 
+  pull(n) %>% unique())
+
+source("limpieza_destinos.R", encoding = "UTF-8")
+
+```
+
+Respecto del destino, un `r format(round(te_tb[te_tb$Tipo=="Interno","porcentaje"]*100,1), decimal.mark=",")`% realiza viajes en el país y un `r format(round(te_tb[te_tb$Tipo=="Externo","porcentaje"]*100,1), decimal.mark=",")`% en el exterior. El principal destino nacional seleccionado por el segmento estudiantil es `r destinos_te_agregado[destinos_te_agregado$n== sort(destinos_te_agregado$n)[length(destinos_te_agregado$n)],"destinos"]`, al cual viajan el `r format(round(destinos_te_agregado[destinos_te_agregado$n== sort(destinos_te_agregado$n)[length(destinos_te_agregado$n)],"porcentaje"]*100,1), decimal.mark=",")`% de las agencias, seguido de `r destinos_te_agregado[destinos_te_agregado$n== sort(destinos_te_agregado$n)[length(destinos_te_agregado$n)-1],"destinos"]` (`r format(round(destinos_te_agregado[destinos_te_agregado$n== sort(destinos_te_agregado$n)[length(destinos_te_agregado$n)-1],"porcentaje"]*100,1), decimal.mark=",")`%).
+
+```{r}
+
+
+# destinos_te_agregado <- destinos_test %>% 
+#   pivot_longer(c(san_carlos_de_bariloche:patagonia), 
+#                names_to = "destinos", values_to = "Aplica") %>% 
+#   count(destinos, Aplica) %>% 
+#   filter(Aplica == "Si") %>% 
+#   select(-Aplica) %>% 
+#   mutate(destinos = case_when(destinos == "brasil_estudiantil" ~ "Brasil",
+#                           destinos == "mexico" ~ "México",
+#                           destinos %in% c("otro","otro_destino","otros") ~ "Otros",
+#                           destinos == "republica_dominicana" ~ "Rep. Dominicana",
+#                           destinos == "san_carlos_de_bariloche" ~ "Bariloche",
+#                           destinos == "villa_carlos_paz" ~ "Carlos Paz",
+#                           destinos %in% c("caba","buenos  aires","bs as") ~ "buenos aires",
+#                           destinos %in% c("cataratas","cataratas del iguazu","iguazu") ~ "puerto iguazu",
+#                           destinos %in% c("puero madryn","pto madryn","madryn") ~ "puerto madryn",
+#                           destinos == "villa gessell" ~ "villa gesell",
+#                           TRUE ~ destinos)) %>%
+#   # mutate(destinos = case_when(n >= 9 ~ destinos,
+#   #                             TRUE ~ "Otros")) %>%
+#   group_by(destinos) %>% 
+#   summarise(n = sum(n),
+#          porcentaje = n/nrow(turismo_estudiantil)
+#          ) %>%
+#   ungroup() %>% 
+#   arrange(desc(n)) %>% 
+#   filter(destinos != "Otros")
+
+
+```
+
+```{r fig.height=4, out.width = "80%"}
+destinos_te_agregado %>% 
+  head(15) %>% 
+  ggplot(aes(reorder(toupper(destinos),porcentaje), porcentaje)) +
+  geom_col(fill = dnmye_colores("cian")) +
+  geom_text(aes(reorder(toupper(destinos),porcentaje), porcentaje, label = n),
+            hjust = -0.4) +
+  scale_y_continuous(labels = scales::percent, limits = c(0,0.8)) +
+  labs(title = "Top destinos de turismo estudiantil", 
+       subtitle = "En porcentaje y cantidad de agencias", x = "", y = "") +
+  coord_flip() +
+  theme_minimal() +
+  labs(caption = "Fuente: Elaboración de la DNMYE en base a datos del Registro\nde Agencias de Viajes de la Dirección Nacional de Agencias de Viajes") +
+  theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0.5))
+
+```
+
+# TABLERO INTERACTIVO DE AGENCIAS {.unnumbered}
+
+A partir de los datos del Registro de Agencias de Viajes de la Dirección Nacional de Agencias de Viajes la Dirección Nacional de Mercados y Estadísticas hace público para la consulta de los datos aquí presentados el [Tablero de Agencias de Viaje](https://tableros.yvera.tur.ar/agencias/).
+
+<a href="https://tableros.yvera.tur.ar/agencias/"><img src="agencias_tablero.png" alt="HTML tutorial"  width="600"></a> 
+
+
+```{r}
+mercados_prov <- base_agencias %>% 
+  filter(receptivo=="Si") %>% 
+  select(provincia,bolivia:resto_del_mundo) %>% 
+  filter(!if_all(bolivia:resto_del_mundo, ~ . == "No"),
+         !provincia %in% c("sin informacion","otro lugar"))
+
+agencias_prov <- base_agencias %>% 
+  count(provincia,receptivo) %>% 
+  filter(receptivo == "Si") %>% 
+  rename(total_prov = n) %>% 
+  select(provincia, total_prov)
+
+tabla_mercados_prov <- mercados_prov %>% 
+  pivot_longer(bolivia:resto_del_mundo) %>% 
+  count(provincia,name, value) %>% 
+  filter(value == "Si") %>%
+  select(-value) %>%
+  left_join(agencias_prov) %>% 
+  mutate(prop = n/total_prov) %>% 
+  pivot_wider(names_from = "name", values_from = c(n,prop))
+
+# <iframe src="https://tableros.yvera.tur.ar/agencias/" title="Tablero de Agencias" height="450"></iframe>
+
+# totales <- tabla_mercados_prov %>% 
+#   select(1,2:12) %>% 
+#   arrange(desc(total_prov)) %>% 
+#   gt()
+
+# proporciones <- tabla_mercados_prov %>% 
+#   select(1,2,13:22) %>% 
+#   arrange(desc(total_prov)) %>%
+#   rename_with(.cols = contains("prop"), ~ str_replace(., "prop", "%")) %>% 
+#   rename_with(.cols = contains("_"), ~ str_replace_all(., "_", " ")) %>% 
+#   rename_with(.cols = everything(), ~ toupper(.)) %>% 
+#   mutate(PROVINCIA = toupper(PROVINCIA)) %>% 
+#   gt() %>% 
+#   cols_label(PROVINCIA = "") %>% 
+#   fmt_percent(3:12, dec_mark = ",", decimals = 1) %>% 
+#   fmt_missing(3:12, missing_text = "-")
+
+#gtsave(totales, "tabla_totales.html")
+#gtsave(proporciones, "tabla_proporciones.html")
+```
+
+```{r}
+
+# tabla_mercados_prov %>% 
+#   select(1,2,13:22) %>% 
+#   arrange(desc(total_prov)) %>%
+#   rename_with(.cols = contains("prop"), ~ str_replace(., "prop", "%")) %>% 
+#   rename_with(.cols = contains("_"), ~ str_replace_all(., "_", " ")) %>% 
+#   rename_with(.cols = everything(), ~ toupper(.)) %>%
+#   rename("% BRASIL"= "% BRASIL GENERAL") %>% 
+#   mutate(PROVINCIA = toupper(PROVINCIA)) %>% 
+#   gt() %>% 
+#   cols_label(PROVINCIA = "") %>% 
+#   fmt_percent(3:12, dec_mark = ",", decimals = 1) %>% 
+#   fmt_missing(3:12, missing_text = "-") %>% 
+#   # tab_header(title = "Agencias de turismo receptivo",
+#   #            subtitle = "Total provincial y proporción por mercado") %>% 
+#   tab_options(table.font.size = 10,
+#               table.width = 600,
+#                data_row.padding = px(5))
+```
