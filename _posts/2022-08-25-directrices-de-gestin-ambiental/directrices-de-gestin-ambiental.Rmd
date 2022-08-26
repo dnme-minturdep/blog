@@ -1,0 +1,269 @@
+---
+title: "Directrices de Gestión Ambiental"
+description: |
+  Principales indicadores para caracterizar las organizaciones distinguidas por el programa de Directrices de Gestión Ambiental del Sistema Argentino de Calidad Turística.
+author: [DNMyE]
+date: 2022-08-25
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(readxl)
+library(sf)
+library(lubridate)
+library(here)
+library(herramientas)
+library(comunicacion)
+library(ggthemes)
+library(gt)
+library(geoAr)
+
+options(scipen = 100)
+
+```
+
+```{r - Carga de dataset}
+directrices <- read_excel("/srv/DataDNMYE/distinciones_ambientales/registro-organizaciones-distinguidas-certificadas-sact-v20220824.xlsx") %>%
+  janitor::clean_names() %>% 
+  unique() %>%  # Hay 3 registros que se encuentran duplicados.
+  mutate(organizacion = str_to_title(str_squish(remover_tildes(organizacion))),
+         programa = str_squish(programa),
+         programa = case_when(grepl("ISO", programa) ~ "Certificación ISO",
+                              TRUE ~ programa),
+         programa = case_when(programa == "Programa de Excelencia en Gestión" ~ "Club de Excelencia",
+                              programa == "Sistema de Gestión, alineado a las bases del Premio Nacional a la Calidad" ~ "Premio Nacional a la Calidad",
+                              programa == "Sello de Calidad" ~ "Sello CocinAR",
+                              TRUE ~ programa),
+         subprograma = if_else(is.na(subprograma), programa, subprograma),
+         subprograma = if_else(subprograma == "No Aplica", programa, subprograma),
+         subprograma = str_to_title(str_squish(subprograma)),
+         subprograma = case_when(grepl("42560", subprograma) ~ "Norma Iram Sectur 42560 - Navegación Turística En Embarcaciones A Motor",
+                                 TRUE ~ subprograma),
+         subprograma = recode(subprograma,
+                              "Directrices De Accesibilidad" = "Directrices de accesibilidad para espacios y servicios turísticos",
+                              "Directrices De Calidad Turística Para Bodegas" = "Directrices de gestión turística para bodegas",
+                              "Directrices Para Turismo Familiar" = "Directrices de turismo familiar",
+                              "Directrices De Gestión Turística De Municipios" = "Municipios Turísticos Sostenibles",
+                              "Bases Para La Gestión Integral De Municipios Turísticos Sostenibles" = "Municipios Turísticos Sostenibles")) %>% 
+  filter(programa != "Certificación ISO") %>% 
+  filter(subprograma == "Directrices De Gestión Ambiental")
+
+```
+
+El cambio climático es uno de los desafíos más urgentes que enfrenta la humanidad. De acuerdo con el [Grupo Intergubernamental de Expertos sobre el Cambio Climático (IPCC)](https://www.ipcc.ch/report/ar6/wg2/downloads/report/IPCC_AR6_WGII_FullReport.pdf), se espera que, en las próximas décadas, el incremento de la temperatura media mundial por encima de los 1,5ºC con respecto a los niveles preindustriales, lleve al aumento en la periodicidad e intensidad de los fenómenos climáticos extremos, acarreando grandes consecuencias para toda la sociedad y, particularmente, para los sectores más vulnerables de la misma. 
+
+En este marco y en función del principio 3 de la Ley Nacional de Turismo 25.997, el cual consagra al desarrollo sustentable como una de las guías rectoras para el fomento, el desarrollo, la promoción y la regulación de la actividad turística, el **Ministerio de Turismo y Deportes de la Nación (MINTURyDEP)**, a través de la **Subsecretaría de Calidad, Accesibilidad y Sustentabilidad del Turismo Nacional** y la **Dirección Nacional de Calidad e Innovación Turística**, implementa el programa de **Directrices de Gestión Ambiental (DGA)** perteneciente al [**Sistema Argentino de Calidad Turística (SACT)**](https://www.argentina.gob.ar/turismo/sistema-argentino-de-calidad-turistica/programas).
+
+Las DGA tienen por objetivo garantizar la calidad ambiental, social y cultural de las organizaciones turísticas a través de la difusión de un conjunto de recomendaciones capaces de guiar a dichas entidades hacia el establecimiento de un sistema de gestión ambiental, que contribuya a la calidad de servicio, solucione y atenúe los impactos producidos y minimice los costos de gestión y adaptación. En este sentido, la implementación de estas directrices en una localidad apunta a producir un impacto global y busca instalar una gestión ambiental integrada del destino, involucrando a los sectores público y privado, en la medida de que ello sea posible.
+
+Hasta el momento, **395 DGA fueron otorgadas** a diversas organizaciones del país desde el año 2013. Actualmente, el **rubro** con el mayor número de organizaciones distinguidas por este subprograma es el de **alojamientos**, con **202 casos**, el **51% del total**.
+
+```{r Gráfico - Directrices de gestión ambiental, fig.width=8, fig.height=5}
+directrices <- directrices %>% 
+  mutate(rubro = str_to_sentence(rubro),
+         rubro = recode(rubro,
+                        "Gastronomia" = "Gastronomía",
+                        "Actividad recreativas y deportivas" = "Actividades recreativas y deportivas",
+                        "Transporte turístico" = "Transporte",
+                        "Area natural protegida" = "Área natural protegida"))
+ggplot(directrices %>% 
+  group_by(rubro) %>% 
+  summarise(N=n())) +
+  geom_col(aes(y = N, x = reorder(rubro, desc(N)), fill = rubro))+
+  geom_label(aes(y = N+5, x = reorder(rubro, desc(N)), label = as.integer(N)), size = 3)+
+  scale_y_continuous(limits = c(0, 220),
+                     breaks = seq(0, 220, 20))+
+  scale_fill_tableau(palette = "Tableau 20")+
+  labs(title = "DIRECTRICES DE GESTIÓN AMBIENTAL",
+       subtitle = "Organizaciones distinguidas",
+       caption = "Fuente: Sistema Argentino de Calidad Turística (SACT).\nDatos actualizados al 17/08/2022",
+       y = "Total",
+       x = "Rubro")+
+  theme_minimal()+
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+```
+
+De aquellas 202 organizaciones pertenecientes al rubro de alojamientos, la mayoría son **hoteles (72)** y **cabañas (43)**. Juntas, ambas categorías hacen al **29% del total de las organizaciones distinguidas por el subprograma**.
+
+```{r Gráfico - DGA - Alojamientos}
+directrices %>% 
+  filter(rubro == "Alojamiento") %>% 
+  mutate(subrubro = case_when(grepl('Hotel', subrubro) ~ "Hotel",
+                              grepl("Camping", subrubro) ~ "Camping",
+                              TRUE ~ subrubro)) %>%
+  group_by(subrubro) %>% 
+  summarise(N = n()) %>% 
+  arrange(desc(N)) %>% 
+  ggplot() +
+  geom_col(aes(y = N, x = reorder(subrubro, desc(N)), fill = subrubro))+
+  geom_label(aes(y = N+3, x = reorder(subrubro, desc(N)), label = as.integer(N)), size = 3)+
+  scale_y_continuous(limits = c(0, 100),
+                     breaks = seq(0, 100, 20))+
+  scale_fill_tableau(palette = "Tableau 20")+
+  labs(title = "DIRECTRICES DE GESTIÓN AMBIENTAL",
+       subtitle = "Alojamientos certificados",
+       caption = "Fuente: Sistema Argentino de Calidad Turística (SACT).\nDatos actualizados al 17/08/2022",
+       y = "Total",
+       x = "Categoría")+
+  theme_minimal()+
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, vjust = 1.10, hjust = 1, face = "bold"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+```
+
+Con respecto a la distibución espacial de las organizaciones distinguidas por mencionado subprograma, la mayoría se ubica en la **Ciudad Autónoma de Buenos Aires (62)** y, en un escalón por debajo, en las provincias de **Misiones (48), Jujuy (40) y Chubut (40)**. Sin embargo, siete provincias argentinas todavía no cuentan con organizaciones distinguidas y cinco lo hacen con menos de 10.
+
+```{r Gráfico - DGA - Distribución territorial, fig.width= 8}
+# Cargamos el dataset con las geometrías.
+arg_geo <- get_geo(geo = "ARGENTINA", level = "provincia") %>% 
+  add_geo_codes() %>% 
+  rename("provincia" = "name_iso")
+
+# Unimos con la información por provicia.
+arg_geo <- left_join(arg_geo, 
+                     directrices %>% 
+                       group_by(provincia) %>% 
+                       summarise(distinciones = n()) %>% 
+                       mutate(provincia = recode(provincia,
+                                                 "Capital Federal" = "Ciudad Autónoma de Buenos Aires",
+                                                 "Cordoba" = "Córdoba",
+                                                 "Entre Rios" = "Entre Ríos",
+                                                 "Neuquen" = "Neuquén",
+                                                 "Rio Negro" = "Río Negro",
+                                                 "Tucuman" = "Tucumán")),
+                     by = "provincia") %>% 
+  mutate(distinciones = replace(distinciones, is.na(distinciones), 0),
+         distinciones_niveles = case_when(distinciones == 0 ~ "Ninguna",
+                                          distinciones < 10 ~ "Menos de 10",
+                                          distinciones >= 10 & distinciones < 20 ~ "Entre 10 y 19",
+                                          distinciones >= 20 & distinciones < 30 ~ "Entre 20 y 29",
+                                          distinciones >= 30 & distinciones < 40 ~ "Entre 30 y 39",
+                                          distinciones >= 40 & distinciones < 50 ~ "Entre 40 y 49",
+                                          distinciones >= 50 & distinciones < 60 ~ "Entre 50 y 59",
+                                          distinciones >= 60 ~ "60 o más"))
+# Mapaemos.
+mapa <- ggplot()+
+  geom_sf(data = arg_geo, fill = "grey80", color = "white")+
+  geom_sf(data = arg_geo %>% filter(distinciones != 0), aes(fill = distinciones), color = "white") +
+  geom_sf_label(data = arg_geo %>% filter(distinciones != 0), aes(label = distinciones), size = 2.5) +
+  scale_fill_continuous_tableau(palette = "Classic Green") +
+  theme_void() +
+  theme(legend.position = "none")
+
+# y también hacemos un gráfico.
+categorias_faltante <- data.frame("Entre 50 y 59", 0)
+names(categorias_faltante) <- c("distinciones_niveles", "N")
+tabla <- arg_geo %>%
+  st_set_geometry(NULL) %>% 
+  group_by(distinciones_niveles) %>%
+  summarise(N = n()) %>% 
+  rbind(categorias_faltante) %>% 
+  mutate(distinciones_niveles = factor(distinciones_niveles,
+                                       levels = c("Ninguna",
+                                                  "Menos de 10",
+                                                  "Entre 10 y 19",
+                                                  "Entre 20 y 29",
+                                                  "Entre 30 y 39",
+                                                  "Entre 40 y 49",
+                                                  "Entre 50 y 59",
+                                                  "60 o más"))) %>% 
+  ggplot()+
+  geom_segment(aes(x = distinciones_niveles, xend = distinciones_niveles, y = 0, yend = N), color = "black") +
+  geom_point(aes(x = distinciones_niveles, y = N), size = 3, color = "#4e9f50") +
+  geom_label(aes(y = N + 1, x = distinciones_niveles, label = as.integer(N)), size = 2.5) + 
+  scale_y_continuous(limits = c(0, 14),
+                     breaks = seq(0, 14, 2))+
+  labs(y = "Provincias",
+       x = "Directrices",
+       caption = "Fuente: Sistema Argentino de Calidad Turística (SACT).\nDatos actualizados al 17/08/2022")+
+  theme_minimal() +
+  # theme(axis.text.x = element_text(angle = 45, vjust = 1.10, hjust = 1),
+  #       axis.title.x = element_text(size = 9)) +
+  coord_flip()
+
+title_gg <- ggplot() + 
+  labs(title = "DIRECTRICES DE GESTIÓN AMBIENTAL", subtitle = "Distribución territorial")
+
+cuadro <- cowplot::plot_grid(mapa, tabla, scale = c(1, .85))
+
+cowplot::plot_grid(title_gg, cuadro, ncol = 1, rel_heights = c(0.15, 1))
+
+```
+
+Al hacer foco en las ciuades del país, la **Ciudad Autónoma de Buenos Aires** es la **urbe con el mayor número de organizaciones distinguidas con las Directrices de Gestión Ambiental, con 62 casos**. Luego, el podio lo completan las ciudades de **Mar del Plata (Buenos Aires), Salta (Salta) y San Carlos de Bariloche (Río Negro) con 19 cada una**.
+
+```{r TABLA - DGA - Ciudades}
+ciudades <- directrices %>% 
+  mutate(provincia = recode(provincia,
+                            "Capital Federal" = "Ciudad Autónoma de Buenos Aires",
+                            "Cordoba" = "Córdoba",
+                            "Entre Rios" = "Entre Ríos",
+                            "Neuquen" = "Neuquén",
+                            "Rio Negro" = "Río Negro",
+                            "Tucuman" = "Tucumán")) %>% 
+  group_by(ciudad, provincia) %>% 
+  summarise(N = n()) %>% 
+  mutate(ciudad = str_to_title(remover_tildes(ciudad))) %>% 
+  arrange(desc(N)) %>% 
+  left_join(directrices %>% 
+              group_by(provincia) %>%
+              summarise(distinciones = n()) %>%
+              mutate(provincia = recode(provincia,
+                                        "Capital Federal" = "Ciudad Autónoma de Buenos Aires",
+                                        "Cordoba" = "Córdoba",
+                                        "Entre Rios" = "Entre Ríos",
+                                        "Neuquen" = "Neuquén",
+                                        "Rio Negro" = "Río Negro",
+                                        "Tucuman" = "Tucumán")),
+                     by = "provincia") %>% 
+              head(10) %>% 
+              mutate(ciudad = recode(ciudad,
+                         "Ciudad Autonoma De Buenos Aires" = "Ciudad Autónoma de Buenos Aires",
+                         "San Carlos De Bariloche" = "San Carlos de Bariloche",
+                         "Mar Del Plata" = "Mar del Plata",
+                         "Maipu" = "Maipú"),
+         sobre_total_provincial = (N/distinciones)) %>% 
+  ungroup() %>% 
+  select(-distinciones) %>% 
+  gt() %>% 
+   tab_header(
+    title = md("__CIUDADES CON MÁS ORGANIZACIONES DISTINGUIDAS CON LAS DIRECTRICES DE GESTIÓN AMBIENTAL__"),
+    subtitle = "TOP 10") %>% 
+  tab_source_note(
+    source_note = md("**Fuente:** Sistema Argentino de Calidad Turística (SACT).\nDatos actualizados al 17/08/2022")) %>%
+  cols_label(
+    ciudad = md("**Ciudad**"),
+    provincia = md("**Provincia**"),
+    N = md("**Organizaciones Distinguidas**"),
+    sobre_total_provincial = md("**% sobre el total provincial**")) %>% 
+  cols_align(
+    align = "center",
+    columns = c(3, 4))  %>% 
+  opt_table_font(
+    font = list(
+      google_font(name = "Encode Sans"))) %>% 
+  fmt_percent(columns = 4, decimals = 1, dec_mark = ",", sep_mark = ".") %>%
+  tab_style(
+    style = list(
+      cell_fill(color = dnmye_colores("gris claro"))),
+    locations = cells_body(
+      rows = seq(1, 10, 2)))
+
+ciudades
+```
+
+## Recursos
+
+[**Informe** (disponible en la Biblioteca)](https://biblioteca.yvera.tur.ar/)
+
+[**Datos Abiertos**](https://datos.yvera.gob.ar/dataset/organizaciones-distinguidas-sistema-argentino-calidad-turistica-sact)
