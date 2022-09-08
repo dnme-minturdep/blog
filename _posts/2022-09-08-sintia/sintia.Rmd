@@ -1,0 +1,52 @@
+---
+title: "SintIA: un robot comunicador"
+description: |
+  Nueva herramienta del Sistema de Información Turística de la Argentina (SINTA) para facilitar el acceso a datos turísticos 
+date: 2022-09-08
+output:
+  distill::distill_article:
+    self_contained: true
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# 🤖 *SintIA*
+
+Desde la Dirección Nacional de Mercados y Estadísticas venimos trabajando en el desarrollo de múltiples herramientas con el propósito de facilitar el acceso a los datos que producimos, editamos y compilamos. Así, dentro del [**Sistema de Información Turística de la Argentina (SINTA)**](https://www.yvera.tur.ar/sinta/), por ejemplo, un [Portal de Datos Abiertos de Turismo](https://datos.yvera.tur.ar/) o una serie de [Tableros y Reportes](https://tableros.yvera.tur.ar/) interactivos, entre otros.
+
+Conscientes de que la información es mucha, así como los formatos y tecnologías necesarios para acceder a ellos son diversos, seguimos dando pasos para ordenar ese caudal de datos, procurando hacer más amigable y previsible nuestra comunicación. Un paso en este sentido lo dimos con la generación de un [Calendario de Publicaciones](https://calendario.yvera.tur.ar/) en el marco del SINTA, con el objetivo de ofrecer una espacio que pudiera consolidar buena parte de la producción que realiza el equipo.
+
+Con esta primera versión de **SintIA** (aún en modo de prueba y desarrollo) pensamos ofrecer un recurso extra en este sentido. Básicamente nuestra primera idea, que acá presentamos, automatizar avisos de las novedades publicadas en el Calendario, de modo que las usuarias y usuarios que hacen contacto con SintIA recibien esta información como notificaciones sin necesidad de acceder al Calendario a revisar cada día qué es lo que se publica. Los contenidos que allí se publican son:
+
+-   Publicaciones de informes técnicos
+
+-   Actualizaciones de tableros y reportes
+
+-   Carga de recursos al Portal de datos abiertos
+
+-   Nuevos publicaciones de la Bitácora
+
+-   Otras noticias
+
+# *Telegram bot*
+
+**SintIA** es un robot de la plataforma de mensajería *Telegram*. Basicamente se trata de una secuencia de pasos que una computadora realiza a partir de instrucciones (programadas con una libería del lengüage de programación `R`, a través de la libería `telegram.bot`).
+
+```{r echo = FALSE}
+
+knitr::include_graphics("sintIA.png")
+
+```
+
+
+
+## Suscripción
+
+-   Instalar o abrir la aplicación *Telegram* (o escanear el código QR más abajo)
+
+-   Buscar el usuario @RDatinaBot
+
+-   Hacer *click* en ***INICIAR*** para registrarse
