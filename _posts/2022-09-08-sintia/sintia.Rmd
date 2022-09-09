@@ -6,7 +6,7 @@ date: 2022-09-08
 output:
   distill::distill_article:
     self_contained: true
-draft: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}
@@ -15,11 +15,11 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # 🤖 *SintIA*
 
-Desde la Dirección Nacional de Mercados y Estadísticas venimos trabajando en el desarrollo de múltiples herramientas con el propósito de facilitar el acceso a los datos que producimos, editamos y compilamos. Así, dentro del [**Sistema de Información Turística de la Argentina (SINTA)**](https://www.yvera.tur.ar/sinta/), por ejemplo, un [Portal de Datos Abiertos de Turismo](https://datos.yvera.tur.ar/) o una serie de [Tableros y Reportes](https://tableros.yvera.tur.ar/) interactivos, entre otros.
+Desde la Dirección Nacional de Mercados y Estadísticas venimos trabajando en el desarrollo de múltiples herramientas con el propósito de facilitar el acceso a los datos que producimos, editamos y compilamos. Así, desde el [**Sistema de Información Turística de la Argentina (SINTA)**](https://www.yvera.tur.ar/sinta/) se puede encontrar, por ejemplo, un [Portal de Datos Abiertos de Turismo](https://datos.yvera.tur.ar/) o una serie de [Tableros y Reportes](https://tableros.yvera.tur.ar/) interactivos, entre otros.
 
-Conscientes de que la información es mucha, así como los formatos y tecnologías necesarios para acceder a ellos son diversos, seguimos dando pasos para ordenar ese caudal de datos, procurando hacer más amigable y previsible nuestra comunicación. Un paso en este sentido lo dimos con la generación de un [Calendario de Publicaciones](https://calendario.yvera.tur.ar/) en el marco del SINTA, con el objetivo de ofrecer una espacio que pudiera consolidar buena parte de la producción que realiza el equipo.
+Conscientes de que la información es mucha, así como los formatos y tecnologías necesarios para acceder a ellos son diversos, seguimos dando pasos para ordenar ese caudal de datos, procurando hacer más amigable y previsible nuestra comunicación. Un paso en este sentido lo dimos con la generación de un **[Calendario de Publicaciones](https://calendario.yvera.tur.ar/)** en el marco del SINTA, con el objetivo de ofrecer una espacio que pudiera consolidar buena parte de la producción que realiza el equipo.
 
-Con esta primera versión de **SintIA** (aún en modo de prueba y desarrollo) pensamos ofrecer un recurso extra en este sentido. Básicamente nuestra primera idea, que acá presentamos, es automatizar avisos de las novedades publicadas en el Calendario, de modo que las usuarias y usuarios que hacen contacto con SintIA recibien esta información como notificaciones sin necesidad de acceder al Calendario a revisar cada día qué recursos nuevos hay. Los contenidos que allí se publican son:
+Para la primera versión de **SintIA** (aún en modo de prueba y desarrollo) pensamos un recurso extra en este sentido. Básicamente la idea, que acá presentamos, es automatizar avisos de las novedades publicadas en el Calendario, de modo que las usuarias y usuarios que hacen contacto con SintIA recibien esta información como notificaciones sin necesidad de acceder cada día a revisar en el portal si se publicaron nuevos recursos. Los contenidos que allí se publican anucnian son:
 
 -   Informes técnicos
 
@@ -33,15 +33,15 @@ Con esta primera versión de **SintIA** (aún en modo de prueba y desarrollo) pe
 
 # *Telegram bot*
 
-**SintIA** es un bot de la plataforma de mensajería *Telegram*. Basicamente se trata de una secuencia de pasos que una computadora realiza a partir de instrucciones (programadas con el lenguaje de programación `R`, a través de la libería `telegram.bot`).
+**SintIA** es un _bot_ de la plataforma de mensajería [*Telegram*](https://telegram.org/). Basicamente se trata de una secuencia de pasos que una computadora realiza a partir de instrucciones (programadas con el lenguaje de programación `R`, a través de la libería `telegram.bot`).
 
 El lenguaje `R` permite automatizar los procesos de consulta al calendario para revisar si existen nuevas publicaciones en el día y, de ser así, indicarle a SintIA que le avise a las usuarias y los usuarios que quieran recibir las notificaciones.
 
-Mientras que la libreria `telegram.bot` se utiliza para interactuar con la API (Application Programming Interface) de Telegram, con el fin de facilitar la creación y administración de bots a través `R`. 
+Mientras que la libreria `telegram.bot` se utiliza para interactuar con la API (_Application Programming Interface_) de _Telegram_, con el fin de facilitar la creación y administración de bots a través `R`. 
 
-Además, el flujo de consultas al calendario y envío de notificaciones de SintIA se encuentra automatizado usando Github Actions. De esta forma el bot tiene cierta "autonomía" para ejecutarse y enviar avisos, sin la necesidad de un trabajo manual.
+Además, el flujo de consultas al calendario y envío de notificaciones de SintIA se encuentra automatizado usando [_Github Actions_](https://github.com/features/actions). De esta forma el _bot_ tiene cierta "autonomía" para ejecutarse y enviar avisos, sin la necesidad de un trabajo manual.
 
-Por el momento SintIA está programada para enviar mensajes cuando hay novedades en el calendario, es decir, que no es es posible interactuar como chatbot (hacerle preguntas, por ejemplo). Esperamos a futuro poder darle más funcionalidades para que sea más amigable. 
+Por el momento SintIA está programada para enviar mensajes cuando hay novedades en el calendario, es decir, que no es es posible interactuar como _chatbot_ (hacerle preguntas, por ejemplo). Esperamos a futuro poder darle más funcionalidades en ese sentido. 
 
 # ¿Cómo recibir avisos de SintIA?
 
