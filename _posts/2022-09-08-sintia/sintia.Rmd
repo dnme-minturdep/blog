@@ -1,7 +1,7 @@
 ---
-title: "SintIA: un robot comunicador"
+title: "SintIA: el robot del SINTA"
 description: |
-  Nueva herramienta del Sistema de Información Turística de la Argentina (SINTA) para facilitar el acceso a datos turísticos 
+  Nueva herramienta para mantenerse actualizado con los últimos datos del Sistema de Información Turística de la Argentina (SINTA) 
 date: 2022-09-08
 output:
   distill::distill_article:
@@ -19,21 +19,39 @@ Desde la Dirección Nacional de Mercados y Estadísticas venimos trabajando en e
 
 Conscientes de que la información es mucha, así como los formatos y tecnologías necesarios para acceder a ellos son diversos, seguimos dando pasos para ordenar ese caudal de datos, procurando hacer más amigable y previsible nuestra comunicación. Un paso en este sentido lo dimos con la generación de un [Calendario de Publicaciones](https://calendario.yvera.tur.ar/) en el marco del SINTA, con el objetivo de ofrecer una espacio que pudiera consolidar buena parte de la producción que realiza el equipo.
 
-Con esta primera versión de **SintIA** (aún en modo de prueba y desarrollo) pensamos ofrecer un recurso extra en este sentido. Básicamente nuestra primera idea, que acá presentamos, automatizar avisos de las novedades publicadas en el Calendario, de modo que las usuarias y usuarios que hacen contacto con SintIA recibien esta información como notificaciones sin necesidad de acceder al Calendario a revisar cada día qué es lo que se publica. Los contenidos que allí se publican son:
+Con esta primera versión de **SintIA** (aún en modo de prueba y desarrollo) pensamos ofrecer un recurso extra en este sentido. Básicamente nuestra primera idea, que acá presentamos, es automatizar avisos de las novedades publicadas en el Calendario, de modo que las usuarias y usuarios que hacen contacto con SintIA recibien esta información como notificaciones sin necesidad de acceder al Calendario a revisar cada día qué recursos nuevos hay. Los contenidos que allí se publican son:
 
--   Publicaciones de informes técnicos
+-   Informes técnicos
 
 -   Actualizaciones de tableros y reportes
 
 -   Carga de recursos al Portal de datos abiertos
 
--   Nuevos publicaciones de la Bitácora
+-   Nuevas publicaciones de la Bitácora
 
 -   Otras noticias
 
 # *Telegram bot*
 
-**SintIA** es un robot de la plataforma de mensajería *Telegram*. Basicamente se trata de una secuencia de pasos que una computadora realiza a partir de instrucciones (programadas con una libería del lengüage de programación `R`, a través de la libería `telegram.bot`).
+**SintIA** es un bot de la plataforma de mensajería *Telegram*. Basicamente se trata de una secuencia de pasos que una computadora realiza a partir de instrucciones (programadas con el lenguaje de programación `R`, a través de la libería `telegram.bot`).
+
+El lenguaje `R` permite automatizar los procesos de consulta al calendario para revisar si existen nuevas publicaciones en el día y, de ser así, indicarle a SintIA que le avise a las usuarias y los usuarios que quieran recibir las notificaciones.
+
+Mientras que la libreria `telegram.bot` se utiliza para interactuar con la API (Application Programming Interface) de Telegram, con el fin de facilitar la creación y administración de bots a través `R`. 
+
+Además, el flujo de consultas al calendario y envío de notificaciones de SintIA se encuentra automatizado usando Github Actions. De esta forma el bot tiene cierta "autonomía" para ejecutarse y enviar avisos, sin la necesidad de un trabajo manual.
+
+Por el momento SintIA está programada para enviar mensajes cuando hay novedades en el calendario, es decir, que no es es posible interactuar como chatbot (hacerle preguntas, por ejemplo). Esperamos a futuro poder darle más funcionalidades para que sea más amigable. 
+
+# ¿Cómo recibir avisos de SintIA?
+
+-   Instalar o abrir la aplicación *Telegram* (o escanear el código QR de abajo)
+
+-   Buscar el usuario @RDatinaBot
+
+-   Hacer *click* en ***INICIAR*** para registrarse
+
+-   ¡Listo! Cuando haya alguna novedad en el calendario, SintIA te enviará un mensaje de aviso
 
 ```{r echo = FALSE}
 
@@ -41,12 +59,3 @@ knitr::include_graphics("sintIA.png")
 
 ```
 
-
-
-## Suscripción
-
--   Instalar o abrir la aplicación *Telegram* (o escanear el código QR más abajo)
-
--   Buscar el usuario @RDatinaBot
-
--   Hacer *click* en ***INICIAR*** para registrarse
