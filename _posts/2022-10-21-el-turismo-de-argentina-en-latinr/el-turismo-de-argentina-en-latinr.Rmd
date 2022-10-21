@@ -22,7 +22,7 @@ knitr::include_graphics("https://github.com/LatinR/identidad-visual-latinR/raw/m
 ```
 
 
-Entre los días 10 y 14 de octubre se llevó a cabo [**#LatinR2022**](https://latin-r.com/), la quinta edición de la confernecia regional centrada en el uso del lenguaje de programación **R**, donde participamos con ponencias en las que la DNMyE presentó la evolución del trabajo del Sistema de Información Turística de la Argentina (SINTA)
+Entre los días 10 y 14 de octubre se llevó a cabo [**#LatinR2022**](https://latin-r.com/), la quinta edición de la conferencia regional centrada en el uso del lenguaje de programación **R**, donde participamos con ponencias en las que la DNMyE presentó la evolución del trabajo del Sistema de Información Turística de la Argentina (SINTA)
 
 # Las estadísticas de Turismo en la Argentina
 
