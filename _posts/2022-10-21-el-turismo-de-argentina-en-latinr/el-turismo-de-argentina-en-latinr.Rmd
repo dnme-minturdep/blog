@@ -5,7 +5,7 @@ description: |
 date: 2022-10-21
 output:
   distill::distill_article:
-    self_contained: true
+    self_contained: false
 draft: false
 ---
 
