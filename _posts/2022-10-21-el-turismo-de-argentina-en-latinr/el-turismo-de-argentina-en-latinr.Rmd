@@ -1,0 +1,88 @@
+---
+title: "El turismo de Argentina en LatinR"
+description: |
+  Participación del equipo de trabajo de la Dirección Nacional de Mercados y Estadística (DNMYE) en el V Congreso Latinoamericano sobre Uso de R en Investigación + Desarrollo
+date: 2022-10-21
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r echo = FALSE, out.width= '80%'}
+
+knitr::include_graphics("https://github.com/LatinR/identidad-visual-latinR/raw/master/LatinR_hex_violeta.png")
+
+```
+
+
+Entre los días 10 y 14 de octubre se llevó a cabo [**#LatinR2022**](https://latin-r.com/), la quinta edición de la confernecia regional centrada en el uso del lenguaje de programación **R**, donde participamos con ponencias en las que la DNMyE presentó la evolución del trabajo del Sistema de Información Turística de la Argentina (SINTA)
+
+# Las estadísticas de Turismo en la Argentina
+
+### Una experiencia de cómo implementamos flujos de trabajo reproducibles y abiertos en un equipo que produce, consolida y analiza estadísticas públicas.
+
+<aside> 
+**Panel**: _Uso de datos públicos y estadísticas oficiales_
+
+📝 [Ponencias](https://github.com/LatinR/presentaciones-LatinR2022#uso-de-datos-p%C3%BAblicos-y-estad%C3%ADsticas-oficiales-1)
+
+📊 [Presentación](https://d4t4tur.github.io/presentaciones/latinr2022.html#1)
+
+</aside>
+
+
+
+La DNMyE es la responsable de las estadísticas de turismo en el marco del sistema estadístico nacional. Como tal, entre otras actividades, lleva adelante:
+
+**(I)** la coordinación de operativos estadísticos destinados a la producción de indicadores para la caracterización del turismo[^1];
+
+**(II)** la armonización, explotación y análisis de una variedad de registros administrativos[^2].
+
+[^1]: Los mismos son la [Encuesta de Ocupación Hotelera (EOH)](https://bitacora.yvera.tur.ar/posts/2022-05-24-intro-eoh/) y la [Encuesta de Turismo Internacional (ETI)](https://bitacora.yvera.tur.ar/posts/2022-05-31-intro-eti/), junto al Instituto Nacional de Estadísticas y Censos (INDEC); y, por cuenta propia, la [Encuesta de Viaje y Turismo de los Hogares (EVyTH)](https://bitacora.yvera.tur.ar/posts/2022-06-06-intro-evyth/).
+
+[^2]: Ejemplos de ellos son (a) algunos producidos en la órbita del MTyD - como registro de Agencias de Viajes; u (b) otros gestionados y cedidos por organismos como la Dirección Nacional de Migraciones (DNM - para la estimación del turismo internacional por todas las vías); la Agencia Nacional de Aeronavegación Comercial (ANAC - sobre oferta y demanda de vuelos, tanto internacional como de cabotaje); la Comisión Nacional Reguladora de Transporte (CNRT - con datos de registro de servicios de transporte terrestre), o la Administración de Parques Nacionales (APN - con registros de visitaciones a áreas protegidas naturales de administración nacional).
+
+Este conjunto de tareas requiere de una serie de procesos que implican la captura, limpieza, consistencia, consolidación, análisis y comunicación de datos que provienen de múltiples fuentes, con diversos formatos y estructuras.
+
+### Un nuevo flujo de trabajo
+
+De un tiempo a esta parte, la DNMyE viene encarando un proyecto de transformación de los procesos detrás de las acciones antes reseñadas. Con un diagnóstico inicial de que se podía avanzar en la implementación de un flujo de trabajo más sistemático y reproducible; que implicara la apertura de fuentes de datos y de procesos; y que pudiera ser compartido en diversos soportes con usuaries potenciales diversos, se decidió avanzar en un plan de trabajo para lograr esos objetivos. En el siguiente video conversamos sobre ese recorrido. 
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wh2mxd-_2_U" title="TuRismo en Argentina" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+Se presentó también **mapeAr**, una aplicación interactiva que surge como un recurso que desde la Dirección Nacional de Mercados y Estadística (DNMyE), en el marco del SINTA, abrimos para facilitar la producción de recursos vinculados con información geográfica.
+
+
+# 🗺️ mapeAr
+
+
+La visualización de datos es un recurso útil a la hora de comunicar y pensar estrategias de desarrollo. En materia de política turística, como en muchas otras áreas de la administración pública, trabajar con datos geográficos resulta de vital importancia para la planificación y promoción. 
+
+<aside> 
+**Panel**: _Desarrollo de Aplicaciones con shiny_
+
+📝 [Ponencias](https://github.com/LatinR/presentaciones-LatinR2022#desarrollo-de-aplicaciones-con-shiny)
+
+💻 [Publicación en la BITACORA](https://bitacora.yvera.tur.ar/posts/2022-06-28-mapear/)
+
+</aside>
+
+La realización de un mapa que permita visualizar información geográfica resulta ser una tarea un tanto compleja, en especial si no se cuenta con conocimientos técnicos sobre **Sistemas de Información Geográfica (SIG)**. En este sentido, contar con una herramienta de acceso libre para la representación de datos espaciales sin requerimientos de programación o diseño, supone una solución para diversos usuaries interesados en el tema.
+
+
+
+El código fuente de la aplicación se encuentra disponible y abierto en el [repositorio público de la DNMyE en  _GitHub_](https://github.com/dnme-minturdep/mapeAr). Se puede acceder a una versión en línea de la aplicación [acá](https://tableros.yvera.tur.ar/mapeAr/). En el siguiente video se presentan sus principales características. 
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uNuUGroEqmE" title="mapeAr: visualizando datos geográficos de turismo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
