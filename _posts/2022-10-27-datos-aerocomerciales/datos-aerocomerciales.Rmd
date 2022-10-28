@@ -1,8 +1,8 @@
 ---
 title: "Tablero de conectividad aérea"
 description: |
-  La Dirección Nacional de Mercados y Estadística (DNMYE) gracias a la colaboración de la [Administración Nacional de Aviación Civil (ANAC) dependiente del Ministerio de Transporte de la Nación](https://www.argentina.gob.ar/anac) pone a disposición el [Tablero de Conectividad Aérea](%22https://tableros.yvera.tur.ar/conectividad/%22)
-date: 2022-10-27
+ Nuevo tablero interactivo de datos aeromerciales de Argentina
+date: 2022-10-28
 output:
   distill::distill_article:
     self_contained: true
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Información aerocomercial para el turismo `r emo::ji("airplane")`
 
-El [Tablero de Conectividad Aérea](%22https://tableros.yvera.tur.ar/conectividad/%22) es una nueva fuente de datos para el estudio de una dimensión clave de la actividad turística que se suma al [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/) donde ya están disponibles [PUNA](https://tableros.yvera.tur.ar/puna/), [Turismo Internacional](https://tableros.yvera.tur.ar/turismo_internacional/), [Agencias de Viaje](https://tableros.yvera.tur.ar/agencias/) y [mapeAR](https://tableros.yvera.tur.ar/mapeAr/).
+ La Dirección Nacional de Mercados y Estadística (DNMYE) gracias a la colaboración de la [Administración Nacional de Aviación Civil (ANAC) dependiente del Ministerio de Transporte de la Nación](https://www.argentina.gob.ar/anac) pone a disposición el [Tablero de Conectividad Aérea](%22https://tableros.yvera.tur.ar/conectividad/%22). El [tablero](%22https://tableros.yvera.tur.ar/conectividad/%22) acerca una nueva fuente de datos para el estudio de una dimensión clave de la actividad turística que se suma al [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/) donde ya están disponibles [PUNA](https://tableros.yvera.tur.ar/puna/), [Turismo Internacional](https://tableros.yvera.tur.ar/turismo_internacional/), [Agencias de Viaje](https://tableros.yvera.tur.ar/agencias/) y [mapeAR](https://tableros.yvera.tur.ar/mapeAr/).
 
 <a href = "https://tableros.yvera.tur.ar/conectividad/" target="_blank" rel="noopener noreferrer">
 
@@ -27,7 +27,7 @@ knitr::include_graphics("portada_tablero.png")
 
 </a>
 
-Los datos utilizados provienen de la ANAC y son procesados por la DNMYE para reducir el universo de análisis a aquellos movimientos aéreos relevantes para la actividad turística. Es por eso que del total de movimientos registrados por la ANAC sólo se presenta la información correspondiente a movimientos de las principales líneas aerocomerciales, excluyendo los movimientos de vuelos charter, trabajos aéreos, instrucción, vuelos oficiales y vuelos privados. 
+Los datos utilizados provienen del Sistema Integrado de Aviación Civil (SIAC) y son facilitados por la ANAC. La DNMYE realiza un ulterior procesamiento de los mismos para reducir el universo de análisis a aquellos movimientos aéreos relevantes para la actividad turística. Es por eso que del total de movimientos registrados por el SIAC sólo se presenta la información correspondiente a movimientos de las principales líneas aerocomerciales, excluyendo los movimientos de vuelos charter, trabajos aéreos, instrucción, vuelos oficiales y vuelos privados. 
 
 Además del proceso de limpieza y selección de los registros relevantes para las estadísticas del turismo, para el caso de los movimientos de vuelos internacionales también se realiza un entrecruzamiento de datos con los registros de la [Dirección Nacional de Migraciones del Ministerio de Interior de la Nación](https://www.argentina.gob.ar/interior/migraciones) a los fines de establecer un perfil de nacionalidades de las rutas aerocomerciales. Para ello se utiliza información anonimizada y agregada a nivel mensual de los pasajeros de vuelos internacionales según número de vuelo.
 
