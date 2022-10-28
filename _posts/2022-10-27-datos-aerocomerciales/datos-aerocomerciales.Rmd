@@ -1,0 +1,54 @@
+---
+title: "Tablero de conectividad aérea"
+description: |
+  La Dirección Nacional de Mercados y Estadística (DNMYE) gracias a la colaboración de la [Administración Nacional de Aviación Civil (ANAC) dependiente del Ministerio de Transporte de la Nación](https://www.argentina.gob.ar/anac) pone a disposición el [Tablero de Conectividad Aérea](%22https://tableros.yvera.tur.ar/conectividad/%22)
+date: 2022-10-27
+output:
+  distill::distill_article:
+    self_contained: true
+preview: mapa.png
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Información aerocomercial para el turismo `r emo::ji("airplane")`
+
+El [Tablero de Conectividad Aérea](%22https://tableros.yvera.tur.ar/conectividad/%22) es una nueva fuente de datos para el estudio de una dimensión clave de la actividad turística que se suma al [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/) donde ya están disponibles [PUNA](https://tableros.yvera.tur.ar/puna/), [Turismo Internacional](https://tableros.yvera.tur.ar/turismo_internacional/), [Agencias de Viaje](https://tableros.yvera.tur.ar/agencias/) y [mapeAR](https://tableros.yvera.tur.ar/mapeAr/).
+
+<a href = "https://tableros.yvera.tur.ar/conectividad/" target="_blank" rel="noopener noreferrer">
+
+```{r}
+knitr::include_graphics("portada_tablero.png")
+```
+
+</a>
+
+Los datos utilizados provienen de la ANAC y son procesados por la DNMYE para reducir el universo de análisis a aquellos movimientos aéreos relevantes para la actividad turística. Es por eso que del total de movimientos registrados por la ANAC sólo se presenta la información correspondiente a movimientos de las principales líneas aerocomerciales, excluyendo los movimientos de vuelos charter, trabajos aéreos, instrucción, vuelos oficiales y vuelos privados. 
+
+Además del proceso de limpieza y selección de los registros relevantes para las estadísticas del turismo, para el caso de los movimientos de vuelos internacionales también se realiza un entrecruzamiento de datos con los registros de la [Dirección Nacional de Migraciones del Ministerio de Interior de la Nación](https://www.argentina.gob.ar/interior/migraciones) a los fines de establecer un perfil de nacionalidades de las rutas aerocomerciales. Para ello se utiliza información anonimizada y agregada a nivel mensual de los pasajeros de vuelos internacionales según número de vuelo.
+
+De esta manera se facilita el estudio sobre qué líneas y rutas aéreas resultan potencialmente más relevantes para los diferentes mercados del turismo receptivo y del turismo emisivo, aunque cabe aclarar que esto es sólo un indicador proxy de dicho fenómeno.
+
+![](conectividad_tabs.gif)
+
+El [tablero interactivo](https://tableros.yvera.tur.ar/conectividad/) presenta información clave de la actividad aerocomercial en cuatro pestañas:
+
+-   **Resumen**: presenta el mapa interactivo de las rutas aéreas y la serie de tiempo del volumen de pasajeros y asientos
+
+-   **Conectividad**: a partir de datos ANAC presenta la tabla dinámica con los datos de movimientos aéreos, vuelos, pasajeros, pasajeros promedio, asientos y asientos promedio con los mayores niveles de desagregación posible a la fecha. 
+
+-   **Pasajeros Internacionales**: a partir del cruce de datos ANAC y DNM presenta la información correspondiente a la cantidad de pasajeros según nacionalidad, ruta aérea y aerolínea para diferentes periodos de tiempo. [^1]
+
+-   **Puentes Aéreos**: a partir del cruce de datos ANAC y DNM presenta como tabla dinámica los principales indicadores para cada par ciudad de origen y ciudad de destino final como cantidad de pasajeros de nacionalidad argentina y de otras nacionalidades, cantidad de asientos, participación de los asientos de la empresa sobre el total de asientos del puente, y peso relativo de los pasajeros sobre los asientos (en porcentajes). 
+
+Una pestaña adicional, **Metodología** aclara cuestiones conceptuales sobre el tratamiento de los datos y definición de las variables. Además se posibilita la descarga de todas tablas para que las personas interesadas puedan generar sus propios procesamientos.
+
+Pueden encontrar el tablero aquí: https://tableros.yvera.tur.ar/conectividad/ 
+
+También pueden consultar los reportes mensuales realizados por la ANAC en su sitio web: https://datos.anac.gob.ar/estadisticas/. 
+
+[^1]: Una aclaración al respecto  de como aparecen los pares origen - destino en esta pestaña: en la tabla dinámica aparecen siempre aeropuertos argentinos como aeropuerto de destino porque el procedimiento de entrecruzamiento procura mostrar desde qué ciudades retornan hacia Argentina las personas con nacionalidad argentina y desde qué ciudades vienen hacia Argentina las personas sin nacionalidad argentina.
