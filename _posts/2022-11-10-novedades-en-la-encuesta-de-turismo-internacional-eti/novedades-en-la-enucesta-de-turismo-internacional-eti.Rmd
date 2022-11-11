@@ -1,8 +1,8 @@
 ---
-title: "Novedades en la Enucesta de Turismo Internacional (ETI)"
+title: "Novedades en la Encuesta de Turismo Internacional (ETI)"
 description: |
  Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)
-date: 2022-11-10
+date: 2022-11-11
 output:
   distill::distill_article:
     self_contained: true
@@ -15,7 +15,7 @@ draft: false
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-En el día de hoy publicamos los datos correspondientes al mes de septiembre 2022 del turismo internacional para el total nacional, por todos los medios de transporte utilizados (aéreos, fluviales, marítimos y terrestres). A su vez, también el INDEC publicó la Encuesta de Turismo Internacional (MINTURDEP-INDEC) con datos de septiembre y del tercer trimestre del año para los pasos relevados (Ezeiza, Aerop. J. Newbery, Aerop. de Córdoba, Aerop. de Mendoza, Cristo Redentor y Puerto de Buenos Aires) 
+En el día de ayer publicamos los datos correspondientes al mes de septiembre 2022 del turismo internacional para el total nacional, por todos los medios de transporte utilizados (aéreos, fluviales, marítimos y terrestres). A su vez, también el INDEC publicó la Encuesta de Turismo Internacional (MINTURDEP-INDEC) con datos de septiembre y del tercer trimestre del año para los pasos relevados (Ezeiza, Aerop. J. Newbery, Aerop. de Córdoba, Aerop. de Mendoza, Cristo Redentor y Puerto de Buenos Aires) 
 
 ## Novedades
 
