@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2022-11-19-nueva-version-del-monitor-de-provincias/",
+    "title": "Nueva versión del Monitor de provincias",
+    "description": "Publicamos una versión renovada del portal de estadísticas del turismo por provincia.",
+    "author": [],
+    "date": "2022-11-22",
+    "categories": [],
+    "contents": "\nLa DNMyE presenta la nueva versión del MONITOR, el portal de estadísticas del turismo en las provincias. En esta segunda edición del portal se mejoró la navegabilidad integrando un selector de provincia en cada sección de la página, se mejoraron los gráficos de los indicadores y se presentan las tablas en un formato que permite su descarga por el usuario.\nAdemás, en la sección de turismo interno se añadieron las estimaciones de los coeficientes de variación para cada indicador, así como los valores correspondientes a cada región en las que la Encuenta de Viajes y Turismo de los Hogares (EVyTH) divide al país.\n\n\n\nTambién se reemplazó el mapa de empresas de la versión anterior por un mapa interactivo más fácil de navegar.\n\n\n\nPor último se añadió un indice de recursos en cada sección para ahondar en cada uno de los temas presentados y una sección de metodología con la explicación de cómo se construyó cada una de las secciones.\n\n\n\nSe puede acceder a la plataforma desde:\nla página del Sistema Federal de Gestión de Datos Turísticos de la Argentina\no directamente desde la página: https://provincias.yvera.tur.ar/\n\n\n\n",
+    "preview": "posts/2022-11-19-nueva-version-del-monitor-de-provincias/distill-preview.png",
+    "last_modified": "2022-11-22T12:18:15-03:00",
+    "input_file": "nueva-version-del-monitor-de-provincias.knit.md"
+  },
+  {
     "path": "posts/2022-11-10-novedades-en-la-encuesta-de-turismo-internacional-eti/",
     "title": "Novedades en la Encuesta de Turismo Internacional (ETI)",
     "description": "Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)",
