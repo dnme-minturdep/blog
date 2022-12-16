@@ -109,7 +109,7 @@ grafico_estacionalidad_eoh
 ```
 
 
-# Estacionalidad en la ocupación hotelera hotelera
+# Estacionalidad en la ocupación hotelera
 
 Tomando como indicador de estacionalidad el porcentaje que representa el mes de mayor actividad –en este caso las pernoctaciones en hoteles y parahoteles- respecto respecto del promedio del año, se observa que destinos como Mar del Plata, Villa Gesell en la Costa Atlántica, Bariloche en la Patagonia y Salta en el Norte, tienen un mes donde las pernoctaciones superan en un 50% al promedio del año. En cambio, CABA muestra, en su mes de mayor actividad, menos de un 25% respecto de la media anual. En términos generales, las capitales de las provincias muestran una estacionalidad baja o media.
 
