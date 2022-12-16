@@ -1,0 +1,570 @@
+---
+title: "Estacionalidad en el turismo"
+description: |
+ Caracterización de la estacionalidad turística en Argentina a partir de un análisis territorial de la ocupación hotelera y el empleo.
+
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_floate: true
+draft: true    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(directlabels)
+library(tidyverse)
+library(gt)
+library(glue)
+library(ggtext)
+library(comunicacion)
+#library(ggpubr)
+library(lubridate)
+library(tidytext)
+library(geoAr)
+library(sf)
+library(ggpmisc)
+```
+
+La Dirección Nacional de Mercados y Estadística (DNMyE) elaboró un informe que procura examinar las características de la estacionalidad turística en Argentina a partir de distintas mediciones y fuentes de información. Contiene un análisis en base a datos de la ocupación hotelera obtenidos de la [Encuesta de Ocupación Hotelera (EOH)](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-ocupacion-hotelera-eoh) y una caracterización de la estacionalidad ampliada hacia la totalidad de los destinos del país con datos de empleo registrado publicados por el [Centro de Estudios para la Producción (CEP XXI)](https://www.argentina.gob.ar/produccion/cep). Adicionalmente, se estudia la estacionalidad en aquellos departamentos o partidos con relevancia en términos de empleo turístico y a nivel provincial para observar las particularidades de cada jurisdicción.
+
+La estacionalidad de la demanda constituye una característica inherente del sector turístico. El comportamiento estacional, para el caso de Argentina, es marcado en los primeros meses del año, con una recuperación en julio, mes de las vacaciones de invierno. Sin embargo, este fenómeno no es homogéneo entre destinos. Observando algunas de las 49 localidades relevadas por la EOH, puede verificarse que conviven destinos con actividad más estable a lo largo del año, como la Ciudad Autónoma de Buenos Aires (CABA), localidades con picos en verano, como Villa Gesell; otros en la temporada invernal, como el caso de Salta en julio; y, por último, casos, como el de San Martín de los Andes, con 2 temporadas altas en un mismo año.
+
+```{r pernoc_mes}
+pernoc_eoh <- read_csv("http://datos.yvera.gob.ar/dataset/93db331e-6970-4d74-8589-c1223ac9c282/resource/86098160-840e-4191-a0fc-b3923bf2b0b0/download/pernoctes-residentes-y-no-residentes.csv") %>% 
+  #filter(origen_viajeros == "Residentes") %>% 
+  mutate(anio = substr(indice_tiempo,1,4)) 
+pernoc_mes <- pernoc_eoh %>%
+  group_by(indice_tiempo,anio) %>% 
+  summarise(pernoctes = sum(pernoctes)) %>% 
+  group_by(anio) %>% 
+  mutate(part = pernoctes/sum(pernoctes)) %>% 
+  ungroup() %>% 
+  filter(!anio %in% c(2020,2021)) %>% 
+  mutate(mes = as.Date(glue("2020-{substr(indice_tiempo,6,7)}-01")))
+stats_eoh <- pernoc_mes %>%
+  group_by(mes) %>% 
+  filter(anio <= 2019) %>% 
+  mutate(max = max(pernoctes),
+         min=min(pernoctes),
+         avg = mean(pernoctes))
+grafico_estacionalidad_eoh <- pernoc_mes %>% 
+  filter(anio == 2021) %>% 
+  ggplot(., aes(x=mes,y=pernoctes,group=as.factor(anio),color=as.factor(anio)))+
+  geom_ribbon(data= stats_eoh,aes(x = mes, ymax = max, ymin = min),color="lightgrey",alpha = 0.05,fill = "grey")+
+  geom_line(size=3)+
+  geom_point(size=3)+
+  scale_color_manual(values=c(comunicacion::dnmye_colores(5),
+                              comunicacion::dnmye_colores(3)))+
+  #geom_point()+
+  geom_line(data= stats_eoh,aes(x=mes,y=avg),color=comunicacion::dnmye_colores(1))+
+  geom_point(data= stats_eoh,aes(x=mes,y=avg),color=comunicacion::dnmye_colores(1))+
+  scale_y_continuous(labels = scales::number_format(scale = 1/1e+6,suffix = "M"))+
+  geom_dl(aes(label = anio), method = list(dl.combine( "last.points")), cex = 0.8)+ 
+  #scale_x_continuous(labels = scales::date_format(format = "%b"))+
+  labs(x="",y="",title="Pernoctaciones en hoteles y parahoteles por mes",
+       subtitle = "",
+       caption="Fuente: DNMyE en base a Encuesta de Ocupación Hotelera")+
+  annotate("curve", x = as.Date("2020-04-01"), xend=as.Date("2020-05-01"),yend=pull(unique(stats_eoh[stats_eoh$mes == as.Date("2020-05-01"),"max"]))*1.67,
+           y =pull(unique(stats_eoh[stats_eoh$mes == as.Date("2020-04-01"),"max"]))*.95 , 
+           curvature = -.3,
+           color = "grey",size=1) +
+  annotate(geom = "text",  
+           x = as.Date("2020-05-01"),
+           y = pull(unique(stats_eoh[stats_eoh$mes == as.Date("2020-05-01"),"max"]))*1.67,
+           label = "Rango 2007-2019" ,
+           hjust = "left", size = 4,
+           color = "darkgrey")+
+  annotate("curve", x = as.Date("2020-02-01"), xend=as.Date("2020-03-01"),yend=pull(unique(stats_eoh[stats_eoh$mes == as.Date("2020-02-01"),"avg"]))*1.15,
+           y =pull(unique(stats_eoh[stats_eoh$mes == as.Date("2020-02-01"),"avg"])) , 
+           curvature = -.3,
+           color = comunicacion::dnmye_colores(1),
+           size=1) +
+  annotate(geom = "text",  
+           x = as.Date("2020-03-01"),
+           y = pull(unique(stats_eoh[stats_eoh$mes == as.Date("2020-02-01"),"avg"]))*1.15,
+           label = "Promedio 2007-2019" ,
+           hjust = "left", 
+           color = comunicacion::dnmye_colores(1),
+           size=4)+
+  scale_x_date(date_breaks = "1 month",
+               date_labels = "%b"#,
+               #expand = c(0,2)
+  )+
+  theme_minimal()+
+  coord_cartesian(clip = "off")+
+  theme(legend.position = "none",
+        plot.title = element_markdown(face="bold"),
+        plot.subtitle  = element_markdown(),
+        axis.text.x   = element_text(size = 12),
+        axis.text.y   = element_text(size = 12),
+        text = element_text(family = "Encode Sans"),
+        panel.grid.minor = element_blank()
+  )
+grafico_estacionalidad_eoh
+```
+
+
+# Estacionalidad en la ocupación hotelera hotelera
+
+Tomando como indicador de estacionalidad el porcentaje que representa el mes de mayor actividad –en este caso las pernoctaciones en hoteles y parahoteles- respecto respecto del promedio del año, se observa que destinos como Mar del Plata, Villa Gesell en la Costa Atlántica, Bariloche en la Patagonia y Salta en el Norte, tienen un mes donde las pernoctaciones superan en un 50% al promedio del año. En cambio, CABA muestra, en su mes de mayor actividad, menos de un 25% respecto de la media anual. En términos generales, las capitales de las provincias muestran una estacionalidad baja o media.
+
+```{r}
+pernoc_eoh_localidad <- openxlsx::read.xlsx("pernoctes por localidad_2015_2019.xlsx") %>% pivot_longer(cols = 3:7,names_to="anio",values_to = "pernoctes") %>% 
+  select(localidad,pernoctes,mes,anio)  %>% 
+  mutate(mes = tolower(substr(mes,1,3))) %>% 
+  mutate(mes = factor(mes,levels = tolower(substr(c("Enero",      "Febrero"  ,  "Marzo"    ,  "Abril"   ,   "Mayo"   ,    "Junio",      "Julio"  ,    "Agosto" ,"Septiembre", "Octubre" ,   "Noviembre"  ,"Diciembre" ),1,3))))  %>% 
+  mutate(localidad = case_when(localidad == "Villa Gesell" ~ "Villa Gesell, Buenos Aires",
+                               localidad == "Salta" ~ "Salta Capital",
+                               localidad  == "San Martín de los Andes" ~ "San Martín de los Andes, Neuquén",
+                               TRUE ~ localidad)) 
+eoh_pernoc_estacionalidad <- pernoc_eoh_localidad %>% 
+  mutate(localidad = case_when(localidad == "Villa Gesell, Buenos Aires" ~ "Villa Gesell",
+                   localidad == "Salta Capital" ~ "Salta",
+                   localidad  == "San Martín de los Andes, Neuquén" ~ "San Martín de los Andes",
+                   TRUE ~ localidad)) %>% 
+  group_by(anio,localidad) %>% 
+  mutate(pernoctes_media = mean(pernoctes,na.rm=T)) %>% 
+  ungroup() %>% 
+  mutate(desvio_media = pernoctes/pernoctes_media) %>% 
+  group_by(mes,localidad) %>% 
+  mutate(pernoctes = mean(pernoctes,na.rm=T),
+         pernoctes_media = mean(pernoctes_media,na.rm=T),
+    prom_desvio_media =pernoctes/pernoctes_media) %>% 
+  group_by(localidad) %>% 
+  filter(prom_desvio_media == max(prom_desvio_media,na.rm=T)) %>%
+  ungroup() %>% 
+  distinct(localidad,.keep_all = T)
+  
+  
+  
+```
+```{r}
+geo <- get_geo("ARGENTINA", level = "departamento") %>%
+  add_geo_codes() %>% 
+  rename(province = name_iso) %>% 
+  mutate(cod_depto_prov = as.double(paste0(as.numeric(codprov_censo),coddepto_censo))) %>% 
+  filter(!(nomdepto_censo != "COMUNA 06" & name_prov == "CABA")) %>% 
+  mutate(nomdepto_censo = ifelse(nomdepto_censo == "COMUNA 06","CABA",nomdepto_censo),
+         cod_depto_prov = ifelse(nomdepto_censo == "CABA",2000,cod_depto_prov))
+# geo_caba <- get_geo("ARGENTINA", level = "provincia") %>%
+#   add_geo_codes() %>% 
+#   rename(province = name_iso) %>%
+#   mutate(province = ifelse(province=="Ciudad Autónoma de Buenos Aires","CABA",province)) %>% 
+#   filter(province == "CABA")
+mapa_argentina <- read_sf("https://github.com/politicaargentina/data_warehouse/raw/master/geoAr/data_raw/provincias.geojson") %>% 
+  mutate(provincia = case_when(provincia == "CABA" ~ "Ciudad Autónoma de Buenos Aires",
+                               TRUE ~ provincia))
+geo_provs <- get_geo("ARGENTINA", level = "provincia") %>%
+  add_geo_codes() %>% 
+  rename(province = name_iso) 
+```
+
+
+```{r}
+
+# leo tabla localidades indec con coordenas
+geo_localidades_indec <- st_read("/srv/DataDNMYE/evyth/nomenclatura_geo/Codgeo_Pais_x_loc_con_datos/indec_cods/pxlocdatos.shp", quiet = TRUE)
+# limpio los nombres de eoh para que coincidan con nombres de localidad indec
+datos_mapa_eoh <- eoh_pernoc_estacionalidad %>% 
+  mutate(localidad_limpio = case_when(localidad == "MDQ" ~ "Mar del Plata",
+                                      localidad == "CABA" ~ "Ciudad Autónoma de Buenos Aires",
+                                      localidad == "Catamarca" ~ "San Fernando del Valle de Catamarca",
+                                      localidad == "Bariloche" ~ "San Carlos de Bariloche",
+                                      localidad == "Calafate" ~ "El Calafate",
+                                      localidad == "Carlos Paz" ~ "Villa Carlos Paz",
+                                      localidad == "Jujuy" ~ "San Salvador de Jujuy",
+                                      localidad == "La Angostura" ~ "Villa La Angostura",
+                                      localidad == "Malargue-Las Leñas" ~ "Malargüe", # en algunos casos hubo que decidir a qué localidad asignar
+                                      localidad == "Mar Chiquita" ~ "Miramar", # incluso cuando la localidad eoh sea un área
+                                      localidad == "Termas" ~ "Termas de Río Hondo", # verificar
+                                      localidad == "Tucumán" ~ "San Miguel de Tucumán",
+                                      localidad == "Valle de Uco" ~ "Tupungato", # verificar
+                                      localidad == "Rio Gallegos" ~ "Río Gallegos",
+                                      localidad == "VG Belgrano" ~"Villa General Belgrano",
+                                      T ~ localidad))
+# limpiar texto de tildes, mayusculas etc.
+eoh <- datos_mapa_eoh %>% 
+   mutate(localidad_limpio = herramientas::limpiar_texto(localidad_limpio) %>% str_replace_all("  ", " ")) %>% 
+   mutate(prom_desvio_media = prom_desvio_media *100,
+          vars3_rangos = case_when(prom_desvio_media <= 125 & prom_desvio_media > 100 ~ "Baja (entre 100% y 125%)",
+                                   prom_desvio_media <= 150 & prom_desvio_media > 125 ~ "Media (entre 125% y 150%)",  
+                                 # prom_desvio_media <= 150 & prom_desvio_media > 125 ~ "(125%, 150%]",
+                                 prom_desvio_media > 150 ~ "Alta (más de 150%)"),
+          mes = factor(mes,levels = substr(c("enero","febrero",                              "julio","septiembre","octubre","noviembre","diciembre"),1,3),labels = c("enero","febrero",
+                                        "julio","septiembre","octubre","noviembre","diciembre"))) %>% 
+  mutate(vars3_rangos = factor(vars3_rangos,levels = c("Baja (entre 100% y 125%)","Media (entre 125% y 150%)","Alta (más de 150%)"),labels =c("Baja <br> (entre 100% y 125%)","Media <br>(ente 125% y 150%)","Alta <br> (más de 150%)")))
+# tmb para los datos de indec para poder hacer el join
+geo_localidades_indec <- geo_localidades_indec %>% mutate(localidad_limpio = herramientas::limpiar_texto(localidad))
+# guardo el crs de los datos indec (seria el indicador de la proyeccion geografica)
+crs_indec <- st_crs(geo_localidades_indec)
+# hago el join por provincia y localidad
+# me queda la tabla eoh con las coordenadas y algunas variables extra de la tabla indec
+eoh_con_geom <- left_join(eoh, geo_localidades_indec, by = c("localidad_limpio" = "localidad_limpio")) %>% 
+  st_as_sf(crs = crs_indec) %>% 
+  #st_simplify() %>% 
+  filter(!(localidad.x == "Mar Chiquita" & provincia == "Córdoba")) %>% 
+  filter(!(localidad.x == "Santa Rosa" & provincia != "La Pampa")) %>% 
+  filter(!(localidad.x == "Merlo" & provincia != "San Luis")) %>% 
+  mutate(x = as.numeric(map(.x =geometry, ~ unlist(.x)[[1]])), # tomo las coordenadas x de geometry
+         y = as.numeric(map(.x =geometry, ~ unlist(.x)[[2]])))  #tomo 
+gg_eoh <- eoh_con_geom %>% 
+  ggplot() + 
+  geom_sf(data=geo ,aes(geometry=geometry),fill="white",size=.1,alpha=.1)+
+  geom_sf(data=geo_provs ,aes(geometry=geometry),fill="white",size=.4,alpha=.1)+
+  geom_sf(aes(color = vars3_rangos, size = pernoctes_media),alpha=.6) +
+ viridis::scale_color_viridis(discrete = TRUE,name="% respecto del promedio")+
+  scale_size(guide=F)+
+  #guides(size = FALSE)+
+  theme_void()+
+  theme(legend.title = element_text(),
+        legend.position = "none",
+        plot.title = element_text(hjust = .5),
+         plot.subtitle = element_text(hjust = .3),
+        strip.text.x = element_markdown(margin=margin(5,0,0,0),face = "bold"),
+        plot.caption = element_markdown(hjust = 0.5))+
+  labs(subtitle = "Pernoctaciones en el mes más alto respecto del promedio del año. Prom. 2015-2019",
+       title = "Estacionalidad en la ocupación hotelera",
+       caption = "Tamaño = pernoctaciones en el año (media) <br> Fuente: DNMyE en base a EOH")+
+   ggrepel::geom_label_repel(
+                   aes(label = localidad.x, x = x, y = y), seed = 3,
+                   size = 2,
+                   max.overlaps = Inf, # dice si se eliminan etiquetas con overlaps
+                   label.padding = 0.1, force = 3, min.segment.length = 0, fontface = "bold")+
+    facet_wrap(~vars3_rangos)
+# las labels sobrecargar el mapa pero para que puedan ver como queda
+```
+```{r}
+gg_eoh
+```
+
+
+# Estacionalidad en el empleo
+
+Para tener una caracterización de la estacionalidad de la totalidad de los destinos del país, se tomaron los datos abiertos de [empleo registrado por departamento/partido y sector de actividad](https://datos.produccion.gob.ar/dataset/puestos-de-trabajo-por-departamento-partido-y-sector-de-actividad), publicados por el Centro de Estudios para la Producción (CEP XXI) de la Sectretaría de Industria y Desarrollo Productivo de la Nación, en base a información del Sistema Integrado Previsional Argentino (SIPA).
+
+Una mirada a nivel nacional permite ver que, más allá de la tendencia decreciente desde 2018 y la recuperación de los últimos meses, se observa especialmente la estacionalidad en el empleo en Servicios de Alojamiento, con el nivel creciendo hasta alcanzar un máximo en el mes de enero y luego reduciéndose hasta un mínimo en junio. Sucede lo mismo con la gastronomía, si bien solo una parte de su producción es consumida por visitantes.
+
+```{r}
+ramas_turismo_6d <- openxlsx::read.xlsx("/srv/DataDNMYE/empleo/ramas turismo 6 D.xlsx") %>% 
+  filter(!COD_ACTIVIDAD_F883 %in% c(473000,681098,681099,780000,562091)) %>% 
+  pull(COD_ACTIVIDAD_F883)
+empleo_categ <- read_csv("/srv/DataDNMYE/empleo/puestos_6_digitos.csv")
+puestos_6d <- empleo_categ %>% 
+ mutate(rct = ifelse(clae6 %in% ramas_turismo_6d, "RCT","NO RCT"),
+         cat.rct = case_when(substr(clae6,1,3) %in% c(473,491,492,501,502,511,524,771) & rct == "RCT"~ "Transporte",
+                             substr(clae6,1,3) %in% c(551,552) & rct == "RCT"~ "Alojamiento",
+                             substr(clae6,1,3) %in% c(561,562) & rct == "RCT" ~ "Gastronomía",
+                             substr(clae6,1,3) == 791 & rct == "RCT"~ "Agencias de Viaje",
+                             substr(clae6,1,3) %in% c(591,592,681,780,854,900,910,920,931,939) & rct == "RCT"~ "Otros Servicios Turísticos",
+                             TRUE ~ "NO RCT"),
+         puestos = ifelse(puestos == -99,NA,puestos)) %>% 
+  group_by(cat.rct,fecha) %>% 
+  summarise(puestos = sum(puestos,na.rm=T))
+```
+
+Una mirada a nivel nacional permite ver que, más allá de la tendencia decreciente desde 2018 y la recuperación de los últimos meses, se observa especialmente la estacionalidad en el empleo en Servicios de Alojamiento, con el nivel creciendo hasta alcanzar un máximo en el mes de enero y luego reduciéndose hasta un mínimo en junio. Sucede lo mismo con la gastronomía, si bien solo una parte de su producción es consumida por visitantes.
+
+<br>
+
+```{r}
+grafico_puestos_6d <- puestos_6d %>% 
+  filter(fecha >= "2015-01-01" & cat.rct %in% c("Gastronomía","Alojamiento")) %>% 
+ ggplot(aes(x=as.Date(fecha),y=puestos,color=cat.rct,group=cat.rct))+
+  geom_line(size=.5)+
+  geom_point(size = .8)+
+  #geom_point()+
+  scale_y_continuous(labels=scales::number_format(decimal.mark = ","),
+                      breaks = scales::breaks_extended(3))+
+  scale_x_date(#limits = c(as.Date(min(indice.empleo$fecha)),as.Date(max(indice.empleo$fecha)) + months(15)),
+               date_breaks = "6 months",
+               date_labels = "%b%y")+
+  # ggrepel::geom_label_repel(data=filter(indice.empleo,fecha==max(indice.empleo$fecha)),
+  #                                       aes(label = rct),
+  #                  nudge_x = 1,
+  #                  na.rm = TRUE,
+  #                  xlim = c(as.Date(max(indice.empleo$fecha)), as.Date(max(indice.empleo$fecha)) + months(6)),
+  #                  size=3,
+  #                  segment.colour = "black")+
+  scale_color_manual(values=c(dnmye_colores(1),dnmye_colores(2)))+
+  theme_minimal()+
+  labs(title="Evolución de los puestos de trabajo registrados",
+       subtitle = "",x="",y="",
+       caption="Fuente: DNMyE en base a CEP XXI")+
+  theme(
+     text = element_text(family = "Encode Sans Normal"), 
+    plot.title    = element_markdown(size = 12),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 10, face = "bold"),
+    axis.text.x   = element_text(size = 8,angle=90),
+    axis.text.y   = element_text(size = 8),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )+
+  coord_cartesian(clip = "off")+
+  facet_wrap(~cat.rct,scales = "free_y",ncol=1)
+grafico_puestos_6d
+#ggsave(grafico_puestos_6d, file = "salidas/evolucion_puestos_6d.png",width = 9,height = 5)
+```
+
+
+Tomando los departamentos o partidos con relevancia en términos de empleo turístico (aquellos que tienen 250 o más puestos o bien aquellos que representan el 5% o más del empleo en alojamiento de la provincia), podemos ver que los partidos de la costa bonaerense tienen una fuerte estacionalidad, al igual que Córdoba y el departamento de Río Hondo, en Santiago del Estero. En La Costa, el empleo de enero fue un 107% mayor al de la media del año.
+
+```{r}
+puestos_departamento <- read_csv("/srv/DataDNMYE/empleo/puestos_total_empresas_depto_por_clae2.csv")
+clae_diccionario <- read_csv("/srv/DataDNMYE/empleo/clae_diccionario.csv")
+deptos_diccionario_url <- "https://cdn.produccion.gob.ar/cdn-cep/datos-por-departamento/diccionario_cod_depto.csv"
+url <- RCurl::getURL(deptos_diccionario_url, ssl.verifypeer = FALSE,.encoding = "UTF-8")
+deptos_diccionario <- read.csv(textConnection(url))
+```
+
+```{r}
+puestos_aloj_depto <- puestos_departamento %>%
+  filter(clae2 == 55) %>% 
+  left_join(clae_diccionario %>% select(clae2,clae2_desc) %>% distinct(clae2,.keep_all=T)) %>%
+  left_join(deptos_diccionario) %>% 
+  mutate(anio = year(fecha)) %>% 
+  filter(anio == 2021) %>% 
+  group_by(anio,nombre_departamento_indec,nombre_provincia_indec,clae2_desc) %>% 
+  summarise(puestos = mean(puestos)) %>% 
+  group_by(anio,nombre_provincia_indec,clae2_desc) %>% 
+  arrange(-puestos) %>% 
+  mutate(part_provincia = puestos/sum(puestos),
+        part_provincia_acum = cumsum(puestos)/sum(puestos)) %>% 
+  ungroup()
+```
+
+```{r}
+deptos_relevantes <- puestos_aloj_depto %>% 
+  filter(part_provincia >= .05 | puestos >= 250) %>% 
+  left_join(deptos_diccionario) %>% pull(codigo_departamento_indec)
+puestos_deptos_desvio <- puestos_departamento %>% 
+  left_join(clae_diccionario %>% select(clae2,clae2_desc) %>% distinct(clae2,.keep_all=T)) %>%
+  left_join(deptos_diccionario) %>% 
+  mutate(anio = year(fecha)) %>% 
+  group_by(anio,clae2,clae2_desc,nombre_provincia_indec,nombre_departamento_indec,codigo_departamento_indec) %>% 
+  mutate(puestos_media = mean(puestos)) %>% 
+  ungroup() %>% 
+  mutate(desvio_media = puestos/puestos_media) %>% 
+  filter(clae2 == 55 & codigo_departamento_indec %in% deptos_relevantes )
+
+```
+
+```{r}
+#Para mapear todos los deptos:
+ # puestos_departamento %>% 
+ #  left_join(clae_diccionario %>% select(clae2,clae2_desc) %>% distinct(clae2,.keep_all=T)) %>%
+ #  left_join(deptos_diccionario) %>% 
+ #  mutate(anio = year(fecha)) %>% 
+ #  group_by(anio,clae2,clae2_desc,nombre_provincia_indec,nombre_departamento_indec,codigo_departamento_indec) %>% 
+ #  mutate(puestos_media = mean(puestos)) %>% 
+ #  ungroup() %>% 
+ #  mutate(desvio_media = puestos/puestos_media) 
+datos_depto_mapa <- puestos_deptos_desvio %>% 
+  filter(fecha < "2020-01-01" & clae2 == 55 #& nombre_departamento_indec %in% seleccion_deptos$nombre_departamento_indec
+         ) %>% 
+  mutate(mes  = month(fecha)) %>% 
+  group_by(mes,nombre_provincia_indec,nombre_departamento_indec) %>% 
+  mutate(puestos = mean(puestos),
+         puestos_media = mean(puestos_media),
+    prom_desvio_media =puestos/puestos_media) %>% 
+  group_by(nombre_departamento_indec,nombre_provincia_indec) %>% 
+  filter(prom_desvio_media == max(prom_desvio_media)) %>%
+  ungroup() %>% 
+  distinct(nombre_departamento_indec,nombre_provincia_indec,.keep_all = T) %>% 
+  mutate(mes = format(fecha,"%B"),
+         prom_desvio_media = prom_desvio_media * 100) %>% 
+  ungroup() %>% 
+  arrange(-desvio_media) %>% 
+  mutate(vars3_rangos = case_when(prom_desvio_media <= 110 & prom_desvio_media > 100 ~ "Baja (entre 100% y 110%)",
+                                   prom_desvio_media <= 125 & prom_desvio_media > 110 ~ "Media (entre 110% y 125%)",  
+                                 # prom_desvio_media <= 150 & prom_desvio_media > 125 ~ "(125%, 150%]",
+                                 prom_desvio_media > 125 ~ "Alta (más de 125%)"),
+         mes = factor(mes,levels = c("enero","febrero","marzo","mayo","junio",
+                                        "julio","agosto","noviembre","diciembre"))) %>% 
+  left_join(geo, by =c("codigo_departamento_indec" = "cod_depto_prov")) %>% 
+  mutate(centro = st_centroid(geometry),
+         vars3_rangos = factor(vars3_rangos, levels = c("Baja (entre 100% y 110%)",
+                                                        "Media (entre 110% y 125%)",
+                                                        "Alta (más de 125%)"),
+                               labels = c("Baja <br>(entre 100% y 110%)",
+                                                        "Media <br>(entre 110% y 125%)",
+                                                        "Alta <br>(más de 125%)")))  %>% 
+  mutate(x = as.numeric(map(.x =centro, ~ unlist(.x)[[1]])), # tomo las coordenadas x de geometry
+         y = as.numeric(map(.x =centro, ~ unlist(.x)[[2]])))  %>% #tomo las coord y de geometry
+  filter(!nombre_departamento_indec %in% c("Almirante Brown","La Matanza","Florencio Varela","Avellaneda","Quilmes","Lanús","Berazategui","Lomas de Zamora"))
+datos_depto_mapa %>% 
+  group_by(vars3_rangos) %>% 
+  arrange(-puestos_media) %>% 
+  slice(1:15) %>% 
+  ungroup() %>% 
+ggplot() +
+#geom_sf(data=geo %>% filter(),size = 0.2, fill = "white")+
+  geom_sf(data=geo ,aes(geometry=geometry),fill="white",size=.1,alpha=.1)+
+  geom_sf(data=geo_provs ,aes(geometry=geometry),fill="white",size=.4,alpha=.1)+
+  geom_sf(aes(geometry=centro,size=puestos_media,color=vars3_rangos),alpha=.6)+
+  # scale_color_manual(values = c("(100%, 110%]"="greenyellow",
+  #                               "(110%, 125%]"="limegreen",
+  #                               "(125%, 150%]"="forestgreen",
+  #                               "> 150%" ="darkgreen"), name = "% respecto del promedio")+
+  viridis::scale_color_viridis(discrete = TRUE,name="% respecto del promedio")+
+  scale_size(guide=F)+
+  ggrepel::geom_label_repel(#data = labels_deptos %>% filter(!nombre_departamento_indec %in% c("Almirante Brown",
+  #                                                                                            "La Matanza",
+  #                                                                                            "Quilmes",
+  #                                                                                            "Avellaneda",
+  #                                                                                            "Florencio Varela",
+  #                                                                                            "Lanús",
+  #                                                                                            "Lomas de Zamora"))%>% arrange(-puestos_media) %>% slice(1:15),
+                   aes(label = nombre_departamento_indec, x = x, y = y), seed = 3,
+                   size = 2,
+                   max.overlaps = Inf, # dice si se eliminan etiquetas con overlaps
+                   label.padding = 0.1, force = 3, min.segment.length = 0, fontface = "bold")+ 
+  #guides(size = FALSE)+
+  theme_void()+
+  facet_wrap(~vars3_rangos)+
+  theme(legend.title = element_text(),
+        legend.position = "none",
+        plot.title = element_text(hjust = .5),
+         plot.subtitle = element_text(hjust = .3),
+        strip.text.x = element_markdown(margin=margin(5,0,0,0),face = "bold"),
+        plot.caption = element_markdown(hjust = 0.5))+
+  labs(subtitle = "Empleo en el mes más alto respecto del promedio del año. Prom. 2018-2019",
+       title = "Estacionalidad en el empleo en alojamiento",
+       caption = "Tamaño = puestos en el año (media) <br> Fuente: DNMyE en base a CEP XXI")
+  
+```
+
+# Caracterización provincial
+
+La caracterización de la estacionalidad, medida como el porcentaje del empleo registrado en un mes con respecto al promedio del año, puede realizarse también a nivel provincial, para observar las particularidades de cada una de ellas.
+
+```{r}
+puestos_provincia <- puestos_departamento %>% 
+  left_join(clae_diccionario %>% select(clae2,clae2_desc) %>% distinct(clae2,.keep_all=T)) %>%
+  left_join(deptos_diccionario) %>% 
+  group_by(fecha, clae2,clae2_desc,nombre_provincia_indec) %>% 
+  summarise(puestos = sum(puestos)) %>% 
+  mutate(anio = year(fecha)) %>% 
+  group_by(anio,clae2,clae2_desc,nombre_provincia_indec) %>% 
+  mutate(puestos_media = mean(puestos)) %>% 
+  ungroup() %>% 
+  mutate(desvio_media = puestos/puestos_media) %>% 
+  filter(clae2 == 55) %>% 
+  filter(fecha < "2020-01-01") 
+```
+```{r,fig.height=7,fig.width=5}
+grilla_arg <- get_grid("ARGENTINA") %>%
+  mutate(name = ifelse(name== "SANTIAGO DEL ESTERO","S. DEL ESTERO",name))
+puestos_provincia %>%
+  # mutate(nombre_provincia_indec = case_when(nombre_provincia_indec == "Tierra Del Fuego" ~"T. del Fuego",
+  #                                           nombre_provincia_indec == "Santiago Del Estero" ~ "Sgo. del Estero",
+  #                                           TRUE ~ nombre_provincia_indec)) %>%
+  mutate(nombre_provincia_indec = stringr::str_to_upper(herramientas::limpiar_texto(nombre_provincia_indec)),
+         nombre_provincia_indec = ifelse(nombre_provincia_indec== "SANTIAGO DEL ESTERO","SGO. DEL ESTERO",nombre_provincia_indec)) %>%
+  filter(!is.na(nombre_provincia_indec)) %>%
+  ggplot(aes(x=fecha,y=desvio_media,color=clae2_desc,group=clae2_desc))+
+   geom_line()+
+  geom_point(size=.5)+
+  geom_hline(yintercept = 1,color="black")+
+  scale_y_continuous(labels=scales::percent_format(decimal.mark = ",",big.mark ="."),limits = c(min(puestos_provincia$desvio_media),max(puestos_provincia$desvio_media)),
+                     breaks =c(.8,1,1.2))+
+  scale_x_date(#limits = c(as.Date(min(indice.empleo$fecha)),as.Date(max(indice.empleo$fecha)) + months(15)),
+               date_breaks = "6 months",
+               date_labels = "%b%y",
+               expand=c(0,50))+
+  scale_color_manual(values = c(dnmye_colores(1),dnmye_colores(2),dnmye_colores(3)))+
+  theme_minimal()+
+  labs(title="Empleo del mes como porcentaje del promedio anual",
+       subtitle= "",x="",y="",
+       caption="Fuente: DNMyE en base a CEP XXI")+
+  coord_cartesian(clip = "off")+
+  geofacet::facet_geo(~ nombre_provincia_indec , grid = grilla_arg)+
+  theme(
+    text = element_text(family = "Encode Sans Normal"),
+    plot.title    = element_markdown(size = 11.5),
+    plot.subtitle = element_markdown(size = 10),
+    plot.caption  = element_markdown(size = 8),
+    strip.text.y  = element_text(size = 8, face = "bold"),
+    axis.text.x   = element_text(size = 6,angle=90),
+    axis.text.y   = element_text(size = 6),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    legend.position = "none",
+    strip.placement = "outside",
+    legend.title = element_blank()
+  )
+```
+
+```{r}
+puestos_provincia_estacionalidad <- puestos_provincia %>% 
+  filter(fecha < "2020-01-01" & clae2 == 55 & !is.na(nombre_provincia_indec)) %>% 
+  mutate(mes  = month(fecha)) %>% 
+  group_by(mes,nombre_provincia_indec) %>% 
+  mutate(puestos = mean(puestos),
+         puestos_media = mean(puestos_media),
+         prom_desvio_media = puestos/puestos_media) %>% 
+  group_by(nombre_provincia_indec) %>% 
+  filter(prom_desvio_media == max(prom_desvio_media)) %>%
+  ungroup() %>% 
+  mutate(mes = format(fecha,"%B")) %>% 
+  distinct(nombre_provincia_indec,.keep_all = T)
+```
+
+<br>
+
+Tomando el mes con mayor cantidad de puestos de trabajo y su desvío respecto de la media, es posible observar que la mayoría de las provincias tienen su pico en enero, febrero y diciembre. Córdoba, por ejemplo, tuvo un 20,5% más de empleo en enero con respecto al promedio del año. Mendoza es el ejemplo opuesto: el mes con mayor empleo (febrero) es solamente un 1,7% más que el promedio del año.
+
+```{r}
+puestos_provincia_estacionalidad %>% 
+  select(nombre_provincia_indec,mes,puestos,puestos_media,prom_desvio_media) %>% 
+  arrange(-prom_desvio_media) %>% 
+  gt() %>% 
+  cols_label(
+    nombre_provincia_indec = md("") ,             
+    mes = md("Mes") ,             
+    puestos = md("Puestos") ,                  
+    puestos_media = md("Promedio anual") ,             
+    prom_desvio_media = md("Puestos/Promedio (%)") ,                  
+    ) %>% 
+  fmt_number(columns = c(3,4), decimals = 0, sep_mark = ".", dec_mark = ",") %>% 
+  fmt_percent(columns = c(5), decimals = 1, dec_mark = ",",sep_mark = ".") %>% 
+  cols_align(
+    align = "center",
+    columns = vars(mes,puestos,puestos_media,prom_desvio_media
+    ))  %>% 
+  opt_table_font(
+    font = list(
+      google_font(name = "Encode Sans")
+    )
+  ) %>%
+  tab_header(
+    subtitle = md("**Mes con mayor desvío de la media del año (promedio 2018-2019)**"),
+    title = md("**Puestos en alojamiento por provincia**")
+  ) %>%
+  tab_source_note(
+    source_note = md(
+      "**Fuente**: DNMyE en base a CEP XXI")
+  ) %>% 
+tab_style(
+    style = cell_text(weight =  "bold"),
+    locations = cells_row_groups()
+  )   %>%
+  tab_options(row_group.font.weight = "bold",
+              table.width = 600,
+              table.font.size = 12,
+              data_row.padding = px(1))
+```
+El informe además incluye una descripción de los principales resultados obtenidos para cada provincia en términos de empleo turístico y estacionalidad. En cada una de ellas se seleccionó un conjunto de departamentos que albergan localidades de interés turístico, contemplando tanto destinos consolidados como emergentes o en desarrollo.
+
+El documento forma parte de la serie de Documentos de Trabajo de la DNMyE, disponibles en https://biblioteca.yvera.tur.ar/.
+
+Se puede acceder al documento en el siguiente [link](https://tableros.yvera.tur.ar/recursos/biblioteca/estacionalidad_turismo.pdf)
