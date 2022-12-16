@@ -469,7 +469,7 @@ puestos_provincia %>%
   #                                           nombre_provincia_indec == "Santiago Del Estero" ~ "Sgo. del Estero",
   #                                           TRUE ~ nombre_provincia_indec)) %>%
   mutate(nombre_provincia_indec = stringr::str_to_upper(herramientas::limpiar_texto(nombre_provincia_indec)),
-         nombre_provincia_indec = ifelse(nombre_provincia_indec== "SANTIAGO DEL ESTERO","SGO. DEL ESTERO",nombre_provincia_indec)) %>%
+         nombre_provincia_indec = ifelse(nombre_provincia_indec== "SANTIAGO DEL ESTERO","S. DEL ESTERO",nombre_provincia_indec)) %>%
   filter(!is.na(nombre_provincia_indec)) %>%
   ggplot(aes(x=fecha,y=desvio_media,color=clae2_desc,group=clae2_desc))+
    geom_line()+
