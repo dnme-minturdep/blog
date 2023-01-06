@@ -1,0 +1,94 @@
+---
+title: "Datos abiertos: nuevo dataset sobre Turismo Social"
+description: |
+  Publicación de los primeros datos abiertos sobre Turismo Social en Argentina, con información de turistas que visitaron las Unidades Turísticas.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(comunicacion)
+```
+
+
+El [Observatorio de Turismo Social (OTS)](https://www.argentina.gob.ar/turismoydeportes/social/observatorio-de-turismo-social), perteneciente a la Subsecretaría de Calidad, Accesibilidad y Sustentabilidad del Turismo Nacional, busca mejorar las políticas públicas del sector, contribuyendo a un **turismo más democrático, accesible e inclusivo**. 
+
+El Turismo Social se configura a partir de un sistema público, privado o mixto que bajo los propósitos de la inclusión y la solidaridad facilitan el desarrollo de prácticas turísticas y recreativas en sectores de la población que, a causa de diferentes obstáculos de acceso, se encuentran excluidos o limitados de su disfrute.   
+
+En este marco, el OTS lleva un registro de las principales estadísticas referentes al Turismo Social en Argentina, lo cual permite analizar y caracterizar esta tipología. 
+
+En esta oportunidad, el OTS en colaboración con la Dirección Nacional de Mercados y Estadística (DNMyE), publica de manera abierta, un [conjunto de datos sobre Turismo Social](https://datos.yvera.gob.ar/dataset/turismo-social). En primera instancia, los datos, accesibles a través del portal, refieren a **solicitudes y pernoctaciones de turistas que visitaron las Unidades Turísticas de Chapadmalal en Buenos Aires (UTC) y Embalse en Córdoba (UTE)**.
+
+Los recursos publicados contienen información para el período 2009-2021 con una frecuencia anual y, además de conocer la evolución, permiten desagregar por provincia de origen de los turistas y por tipo de plan utilizado.
+
+De esta manera, se puede ver, por ejemplo, la distribución de pernoctaciones según provincia de origen para el año 2021:
+
+```{r}
+chapadmalal <- readxl::read_excel("/srv/DataDNMYE/turismo_social/recursos/turistas_solicitudes_chapadmalal.xlsx") %>% 
+  mutate(ut = "Chapadmalal")
+embalse <- readxl::read_excel("/srv/DataDNMYE/turismo_social/recursos/turistas_solicitudes_embalse.xlsx") %>% 
+  mutate(ut = "Embalse")
+
+data <- rbind(chapadmalal, embalse)
+
+```
+
+```{r}
+data %>% 
+  filter(indice_tiempo == 2021) %>% 
+  group_by(provincia_nombre, ut) %>% 
+  summarise(cantidad_pernoctes = sum(cantidad_pernoctes)) %>% 
+  ungroup() %>%
+  group_by(ut) %>% 
+  mutate(total = sum(cantidad_pernoctes)) %>% 
+  slice_max(cantidad_pernoctes, n = 5) %>% 
+  ungroup() %>% 
+  mutate(provincia_nombre = fct_reorder(provincia_nombre, cantidad_pernoctes),
+         participacion = cantidad_pernoctes/total) %>% 
+  ggplot(aes(provincia_nombre, cantidad_pernoctes)) +
+  geom_col(aes(fill = provincia_nombre)) +
+  geom_label(aes(label = paste0(format(round(participacion*100,0), decimal.mark = ","), " %")), hjust = -0.1) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.5)), n.breaks = 3) +
+  scale_fill_dnmye() +
+  coord_flip() +
+  facet_wrap(~ut, scales = "free") +
+  labs(x = "", y = "") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        strip.text = element_text(size = 12)) 
+```
+
+Se observa que Buenos Aires y CABA encabezan el top 5 de lugares de origen de los turistas, concentrando el 91% para la UTC y el 79% para la UTE. Sin embargo, la proporción de pernoctes de bonaerenses es mayor en Chapdmalal, mientras que en Embalse hay una mayor participación de turistas de CABA, seguidos por Buenos Aires y Córdoba.
+
+Por otra parte, se puede desagregar por tipo de plan solicitado por los turistas. En este sentido, se ve que **Eventos y Terciarios** es el más requerido, con una participación del 67% para UTC y 58% para UTE, seguido del **Plan Familiar**.
+
+```{r}
+data %>% 
+  filter(indice_tiempo == 2021) %>% 
+  group_by(ut, tipo_plan) %>% 
+  summarise(cantidad_pernoctes = sum(cantidad_pernoctes)) %>% 
+  ungroup() %>% 
+  group_by(ut) %>% 
+  mutate(total = sum(cantidad_pernoctes),
+         participacion = cantidad_pernoctes/total,
+         tipo_plan = fct_reorder(tipo_plan, cantidad_pernoctes)) %>% 
+  ungroup() %>% 
+  ggplot(aes(ut, participacion, fill = tipo_plan)) +
+  geom_col(position="fill", width = 0.8) +
+  hrbrthemes::scale_y_percent(limits = c(0,1)) +
+  scale_fill_dnmye() +
+  labs(x = "", y = "", fill = "Plan") +
+  coord_flip() +
+  theme_minimal()
+```
+
+
+Visitá nuestro [portal de datos abiertos](https://datos.yvera.gob.ar/) para conocer más sobre los datos y realizar tus análisis.
