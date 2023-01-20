@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 La **Dirección Nacional de Créditos e Inversiones Turísticas** de la Subsecretaría de Desarrollo Estratégico del Ministerio de Turismo y Deportes desarrolló una [**plataforma**](http://inversionesturisticas.tur.ar/) **destinada a la Promoción de Inversión Privada en Turismo**. Incluye información a nivel nacional y jurisdiccional relevante para la toma de decisiones para quienes deseen invertir. La misma está disponible en español e inglés y cuenta con más de 80 documentos especializados con información complementaria.
 
-Como parte de esta propuesta, desde la **Dirección Nacional de Mercados y Estadística (DNMyE)**, publicamos un visor de información geográfica que implicó un trabajo de georeferenciación de información y el desarrollo de una herramienta interactiva para facilitar la experiencia de descubrimiento de esa infomración. El mapa forma parte de la Plataforma de Inversiones Turísticas y fue desarrollado con el objetivo de facilitar el análisis y la toma de decisiones sobre las oportunidades de negocios en el contexto de sus jurisdicciones.
+Como parte de esta propuesta, desde la **Dirección Nacional de Mercados y Estadística (DNMyE)**, publicamos un visor de información geográfica que implicó un trabajo de georeferenciación de información y el desarrollo de una herramienta interactiva, como parte de la **Plataforma de Inversiones Turísticas,** con el objetivo de facilitar el análisis y la toma de decisiones sobre las oportunidades de negocios en el contexto de las jurisdicciones.
 
 ```{r echo=FALSE}
 
