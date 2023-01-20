@@ -1,7 +1,7 @@
 ---
 title: "Mapa Interactivo para Inversiones Turísticas"
 description: |
-  Desarrollo de un visor de información gegoráfica sobre el turismo junto a oportunidades de negocio geolocalizadas para la toma de decisiones de inversión.
+  Desarrollo de un visor de información geográfica sobre el turismo junto a oportunidades de negocio geolocalizadas para la toma de decisiones de inversión.
 output:
   distill::distill_article:
     self_contained: true
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 La **Dirección Nacional de Créditos e Inversiones Turísticas** de la Subsecretaría de Desarrollo Estratégico del Ministerio de Turismo y Deportes desarrolló una [**plataforma**](http://inversionesturisticas.tur.ar/) **destinada a la Promoción de Inversión Privada en Turismo**. Incluye información a nivel nacional y jurisdiccional relevante para la toma de decisiones para quienes deseen invertir. La misma está disponible en español e inglés y cuenta con más de 80 documentos especializados con información complementaria.
 
-Como parte de esta propuesta, desde la **Dirección Nacional de Mercados y Estadística (DNMyE)**, publicamos un visor de información geográfica que implicó un trabajo de georeferenciación de información y el desarrollo de una herramienta interactiva, como parte de la **Plataforma de Inversiones Turísticas,** con el objetivo de facilitar el análisis y la toma de decisiones sobre las oportunidades de negocios en el contexto de las jurisdicciones.
+Como parte de esta propuesta, desde la **Dirección Nacional de Mercados y Estadística (DNMyE)**, publicamos un visor de información geográfica que implicó un trabajo de georreferenciación de información y el desarrollo de una herramienta interactiva, como parte de la **Plataforma de Inversiones Turísticas,** con el objetivo de facilitar el análisis y la toma de decisiones sobre las oportunidades de negocios en el contexto de las jurisdicciones.
 
 ```{r echo=FALSE}
 
@@ -30,7 +30,7 @@ knitr::include_graphics("sig.png")
 
 2.  Por defecto muestra dos tipos de referencias relativas a las Inversiones Turísticas: **(a) Oportunidades de Inversión y (b) Territorios de Oportunidad.**
 
-3.  Una vez elegido un distrito se puede marcar una caja que permite visualizar **Obras de Infraestructura Turística** en curso e (diferenciando si las mismas ya se encuentran financiadas o proyectadas).
+3.  Una vez elegido un distrito se puede marcar una caja que permite visualizar **Obras de Infraestructura Turística** en curso (diferenciando si las mismas ya se encuentran financiadas o proyectadas).
 
 4.  La herramienta presenta luego tres tipos de **capas de información adicional** que pueden ser activadas:
 
@@ -38,7 +38,7 @@ knitr::include_graphics("sig.png")
 
     -   ***ESTADÍSTICAS***: una selección de indicadores de oferta y demanda del sector hotelero y acceso a internet de la población.\
 
-    -   ***CAPAS GEOGRAFCIAS***: permite visualizar polígonos de áreas protegidas y la propuesta territorial del programa [La Ruta Natural](https://larutanatural.gob.ar/).
+    -   ***CAPAS GEOGRÁFICAS***: permite visualizar polígonos de áreas protegidas y la propuesta territorial del programa [La Ruta Natural](https://larutanatural.gob.ar/).
 
 ## 🔗 ACCESO AL MAPA <https://tableros.yvera.tur.ar/inversiones/>
 
@@ -62,7 +62,7 @@ knitr::include_graphics("sig.png")
 
 -   Los datos de los aeropuertos provienen de información facilitada por la [Administración Nacional de Aviación Civil](https://datos.anac.gob.ar/estadisticas/).
 
--   Los datos correspondientes a cantidad de plazas por departamento provienen del [Padrón Único Nacional de Alojamiento (PUNA)](https://tableros.yvera.tur.ar/puna/) de la Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE)
+-   Los datos correspondientes a cantidad de plazas por departamento provienen del [Padrón Único Nacional de Alojamiento (PUNA)](https://tableros.yvera.tur.ar/puna/) de la Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación (DNMyE).
 
 -   Los datos de demanda turística fueron elaborados a partir de la [Encuesta de Ocupación Hotelera](https://tableros.yvera.tur.ar/eoh.html) realizada por la DNMyE junto al Instituto Nacional de Estadísticas y Censos.
 
@@ -70,4 +70,4 @@ knitr::include_graphics("sig.png")
 
 -   La capa geográfica de áreas protegidas proviene del [IGN](https://www.ign.gob.ar/NuestrasActividades/InformacionGeoespacial/CapasSIG) a partir de la cual la DNMyE ha realizado una selección.
 
--   La capa geográfica de rutas naturales fue elaborada por el Ministerio de Turismo y Deportes de la Nación. Para más detalles ver [La propuesta territorial de La Ruta Natural](https://tableros.yvera.tur.ar/recursos/biblioteca/propuesta_territorial_lrn.pdf)
+-   La capa geográfica de rutas naturales fue elaborada por el Ministerio de Turismo y Deportes de la Nación. Para más detalles ver [La propuesta territorial de La Ruta Natural](https://tableros.yvera.tur.ar/recursos/biblioteca/propuesta_territorial_lrn.pdf).
