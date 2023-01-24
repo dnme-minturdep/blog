@@ -37,7 +37,7 @@ knitr::include_graphics("ti2.png")
 
 **EMISIVO / RECEPTIVO**
 
-Las pestañas por tipo de turismo (emisivo o receptivo) de la versión previa permiten ahora acceder a las estimaciones no sólo de Turistas, que es el valor por defecto en ambas pestañas, sino también de Excursionistas (aquellos visitantes que no pernoctan en el destino). Una caja de selección al comienzo de los respectivos módulos de *FILTRO* permite seleccionar la opción de preferencia.
+Las pestañas por tipo de turismo (emisivo o receptivo) de la versión previa permiten ahora no sólo acceder a las estimaciones de los viajes de los turistas, que es el valor por defecto en ambas pestañas, sino también a los viajes de los excursionistas (aquellos visitantes que no pernoctan en el destino). Una caja de selección al comienzo de los respectivos módulos de *FILTRO* permite seleccionar la opción de preferencia.
 
 Por otro lado se generó la posibilidad de nuevas aperturas dentro de los módulos de *VISUALIZACIÓN*. A las variables ya habilitadas (para *Mostrar por* los datos previamente filtrados), como ser `Mes`, `Vía`, `Paso`, etc., se agregaron `Tipo de Visitante`, `Género` y `Tramos de edad`.
 
@@ -47,7 +47,8 @@ knitr::include_graphics("ti3.png")
 
 **PERFIL RECEPTIVO**
 
-Esta nueva pestaña permite caracterizar el perfil del turismo receptivo que egresó del país por los pasos de Ezeiza y Aeroparque, a partir de la [Encuesta de Turismo Internacional (ETI)](https://bitacora.yvera.tur.ar/posts/2022-05-31-intro-eti/ "Encuesta de Turismo Internacional (ETI)"). Se pueden analizar algunas características de los turistas (país de residencia, tipo de alojamiento principal en el país, motivo de viaje), así como conocer los destinos (localidades, provincias) que han visitado en la Argentina.
+Esta nueva pestaña permite caracterizar el perfil del turismo receptivo que egresó del país por los pasos de Ezeiza y Aeroparque, a partir de la [Encuesta de Turismo Internacional (ETI)](https://bitacora.yvera.tur.ar/posts/2022-05-31-intro-eti/ "Encuesta de Turismo Internacional (ETI)"). Se pueden analizar algunas características de los turistas (país de residencia, tipo de alojamiento principal en el país, motivo de viaje), así como conocer los destinos (localidades, provincias) que han visitado en la Argentina y el gasto turístico -a nivel trimestral- que han realizado durante sus viajes en el país.
+
 
 <aside>
 
