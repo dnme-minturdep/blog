@@ -35,6 +35,11 @@ html {
 }
 
 
+a {
+  
+  --target: '_blank'
+}
+
 
 /*-- WEBSITE HEADER + FOOTER --*/
 /* These properties only apply to Distill sites and blogs  */
@@ -144,3 +149,4 @@ body {
   border: 1px solid black;
   border-radius: 10px;
 }
+

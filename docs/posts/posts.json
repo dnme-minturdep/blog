@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2023-01-24-nueva-versin-del-tablero-de-turismo-internacional/",
+    "title": "Nueva versión del Tablero de Turismo Internacional",
+    "description": "Nuevos datos para la caracterización de los visitantes",
+    "author": [],
+    "date": "2023-01-24",
+    "categories": [],
+    "contents": "\n💻 TABLERO: Turismo Internacional\nEl tablero de TURISMO INTERNACIONAL presenta las estimaciones de turismo receptivo y emisivo de la Argentina. Esta nueva versión incorpora novedades que permiten, por ejemplo, cuantificar y caracterizar a los viajes de los visitantes internacionales (sumando datos de excursionistas a los de turistas), o la caracterización de perfiles de turismo receptivo (no residentes que visitan Argentina).\n\n\n\nNOVEDADES\nRESUMEN\nLa primera pestaña presenta el contenido de toda la aplicación, a la vez que permite visualizar rápidamente una serie de tiempo con las estimaciones de Emisivo y Receptivo, incorporando un menú desplegable que permite explorar la serie por mercados (por país de residencia o destino agrupado). Se agregaron además dos nuevas visualizaciones que muestran el acumulado anual al último dato disponible por mercado y por medio de transporte.\n\n\n\nEMISIVO / RECEPTIVO\nLas pestañas por tipo de turismo (emisivo o receptivo) de la versión previa permiten ahora acceder a las estimaciones no sólo de Turistas, que es el valor por defecto en ambas pestañas, sino también de Excursionistas (aquellos visitantes que no pernoctan en el destino). Una caja de selección al comienzo de los respectivos módulos de FILTRO permite seleccionar la opción de preferencia.\nPor otro lado se generó la posibilidad de nuevas aperturas dentro de los módulos de VISUALIZACIÓN. A las variables ya habilitadas (para Mostrar por los datos previamente filtrados), como ser Mes, Vía, Paso, etc., se agregaron Tipo de Visitante, Género y Tramos de edad.\n\n\n\nPERFIL RECEPTIVO\nEsta nueva pestaña permite caracterizar el perfil del turismo receptivo que egresó del país por los pasos de Ezeiza y Aeroparque, a partir de la Encuesta de Turismo Internacional (ETI). Se pueden analizar algunas características de los turistas (país de residencia, tipo de alojamiento principal en el país, motivo de viaje), así como conocer los destinos (localidades, provincias) que han visitado en la Argentina.\nEncuesta de Turismo Internacional (ETI)\n📊 Datos Abiertos\n📚 Metodología\n📑 Reportes\n\nSe puede acceder a la plataforma desde la página del SINTA o directamente desde la página: https://tableros.yvera.tur.ar/turismo_internacional/\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2023-01-24-nueva-versin-del-tablero-de-turismo-internacional/distill-preview.png",
+    "last_modified": "2023-01-24T14:57:47-03:00",
+    "input_file": "nueva-versin-del-tablero-de-turismo-internacional.knit.md"
+  },
+  {
     "path": "posts/2023-01-19-mapa-interactivo-para-inversiones-tursticas/",
     "title": "Mapa Interactivo para Inversiones Turísticas",
     "description": "Desarrollo de un visor de información geográfica sobre el turismo junto a oportunidades de negocio geolocalizadas para la toma de decisiones de inversión.",
