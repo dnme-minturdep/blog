@@ -1,0 +1,95 @@
+---
+title: "Encuesta a prestadores turísticos"
+description: |
+ Publicación del documento que resume los resultados de la encuesta a prestadores turísticos que participaron de programas del Ministerio, realizada en marzo de 2022. 
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: true    
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Presentación
+
+En forma complementaria a la elaboración del [Documento de Trabajo N°5 - Informe de cadena de valor del turismo](https://tableros.yvera.tur.ar/recursos/biblioteca/cadena_de_valor.pdf), la Dirección Nacional de Mercados y Estadísticas (DNMyE)  realizó, en marzo de 2022, una encuesta a prestadores turísticos inscriptos en programas del Ministerio de Turismo y Deportes de la Nación. Con ella se buscó conocer las principales fortalezas y desafíos que enfrentan los diferentes actores que componen la cadena de valor del sector, así como el impacto de la pandemia sobre la actividad y las nuevas tendencias esperadas por los prestadores.
+
+La encuesta consistió en un formulario online, de respuesta anónima y no obligatoria, dividido en cinco bloques. El primer bloque, general a todos los prestadores, buscó relevar las características principales de los participantes. El segundo bloque se centró en preguntas específicas para los rubros de alojamiento, agencias de viajes y transporte. En el tercer bloque se consultó sobre el impacto de la pandemia en la actividad y acerca de la utilización de programas de auxilio del Estado y líneas de financiamiento. El bloque cuatro estuvo destinado a conocer las principales limitaciones enfrentadas por los encuestados en los rubros y provincias o regiones en las que operan, y las soluciones potenciales para superar dichas restricciones. Por último, el quinto bloque ahondó sobre las tendencias esperadas en el sector turístico en la pospandemia. 
+
+En total, la encuesta fue enviada por mail a 19.258 prestadores de servicios de alojamiento, agencias de viajes, transporte, gastronomía, guías de turismo, entre otros, y respondida por 2.882. 
+
+# Características generales
+
+De acuerdo con el relevamiento realizado, las cuatro grandes categorías consideradas núcleo (Agencias de viajes, Transporte, Alojamiento y Gastronomía) representan el 70% del total de encuestados. El restante 30% se reparte entre otras actividades productoras de bienes y servicios complementarios y aquellos desarrollados en parques nacionales, playas, museos y parques temáticos. Los guías de turismo y los prestadores dedicados a las excursiones representan una porción significativa de los encuestados, con un 12% y 10%, respectivamente.
+
+```{r}
+viz_encuesta <- readr::read_rds("viz_bitacora.rds")
+viz_encuesta$tabla_sector
+```
+
+
+Las provincias en las que operan más prestadores son Buenos Aires, CABA, Córdoba, Río Negro y Mendoza, que acumulan el 51% de las respuestas.
+
+```{r}
+viz_encuesta$graf_prov+
+  theme(legend.text = element_text(size = 5))
+```
+
+La distribución de la cantidad de empleados entre los distintos rubros es heterogénea. El rubro gastronomía es el de menor participación de prestadores sin empleados (29%), mientras que la venta de artesanías y productos regionales cuenta con un 93% de prestadores sin empleados. De manera similar, los guías de turismo y servicios de excursiones también presentan un alto porcentaje de prestadores sin empleados.
+
+```{r}
+viz_encuesta$empleados_act+
+  theme(legend.text = element_text(size = 5))
+```
+
+# Impacto de la pandemia
+
+De acuerdo con el relevamiento realizado, se observan respuestas dispares en relación a la variación de la cantidad de trabajadores respecto de 2019. La opción que indica que no varió la dotación de trabajadores, y aquella que muestra una caída mayor al 25% representan la mayoría de las respuestas. Los rubros alojamiento, agencias de viajes, gastronomía, transporte y venta de artesanías tienen como respuesta más frecuente el mantenimiento de la dotación. En cambio, los servicios de guías de turismo y de excursiones muestran una caída superior al 25% como respuesta más elegida.
+
+```{r, fig.width=10, fig.asp = 1}
+viz_encuesta$var_empleo
+```
+
+Con el fin de mitigar los efectos de la pandemia en este sector, el gobierno implementó un paquete de medidas en el período 2020-2021. En ese marco, el 85% de los encuestados señaló haber recibido algún tipo de asistencia. Entre los principales programas utilizados por las empresas/trabajadores independientes, aparecen APTur, con 954 respuestas, PreViaje (666), REPRO 2 (625) y ATP (620).
+
+```{r, fig.width=10, fig.asp = 1}
+viz_encuesta$programas_sector
+```
+
+Complementariamente a los programas de asistencia, estuvieron vigentes distintas líneas de crédito orientadas a financiar capital de trabajo e inversiones. De acuerdo con la encuesta, el 33% de los consultados tuvo acceso a ellas. Los porcentajes más elevados correspondieron a las categorías gastronomía (43,5%) y alojamiento (39%).
+
+# Limitantes para el desarrollo y posibles soluciones
+
+Frente a la consulta sobre los limitantes al desarrollo del sector, se destaca la mención a la insuficiente infraestructura en el rubro alojamiento, guía de turismo y excursiones. Las dificultades de acceso al crédito son relevantes en agencias de viajes, transporte y gastronomía. Los problemas de conectividad fueron elegidos por prestadores de agencias de viaje y alojamiento. La falta de promoción turística es señalada por guías de turismo, organizadores de excursiones y alojamientos. La dificultad de contratación en puestos operativos es señalada en el rubro gastronómico como limitante más frecuente. 
+
+```{r, fig.width=10, fig.asp = 1}
+viz_encuesta$restriccion_rubro
+```
+
+Adicionalmente, se preguntó qué políticas consideran los prestadores que podrían ayudar a superar las limitaciones antes mencionadas. La opción por facilidades de financiamiento ocupó un lugar destacado. La inversión en infraestructura complementaria para la puesta en valor de los destinos turísticos es una opción mencionada especialmente entre prestadores de alojamiento, guías de turismo, excursiones, transporte y venta de artesanías. Los programas de promoción de los destinos, así como aquellos de consolidación de la oferta y la generación de nuevos productos, circuitos y rutas complementarias, fueron otras de las políticas predominantes entre las elecciones de los prestadores.
+
+# Prospectiva
+
+La pandemia ha modificado los comportamientos y gustos de los viajeros, con creciente interés en lo natural, lo personalizado o en grupos reducidos y con cierta flexibilidad a posibles contingencias. De la encuesta, surge que la principal transformación fue, previsiblemente, una mayor preferencia por el turismo dentro del país. En este sentido, el interés por el turismo de naturaleza muestra una participación destacada. El aumento de las reservas de último momento y con posibilidades de cancelación destacan entre las respuestas de los prestadores de agencias de viajes. La preferencia por destinos turísticos no masivos está presente también en prestadores de excursiones, gastronomía y transporte.
+
+```{r, fig.width=10, fig.asp = 1}
+viz_encuesta$cambios_pandemia
+```
+
+La gran mayoría de los encuestados considera que estos cambios se mantendrán en los próximos años: todas las categorías muestran valores cercanos al 80% respondiendo afirmativamente.
+
+Hasta aquí se presentan los principales resultados. El informe incluye además un análisis con mayor detalle de cada bloque de la encuesta y una sección especial para el bloque dos, que contiene preguntas específicas para los rubros Alojamientos, Agencias de viaje y Transporte.  
+
+El documento forma parte de la serie de Documentos de Trabajo de la DNMyE, disponibles en https://biblioteca.yvera.tur.ar/.
+
+Se puede acceder al documento en el siguiente [enlace](https://tableros.yvera.tur.ar/recursos/biblioteca/DT7_encuesta_prestadores.pdf) 
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
