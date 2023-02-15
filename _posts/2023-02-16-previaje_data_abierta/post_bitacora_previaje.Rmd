@@ -333,7 +333,7 @@ graf_previaje_od <- provs_viajes_destino %>%
   labs(title = "Viajes por provincia de origen y destino en Previaje")+
   theme(legend.position = "none",
         strip.placement = "outside",
-        strip.text = element_text(family = "Encode Sans",size = 12,vjust = 1.5))
+        strip.text = element_text(family = "Encode Sans",size = 12,vjust = 1))
 
 graf_previaje_od    
 ```
