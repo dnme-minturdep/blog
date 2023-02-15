@@ -19,5 +19,5 @@ Para actualizar el contenido del *blog* es necesario hacer un *fork* del repo.
 
 -   Para crear un nuevo *post* ejecutar el siguiente código `distill::create_post(title = "Titulo del Post", draft = TRUE)` . El mismo genera un nuevo archivo `.Rmd` a partir del cual se genera la publicación, pero setéa en el `YAML` (encabezado del documento) que el mismo será borrador.
 
--   Para empezar a listar la publicación en el landing del *blog* hay que cambiar el parámetro `draft = TRUE` en el `YAML` del `.Rmd`
+-   Para empezar a listar la publicación en el landing del *blog* hay que cambiar el parámetro `draft = FALSE` en el `YAML` del `.Rmd`
 

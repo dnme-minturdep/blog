@@ -1,0 +1,31 @@
+{
+"type": "FeatureCollection",
+"name": "centroides_prov",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "codprov_censo": "02", "codprov": "01", "codprov_iso": "AR-C", "name_iso": "Ciudad Autónoma de Buenos Aires" }, "geometry": { "type": "Point", "coordinates": [ -58.450878211287808, -34.609370451944152 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "10", "codprov": "03", "codprov_iso": "AR-K", "name_iso": "Catamarca" }, "geometry": { "type": "Point", "coordinates": [ -67.259512646834807, -27.280873717581077 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "14", "codprov": "04", "codprov_iso": "AR-X", "name_iso": "Córdoba" }, "geometry": { "type": "Point", "coordinates": [ -63.845729056987565, -31.189893593101448 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "18", "codprov": "05", "codprov_iso": "AR-W", "name_iso": "Corrientes" }, "geometry": { "type": "Point", "coordinates": [ -57.695483006052989, -28.536269982273193 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "22", "codprov": "06", "codprov_iso": "AR-H", "name_iso": "Chaco" }, "geometry": { "type": "Point", "coordinates": [ -60.496426846297759, -26.913453799192315 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "30", "codprov": "08", "codprov_iso": "AR-E", "name_iso": "Entre Ríos" }, "geometry": { "type": "Point", "coordinates": [ -59.438124979924893, -32.343792032341909 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "34", "codprov": "09", "codprov_iso": "AR-P", "name_iso": "Formosa" }, "geometry": { "type": "Point", "coordinates": [ -58.869884152372784, -25.587353350731846 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "38", "codprov": "10", "codprov_iso": "AR-Y", "name_iso": "Jujuy" }, "geometry": { "type": "Point", "coordinates": [ -66.013403880476062, -22.755386912625791 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "42", "codprov": "11", "codprov_iso": "AR-L", "name_iso": "La Pampa" }, "geometry": { "type": "Point", "coordinates": [ -65.221756899947394, -37.4026678060699 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "46", "codprov": "12", "codprov_iso": "AR-F", "name_iso": "La Rioja" }, "geometry": { "type": "Point", "coordinates": [ -66.722980973205338, -29.773906157291812 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "50", "codprov": "13", "codprov_iso": "AR-M", "name_iso": "Mendoza" }, "geometry": { "type": "Point", "coordinates": [ -68.328593742431252, -34.699168688485578 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "54", "codprov": "14", "codprov_iso": "AR-N", "name_iso": "Misiones" }, "geometry": { "type": "Point", "coordinates": [ -54.270473980391557, -26.759579502383112 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "58", "codprov": "15", "codprov_iso": "AR-Q", "name_iso": "Neuquén" }, "geometry": { "type": "Point", "coordinates": [ -69.568181397984389, -38.306992531359036 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "62", "codprov": "16", "codprov_iso": "AR-R", "name_iso": "Río Negro" }, "geometry": { "type": "Point", "coordinates": [ -67.13769990245261, -40.42916116612664 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "66", "codprov": "17", "codprov_iso": "AR-A", "name_iso": "Salta" }, "geometry": { "type": "Point", "coordinates": [ -63.324302493773828, -23.036599384022626 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "70", "codprov": "18", "codprov_iso": "AR-J", "name_iso": "San Juan" }, "geometry": { "type": "Point", "coordinates": [ -68.771004858882463, -30.899425413268276 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "74", "codprov": "19", "codprov_iso": "AR-D", "name_iso": "San Luis" }, "geometry": { "type": "Point", "coordinates": [ -66.132177948467657, -32.898932347817087 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "82", "codprov": "21", "codprov_iso": "AR-S", "name_iso": "Santa Fe" }, "geometry": { "type": "Point", "coordinates": [ -60.841414571930997, -29.958513137229286 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "86", "codprov": "22", "codprov_iso": "AR-G", "name_iso": "Santiago del Estero" }, "geometry": { "type": "Point", "coordinates": [ -63.40685310597808, -28.164710252799946 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "90", "codprov": "23", "codprov_iso": "AR-T", "name_iso": "Tucumán" }, "geometry": { "type": "Point", "coordinates": [ -65.297950208519183, -26.716328842656765 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "78", "codprov": "20", "codprov_iso": "AR-Z", "name_iso": "Santa Cruz" }, "geometry": { "type": "Point", "coordinates": [ -69.418034759071617, -47.762642090750475 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "06", "codprov": "02", "codprov_iso": "AR-B", "name_iso": "Buenos Aires" }, "geometry": { "type": "Point", "coordinates": [ -60.375129242057412, -36.490280994605016 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "26", "codprov": "07", "codprov_iso": "AR-U", "name_iso": "Chubut" }, "geometry": { "type": "Point", "coordinates": [ -68.687914948749437, -43.873380612191681 ] } },
+{ "type": "Feature", "properties": { "codprov_censo": "94", "codprov": "24", "codprov_iso": "AR-V", "name_iso": "Tierra del Fuego" }, "geometry": { "type": "Point", "coordinates": [ -67.823343233473494, -54.400797143284301 ] } }
+]
+}
