@@ -98,9 +98,9 @@ Fuente: Elaboración propia en base a datos de PUNA.
 
 # Resultados
 
-Sobre la clasificación obtenida mediante el algoritmo de "Head-Tails" se realizó un análisis de los casos con valores cercanos a los puntos de corte en función de considerar especifidades de los mismos que no estuvieran reflejados en su cantidad de plazas de alojamiento. En función de ese análisis se corrigieron marginalmente los puntos de corte llegar a una nueva clasificación.
+Sobre la clasificación obtenida mediante el algoritmo de "Head-Tails" se realizó un análisis de los casos con valores cercanos a los puntos de corte en función de considerar especificidades de los mismos que no estuvieran reflejados en su cantidad de plazas de alojamiento. En función de ese análisis se corrigieron marginalmente los puntos de corte para llegar a una nueva clasificación.
 
-Mediante esa corrección se llegó a la siguiente distribución de la clasificación de las localidades PUNA: 1089 localidades en la categoría *emergente*, 115 localidades en la categoría *en desarrollo* y 78 localidades en la categoría *consolidado*. Se puede observar en el siguiente mapa la distribución espacial que resulta de la clasifación realizada.
+Mediante esa corrección se llegó a la siguiente distribución de la clasificación de las localidades PUNA: 1089 localidades en la categoría *emergente*, 115 localidades en la categoría *en desarrollo* y 78 localidades en la categoría *consolidado*. Se puede observar en el siguiente mapa la distribución espacial que resulta de la clasificación realizada.
 
 **Distribución geográfica de las localidades clasificadas**
 ```{r, fig.height= 7}
@@ -160,7 +160,7 @@ En tal sentido las próximas iteraciones de la propuesta de clasificación del n
 
 # 🔗 Documento de Trabajo N°8
 
-Se puede descaragar el documento **[Clasificación de localidades según nivel de desarrollo turístico](https://tableros.yvera.tur.ar/recursos/biblioteca/DT8_clasificacion_localidades.pdf)** de la  BIBLIOTECA del  [Sistema de Información Turística de Argentina (SINTA)](https://www.yvera.tur.ar/sinta/)  https://biblioteca.yvera.tur.ar/
+Se puede descargar el documento **[Clasificación de localidades según nivel de desarrollo turístico](https://tableros.yvera.tur.ar/recursos/biblioteca/DT8_clasificacion_localidades.pdf)** de la  BIBLIOTECA del  [Sistema de Información Turística de Argentina (SINTA)](https://www.yvera.tur.ar/sinta/)  https://biblioteca.yvera.tur.ar/
 
 
 # 🔗 Recursos
