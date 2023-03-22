@@ -82,7 +82,7 @@ Los datos obtenidos a partir de estos procesamientos nos permiten realizar un mo
 
 Antes de comenzar con la descripción del contenido del informe, se deben hacer algunas aclaraciones:
 
-+ Solo se presentan datos vinculados al **crucerismo marítimo** en nuestor país, **quedando de esta manera excluido el crucerismo fluvial**.
++ Solo se presentan datos vinculados al **crucerismo marítimo** en nuestro país, **quedando de esta manera excluido el crucerismo fluvial**.
 
 + Al utilizar como insumo los datos aportados por la DNM, **no es incluida información vinculada a los cruceristas transportados por cruceros que realizaron movimientos internos** (la DNM solo registra los movimientos que suponen traspasar las fronteras argentinas). Este punto es importante, ya que podrán observarse diferencias con la información de cruceristas provenientes de otras fuentes.
 
@@ -114,19 +114,20 @@ cruceristas_anio <- cruceristas %>%
 #Gráfico
 
 ggplot(data=cruceristas_anio %>% mutate(residencia=factor(residencia,levels = c("Total","Residentes","No residentes"))) ,aes(x=temporada,y=cruceristas,color=residencia,label=cruceristas))+
-  geom_text(hjust=1.5,size=5)+
+  geom_text(hjust=1.5)+
   geom_point(size=5, alpha = 0.9)+
   geom_hline(yintercept = 0, color = "black")+
+  coord_cartesian(clip="off")+
   scale_color_manual(values = c("Residentes" = dnmye_colores("cian"),
                                 "No residentes" = dnmye_colores("rosa"),
                                 "Total" = dnmye_colores("gris oscuro")))+
-  labs(title = "Cruceristas (en miles) por temporada, según condición de residencia",
+  labs(title = "Cruceristas (en miles) por temporada, \nsegún condición de residencia",
        subtitle = titulos_serie,
        x = "",
        y = "",
        colour="",
        caption = "Fuente: DNMyE en base a DNM.") +
-  theme(text = element_text(size = 18, family = "Encode Sans Normal"),
+  theme(text = element_text(family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         plot.title=element_text(hjust = 0,face = "bold"),
@@ -308,7 +309,7 @@ graf <- cruceristas_resi_completo %>%
   mutate(residencia=factor(residencia,levels = c("Total","Residentes","No residentes"))) %>% 
 ggplot(aes(x=anio_mes,y=cruceristas, color=residencia,text=cruceristas))+
   geom_line(linewidth=2,alpha = 0.4)+
-  geom_point(size=3, alpha = 0.9)+
+  geom_point( alpha = 0.9)+
   geom_hline(yintercept = 0, color = "black")+
   scale_color_manual(values = c("Residentes" = dnmye_colores("cian"),
                                 "No residentes" = dnmye_colores("rosa"),
@@ -319,7 +320,7 @@ ggplot(aes(x=anio_mes,y=cruceristas, color=residencia,text=cruceristas))+
        y = "",
        colour="",
        caption = "Fuente: DNMyE en base a DNM.") +
-  theme(text = element_text(size = 12, family = "Encode Sans Normal"),
+  theme(text = element_text( family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         plot.title=element_text(hjust = 0,face = "bold"),
@@ -333,7 +334,7 @@ ggplot(aes(x=anio_mes,y=cruceristas, color=residencia,text=cruceristas))+
                                             linetype = 1),
         panel.background = element_blank(),
         axis.text.x = element_text(angle = 90)) + 
-  scale_x_date(date_breaks = "1 months",
+  scale_x_date(date_breaks = "3 months",
                date_labels = "%b-%y",
                expand = c(0,40))+
   theme(#axis.text.y =element_blank(),
@@ -438,7 +439,7 @@ ggplot(data=nacion_total %>%mutate(nacion_2 = factor(nacion_2,levels=nacionalida
        aes(x=valor,y=nacion_2,fill=colores,
            label=glue("{valor} %")))+
   geom_col()+ 
-  geom_text(hjust = "inward",size=10) +
+  geom_text(hjust = "inward") +
   #scale_fill_dnmye()+
   scale_fill_manual(values = c("1"=dnmye_colores("cian"),
                                "2"=dnmye_colores("rosa"),
@@ -451,7 +452,7 @@ ggplot(data=nacion_total %>%mutate(nacion_2 = factor(nacion_2,levels=nacionalida
        colour="",
        caption = "Fuente: DNMyE en base a DNM.")+
   theme_minimal()+
-  theme(text = element_text(family = "Encode Sans Normal",size = 20),
+  theme(text = element_text(family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
@@ -500,7 +501,7 @@ ggplot(data=dist_sexo %>% mutate(sexo_2=factor(sexo_2,levels = c("Masculino","Fe
        aes(x=valor,y=sexo_2,fill=sexo_2,
            label=glue("{valor} %")))+
   geom_col()+ 
-  geom_text(position = position_stack(vjust = .5),size=10) +
+  geom_text(position = position_stack(vjust = .5)) +
   scale_fill_dnmye(reverse = TRUE)+
   theme(legend.position='none')+
   labs(title = "Distribución de los cruceristas según género",
@@ -510,7 +511,7 @@ ggplot(data=dist_sexo %>% mutate(sexo_2=factor(sexo_2,levels = c("Masculino","Fe
        colour="",
        caption = "Fuente: DNMyE en base a DNM.")+
   theme_minimal()+
-  theme(text = element_text(family = "Encode Sans Normal",size=20),
+  theme(text = element_text(family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
@@ -555,7 +556,7 @@ ggplot(data=edad %>% mutate(grupo_etario=factor(grupo_etario,
        aes(x=valor,y=grupo_etario,fill=grupo_etario,
            label=glue("{valor} %")))+
   geom_col()+ 
-  geom_text(position = position_stack(vjust = .5),size=8) +
+  geom_text(position = position_stack(vjust = .5)) +
   scale_fill_dnmye(reverse = TRUE)+
   theme(legend.position='none')+
   labs(title = "Distribución de los cruceristas según grupo etario",
@@ -565,7 +566,7 @@ ggplot(data=edad %>% mutate(grupo_etario=factor(grupo_etario,
        colour="",
        caption = "Fuente: DNMyE en base a DNM.")+
   theme_minimal()+
-  theme(text = element_text(family = "Encode Sans Normal",size=20),
+  theme(text = element_text(family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
@@ -621,17 +622,17 @@ ggplot(data=vlcv_b %>% mutate(puerto=factor(puerto,levels = c("TOTAL","CABA","Pu
                               vlcv=factor(vlcv,levels = c("VLCV","Otros","Sin datos"))),
        aes(x=puerto,y=valor,fill=vlcv,label=glue("{valor} %")))+
   geom_col()+
-  geom_text(position = position_stack(vjust = .5),size=8)+
+  geom_text(position = position_stack(vjust = .5))+
   theme_minimal()+
   scale_y_continuous(labels = function(x) paste0(x,"%"))+
-  labs(title = "Distribución de los pasajeros transportados según tamaño de embarcación, por puerto.",
+  labs(title = "Distribución de los cruceristas según tamaño \nde embarcación, por puerto.",
        subtitle = glue("{titulos}"),
        x = "",
        y = "",
        colour="",
        caption = "Fuente: DNMyE en base a DNM.")+
   scale_fill_dnmye()+
-  theme(text = element_text(family = "Encode Sans Normal",size=20),
+  theme(text = element_text(family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
@@ -639,7 +640,7 @@ ggplot(data=vlcv_b %>% mutate(puerto=factor(puerto,levels = c("TOTAL","CABA","Pu
         panel.grid = element_blank(),
         legend.title = element_blank(),
         legend.position = "right",
-        strip.text.x = element_text(size=14))
+        strip.text.x = element_text())
 
 
 rm(vlcv_a,vlcv_b)
@@ -694,7 +695,7 @@ ggplot(data=pax_x_b %>%mutate(crucero = factor(crucero,levels=orden_cruceros)),
        aes(x=valor,y=crucero,fill=crucero,
            label=glue("{valor} %")))+
   geom_col()+ 
-  geom_text(hjust = "inward",size=8) +
+  geom_text(hjust = "inward") +
   scale_fill_dnmye(reverse = TRUE)+
   theme(legend.position='none')+
   labs(title = "Distribución de los cruceristas por crucero",
@@ -704,7 +705,7 @@ ggplot(data=pax_x_b %>%mutate(crucero = factor(crucero,levels=orden_cruceros)),
        colour="",
        caption = "Fuente: DNMyE en base a DNM.")+
   theme_minimal()+
-  theme(text = element_text(family = "Encode Sans Normal",size=20),
+  theme(text = element_text(family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
@@ -726,7 +727,7 @@ rm(orden_cruceros)
 
 ```
 
-Mismo ejercicio se realizó para dar cuenta de la distribución de pasajeros por compañia naviera, apreciando **el peso de _MSC_ y _Costa_**:
+Mismo ejercicio se realizó para dar cuenta de la distribución de pasajeros por compañía naviera, apreciando **el peso de _MSC_ y _Costa_**:
 
 
 ```{r}
@@ -771,17 +772,17 @@ ggplot(data=pax_x_oper_b %>%mutate(operador = factor(operador,levels=orden_opera
        aes(x=valor,y=operador,fill=operador,
            label=glue("{valor} %")))+
   geom_col()+ 
-  geom_text(hjust = "inward",size=8) +
+  geom_text(hjust = "inward") +
   scale_fill_dnmye(reverse = TRUE)+
   theme(legend.position='none')+
-  labs(title = "Distribución de los cruceristas por compañía naviera",
+  labs(title = "Distribución de los cruceristas \npor compañía naviera",
        subtitle = glue("{titulos}"),
        x = "",
        y = "",
        colour="",
        caption = "Fuente: DNMyE en base a DNM.")+
   theme_minimal()+
-  theme(text = element_text(family = "Encode Sans Normal",size=20),
+  theme(text = element_text(family = "Encode Sans Normal"),
         plot.caption  = element_text(hjust = 0),
         plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
         axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
