@@ -1,0 +1,814 @@
+---
+title: "Crucerismo Marítimo en la Argentina"
+description: "Publicación del Informe de Crucerismo Marítimo en la Argentina, que recopila información de cruceristas y cruceros en los puertos de nuestro país."
+date: 2023-03-21
+output:
+  distill::distill_article:
+    self_contained: true
+draft: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+
+
+options(scipen = 9999)
+
+library(readxl)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(haven)
+library(janitor)
+library(lubridate)
+library(glue)
+library(data.table)
+library(comunicacion)
+library(ggplot2)
+library(ggrepel)
+library(ggtext)
+library(gt)
+library(sf)
+library(leaflet)
+library(plotly)
+
+```
+
+
+
+```{r}
+
+# Completar la temporada trabajada
+
+
+#temp <- "19_20"
+filtro_temp <- "19/20"
+titulos <- "Temporada 2019/2020"
+# titulos_serie <- "Temporadas 2021/22, 2019/20, 2018/19, 2017/18, 2016/17 y 2015/16"
+titulos_serie <- "Temporadas 2019/20, 2018/19, 2017/18, 2016/17 y 2015/16"
+# titulos_serie <- "Temporadas 2018/19, 2017/18, 2016/17 y 2015/16"
+# titulos_serie <- "Temporadas 2017/18, 2016/17 y 2015/16"
+# titulos_serie <- "Temporadas 2016/17 y 2015/16"
+# titulos_serie <- "Temporada 2015/16"
+filtro_fecha <- as.Date("2020-04-30") #Solo modificar último año de la temporada
+
+#Se levanta la base de cruceristas y de cruceros
+
+cruceristas <- read_rds(glue("/srv/DataDNMYE/cruceros/entradas/cruceristas_total.rds"))  %>%
+  filter(tipo_pax=="Pasajeros" & fecha_final<=filtro_fecha)
+
+cruceros <- read_rds(glue("/srv/DataDNMYE/cruceros/entradas/base_cruceros_total.rds"))  %>%
+  filter(fecha_final<=filtro_fecha) 
+
+
+```
+
+
+# PRESENTACIÓN
+
+**En el informe de Crucerismo Marítimo en la Argentina** **(PONER LINK DEL INFORME)** se presentan datos vinculados tanto al volumen y perfil de los cruceristas en nuestro país, como también la distribución de los pasajeros según las embarcaciones utilizadas (tamaño del crucero, empresa naviera, nombre del crucero, etc.).
+
+Mensualmente, desde la **Dirección Nacional de Mercados y Estadística (DNMyE)** del Ministerio de Turismo y Deportes, en base a datos aportados por la Dirección Nacional de Migraciones (DNM), se llevan a cabo las procesamientos necesarios para realizar las estimaciones vinculadas al Turismo Internacional en la Argentina (cuyos resultados se pueden consultar en el [**Tablero de turismo internacional**](https://tableros.yvera.tur.ar/turismo_internacional/), el [**Reporte de Turismo Internacional**](https://tableros.yvera.tur.ar/internacional.html); el [**Informe de Turismo Internacional**](https://www.yvera.tur.ar/sinta/informe/info/turismo-internacional); también se pueden descargar los [**recursos de Turismo Internacional**](https://datos.yvera.gob.ar/dataset/turismo-internacional-total-pais)).
+
+Los datos de crucerismo en la Argentina surgen como un sub-producto de los procesamientos de Turismo Internacional: a partir de la base de datos generada (en la cual cada caso es una persona que ingresa o egresa de las fronteras internacionales del país) se seleccionan los puertos de cruceros de la Argentina y se realizan los procesamientos necesarios para filtrar dentro de los mismos a los casos que efectivamente corresponden a personas transportadas por cruceros (si bien la mayoría de los ingresos o egresos son realizados por este tipo de embarcaciones, pueden existir algunos movimientos marginales de embarcaciones menores, siendo el desafío descartar a la personas que viajaron en estas últimas). 
+
+Los datos obtenidos a partir de estos procesamientos nos permiten realizar un monitoreo del crucerismo, que es una actividad pujante tanto a nivel global como en nuestro país. Con ese fin, **presentamos el Informe de Crucerismo Marítimo en la Argentina con datos actualizados a la temporada 2019/2020**. 
+
+# PRINCIPALES RESULTADOS
+
+Antes de comenzar con la descripción del contenido del informe, se deben hacer algunas aclaraciones:
+
++ Solo se presentan datos vinculados al **crucerismo marítimo** en nuestor país, **quedando de esta manera excluido el crucerismo fluvial**.
+
++ Al utilizar como insumo los datos aportados por la DNM, **no es incluida información vinculada a los cruceristas transportados por cruceros que realizaron movimientos internos** (la DNM solo registra los movimientos que suponen traspasar las fronteras argentinas). Este punto es importante, ya que podrán observarse diferencias con la información de cruceristas provenientes de otras fuentes.
+
+Hechas estas aclaraciones, en el informe de Crucerismo en la Argentina encontrarán, en primera instancia, información relacionada a la evolución de los cruceristas en el país desde la temporada 2015/16 hasta la temporada 2019/20:
+
+
+```{r out.height= "80%", out.width="100%"}
+
+### Gráfico de evolición de cruceristas POR TEMPORADA
+
+
+cruceristas_anio_total <- cruceristas %>%
+  filter(tipo_pax=="Pasajeros") %>% 
+  group_by(temporada) %>% 
+  summarise(cruceristas=sum(crucerista)) %>% 
+  mutate(residencia="Total")
+
+
+
+cruceristas_anio <- cruceristas %>%
+  filter(tipo_pax=="Pasajeros") %>% 
+  group_by(temporada,residencia) %>% 
+  summarise(cruceristas=sum(crucerista)) %>%
+  rbind(cruceristas_anio_total) %>% 
+  mutate(cruceristas=round(cruceristas/1000,1)) %>% 
+  arrange(temporada)
+   
+
+#Gráfico
+
+ggplot(data=cruceristas_anio %>% mutate(residencia=factor(residencia,levels = c("Total","Residentes","No residentes"))) ,aes(x=temporada,y=cruceristas,color=residencia,label=cruceristas))+
+  geom_text(hjust=1.5,size=5)+
+  geom_point(size=5, alpha = 0.9)+
+  geom_hline(yintercept = 0, color = "black")+
+  scale_color_manual(values = c("Residentes" = dnmye_colores("cian"),
+                                "No residentes" = dnmye_colores("rosa"),
+                                "Total" = dnmye_colores("gris oscuro")))+
+  labs(title = "Cruceristas (en miles) por temporada, según condición de residencia",
+       subtitle = titulos_serie,
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.") +
+  theme(text = element_text(size = 18, family = "Encode Sans Normal"),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        panel.grid.major.y =  element_line (colour = dnmye_colores("gris oscuro"),
+                                            size = 0.1,
+                                            linetype = 1),
+        panel.grid.major.x =  element_line (colour = dnmye_colores("gris oscuro"),
+                                            size = 0.1,
+                                            linetype = 1),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 90)) +
+  #scale_y_continuous(breaks=seq(0, max(cruceristas_anio$cruceristas+10),50))+
+  theme(axis.text.y =element_blank())
+
+
+rm(cruceristas_anio)
+
+```   
+
+Ya que que los datos presentan marcados matices según el puerto de crucero analizado, **la gran mayoría de la informacíón se presenta diferenciada por puerto**, en este caso, en el mapa se observa la cantidad de cruceristas, recaladas y cruceros registrados según puerto en la temporada 19/20:
+
+
+```{r}
+
+
+########## ARMADO DE TABLA QUE SIRVE DE INSUMO PARA EL MAPA#################
+
+
+###Puertos
+
+puertos <- read_sf("/srv/DataDNMYE/capas_sig/puertos_seleccionados.gpkg") %>% 
+  filter(nombre_paso %in% c("Puerto Madryn","Puerto Buenos Aires","Puerto Ushuaia")) %>%
+  rename(puerto=nombre_paso) %>% 
+  mutate(puerto=case_when(puerto=="Puerto Buenos Aires"~"CABA",
+                          puerto=="Puerto Madryn"~"Puerto Madryn",
+                          puerto=="Puerto Ushuaia"~"Ushuaia"))
+
+
+###Cruceristas
+
+n_cruceristas <- cruceristas %>%
+  group_by(puerto,temporada,residencia) %>%
+  filter(temporada==filtro_temp) %>% 
+  summarise(cruceristas=sum(crucerista)) %>%
+  pivot_wider(names_from = residencia,
+              values_from = cruceristas) %>% 
+  mutate(total=sum(`Residentes`,`No residentes`)) %>% 
+  ungroup() %>% 
+  select(puerto,total) %>% 
+  rename(cruceristas=total)
+
+
+#Evolución histórica de los CRUCEROS
+
+
+cruceros <- cruceros %>%
+  mutate(crucero_2=case_when(crucero !="Sin datos"~crucero,
+                             TRUE~id_vehi))
+
+
+#Se genera una base agregada para sumar cantidad de cruceros en todos los puertos del país
+
+cant_cruceros_total <- cruceros %>% 
+  group_by(temporada,crucero_2) %>% 
+  summarise(n=1)
+
+
+n_cruceros_total<- cant_cruceros_total %>% 
+  group_by(temporada) %>%
+  summarise(n=sum(n)) %>% 
+  mutate(puerto="TOTAL")
+
+#Se genera una base agregada para sumar cantidad de cruceros por puerto
+
+cant_cruceros_puerto <- cruceros %>% 
+  group_by(temporada,puerto,crucero_2) %>% 
+  summarise(n=1)
+
+
+n_cruceros_puerto <- cant_cruceros_puerto %>% 
+  group_by(temporada,puerto) %>%
+  summarise(n=sum(n))
+
+#Se unifican las tablas total y por puerto
+
+n_cruceros <- n_cruceros_total %>% 
+  rbind(n_cruceros_puerto) %>% 
+  arrange(temporada,puerto) %>% 
+  filter(temporada==filtro_temp & puerto !="TOTAL") %>% 
+  rename(cruceros=n) %>% 
+  select(puerto,cruceros)
+
+rm(cant_cruceros_total,n_cruceros_total,
+   cant_cruceros_puerto,n_cruceros_puerto)
+
+###RECALADADAS
+
+
+n_recaladas <- cruceros %>%
+  group_by(puerto,temporada) %>% 
+  summarise(recaladas=sum(recalada)) %>% 
+  filter(temporada==filtro_temp) %>% 
+  select(puerto,recaladas)
+
+###SE UNIFICAN LAS TABLAS EN UNA SOLA
+
+  
+tabla_mapa <- puertos %>% 
+  left_join(n_cruceristas) %>% 
+  left_join(n_cruceros) %>% 
+  left_join(n_recaladas) %>% 
+  mutate(puerto=case_when(puerto=="CABA"~"Puerto Buenos Aires",
+                          TRUE~puerto))
+
+
+###ARMADO DE MAPA
+
+labels <- paste0("<b>",tabla_mapa$puerto,"</b>",
+               "<br>Cruceristas: ", format(tabla_mapa$cruceristas, big.mark = "."),
+               "<br>Recaladas: ", tabla_mapa$recaladas,
+               "<br>Cruceros: ", tabla_mapa$cruceros) %>%
+            lapply(htmltools::HTML)
+
+tabla_mapa %>% 
+  leaflet() %>% 
+   setView(lat = -42.5, lng = -64.49, zoom = 3) %>%
+  addTiles(
+    urlTemplate = "https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png") %>% 
+  addMarkers(label = labels, popup = labels) 
+
+
+```
+
+
+Al ser una activdad vinculada al turismo, el crucerismo esta marcado por la estacionalidad. En el caso de nuestro país, la temporada comienza en el mes de septiembre y finaliza en el mes de abril del año siguiente, siendo **los meses _"fuertes"_ enero y febrero**:
+
+
+```{r}
+
+###INSUMO para Gráfico de distribución de los cruceristas por residencia según temporada POR MES
+
+
+cruceristas_resi_total <- cruceristas %>%
+  filter(tipo_pax=="Pasajeros") %>% 
+  group_by(anio_mes) %>% 
+  summarise(cruceristas=sum(crucerista)) %>% 
+  mutate(residencia="Total")
+
+
+cruceristas_resi_completo <- cruceristas %>%
+  filter(tipo_pax=="Pasajeros") %>% 
+  group_by(anio_mes,residencia) %>% 
+  summarise(cruceristas=sum(crucerista)) %>%
+  rbind(cruceristas_resi_total) %>% 
+  mutate(anio_mes=as.Date(anio_mes),
+         cruceristas=round(cruceristas/1000,1)) %>% 
+  ungroup() %>% 
+  arrange(anio_mes)
+
+
+min_date=min(cruceristas_resi_completo$anio_mes)
+
+max_date=max(cruceristas_resi_completo$anio_mes)
+
+cruceristas_resi_completo <- cruceristas_resi_completo %>% 
+  complete(anio_mes = seq.Date(from = min_date, 
+                               to = max_date, 
+                               by = "month"),
+           residencia,
+           fill = list(cruceristas = 0)) 
+
+rm(min_date,max_date)
+
+####PLOTLY:
+
+graf <- cruceristas_resi_completo %>%
+  mutate(residencia=factor(residencia,levels = c("Total","Residentes","No residentes"))) %>% 
+ggplot(aes(x=anio_mes,y=cruceristas, color=residencia,text=cruceristas))+
+  geom_line(linewidth=2,alpha = 0.4)+
+  geom_point(size=3, alpha = 0.9)+
+  geom_hline(yintercept = 0, color = "black")+
+  scale_color_manual(values = c("Residentes" = dnmye_colores("cian"),
+                                "No residentes" = dnmye_colores("rosa"),
+                                "Total" = dnmye_colores("gris oscuro")))+
+  labs(title = "Cruceristas (en miles) por mes, según condición de residencia",
+       subtitle = titulos_serie,
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.") +
+  theme(text = element_text(size = 12, family = "Encode Sans Normal"),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "top",
+        panel.grid.major.y =  element_line (colour = dnmye_colores("gris oscuro"),
+                                            size = 0.1,
+                                            linetype = 1),
+        panel.grid.major.x =  element_line (colour = dnmye_colores("gris oscuro"),
+                                            size = 0.1,
+                                            linetype = 1),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 90)) + 
+  scale_x_date(date_breaks = "1 months",
+               date_labels = "%b-%y",
+               expand = c(0,40))+
+  theme(#axis.text.y =element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())+
+   scale_y_continuous(breaks = seq(0, 150, by = 50),
+                      limits = c(0,200),
+                      labels=c(0,50,100,150))
+
+
+plot_1 <- graf %>%   
+  ggplotly(tooltip = "text") %>% 
+  layout(title = list(text = paste0('Cruceristas (en miles) por mes, según condición de residencia.',
+                                    '<br>',
+                                    '<sup>',
+                                    'Temporadas 2015/16, 2016/17, 2017/18, 2018/19, 2019/20.',
+                                    '</sup>')),
+         annotations = 
+           list(x = 1, y = -0.3, text = "Fuente: DNMyE en base a DNM.", 
+                showarrow = F, xref='paper', yref='paper', 
+                xanchor='right', yanchor='auto', xshift=0, yshift=0)) %>% 
+  layout(legend = list(
+    orientation = "h"
+  )
+  )
+
+plot_1
+
+
+
+
+```   
+
+Dado que la información que se encuentra en el informe surge como una ramificación de los datos de **turismo internacional**, los datos de perfil de los cruceristas presentan similares aperturas a las que se pueden observar en los diversos productos de turismo internacional generados por la DNMyE. 
+
+De esta manera, se puede conocer qué mercados participan en el crucerismo en nuestro país: **la mayoría de los cruceristas son no residentes en la Argentina**, de los cuales se destacan los residentes en Brasil y Estados Unidos:
+
+
+```{r out.height= "100%", out.width="100%"}
+
+###Cruceristas por residencia TOTALIDAD DE LOS PUERTOS
+
+nacion_a <- cruceristas %>%
+  filter(tipo_pax=="Pasajeros" & temporada==filtro_temp) %>%
+  group_by(nacion_2) %>% 
+  summarise(valor=sum(crucerista)) %>%  
+  ungroup() %>%
+  arrange(desc(valor)) %>%  
+  mutate(ranking=row_number()) 
+
+
+top_15 <- nacion_a %>% 
+  filter(ranking<=15)
+
+ultimos <- nacion_a %>% 
+  filter(ranking>15) %>% 
+  adorn_totals() %>%  
+  mutate(nacion_2=case_when(nacion_2=="Total"~"OTROS")) %>% 
+  filter(nacion_2=="OTROS")
+
+nacion_b <- rbind(top_15,ultimos) %>%
+  ungroup() %>%
+  mutate(valor_2=round(prop.table(valor),3)*100) %>% 
+  select(nacion_2,valor_2) %>%
+  rename(valor=valor_2) %>% 
+  mutate(ranking=row_number()) %>%
+  arrange(desc(ranking)) %>% 
+  select(nacion_2,valor)
+
+
+arg <- nacion_b %>% 
+  filter(nacion_2=="Argentina") %>% 
+  mutate(nacion_2=case_when(nacion_2=="Argentina"~"RESIDENTES")) %>% 
+  mutate(rank=1)
+
+ext <- nacion_b %>% 
+  filter(nacion_2!="Argentina") %>% 
+  adorn_totals(name = "NO RESIDENTES") %>% 
+  mutate(rank=seq(17,2))
+
+nacion_total <- arg %>% 
+  rbind(ext) %>% 
+  arrange(desc(rank)) %>% 
+  select(-rank) %>% 
+  mutate(colores=case_when(nacion_2=="RESIDENTES"~1,
+                           nacion_2=="NO RESIDENTES"~2,
+                           TRUE~3),
+         colores=as.character(colores))
+
+rm(arg,ext,nacion_a,nacion_b,top_15,ultimos)
+
+###Gráfico
+
+
+nacionalidad <- (nacion_total$nacion_2)
+
+
+ggplot(data=nacion_total %>%mutate(nacion_2 = factor(nacion_2,levels=nacionalidad),
+                                   colores=as.character(colores)),
+       aes(x=valor,y=nacion_2,fill=colores,
+           label=glue("{valor} %")))+
+  geom_col()+ 
+  geom_text(hjust = "inward",size=10) +
+  #scale_fill_dnmye()+
+  scale_fill_manual(values = c("1"=dnmye_colores("cian"),
+                               "2"=dnmye_colores("rosa"),
+                               "3"=dnmye_colores("gris oscuro")))+
+  theme(legend.position='none')+
+  labs(title = "Distribución de los cruceristas según residencia",
+       subtitle = glue("Totalidad de los puertos de cruceros, {titulos}"),
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.")+
+  theme_minimal()+
+  theme(text = element_text(family = "Encode Sans Normal",size = 20),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "none",
+        panel.grid.major.y = element_line(color = "grey",
+                                          linewidth = 0.3,
+                                          linetype = 4),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank())
+
+
+
+
+rm(nacionalidad,nacion_total)
+
+
+
+
+```
+
+Los datos también se segmentan según género, y se destaca que **más de la mitad de los cruceristas son de género femenino**:
+
+
+```{r}
+
+#Distribución de cruceristas por por género
+
+
+dist_sexo <- cruceristas %>%
+  filter(temporada==filtro_temp) %>% 
+  group_by(sexo_2) %>% 
+  summarise(cruceristas=sum(crucerista)) %>%
+  ungroup() %>% 
+  mutate(valor=round(prop.table(cruceristas),3)*100) %>% 
+  select(sexo_2,valor)
+
+#ggplot  
+
+
+ggplot(data=dist_sexo %>% mutate(sexo_2=factor(sexo_2,levels = c("Masculino","Femenino"))),
+       aes(x=valor,y=sexo_2,fill=sexo_2,
+           label=glue("{valor} %")))+
+  geom_col()+ 
+  geom_text(position = position_stack(vjust = .5),size=10) +
+  scale_fill_dnmye(reverse = TRUE)+
+  theme(legend.position='none')+
+  labs(title = "Distribución de los cruceristas según género",
+       subtitle = glue("TOTAL PUERTOS DE CRUCEROS, {titulos}"),
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.")+
+  theme_minimal()+
+  theme(text = element_text(family = "Encode Sans Normal",size=20),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "none",
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank())
+
+rm(dist_sexo)
+
+
+
+
+```
+
+En lo que respecta al **grupo etario**, se evidencia que la mayoría de los cruceristas son mayores de 59 años:
+
+
+```{r}
+
+#Distribución de cruceristas por grupo etario:
+
+edad <- cruceristas %>%
+  filter(temporada==filtro_temp) %>% 
+  group_by(grupo_etario) %>% 
+  summarise(cruceristas=sum(crucerista)) %>%
+  ungroup() %>% 
+  mutate(valor=round(prop.table(cruceristas),3)*100) %>% 
+  select(grupo_etario,valor) %>% 
+  arrange(valor)
+
+#ggplot  
+  
+
+ggplot(data=edad %>% mutate(grupo_etario=factor(grupo_etario,
+                                                 levels = c("Menos de 18","18 a 29","30 a 44",
+                                                            "45 a 59","Mas de 59"))),
+       aes(x=valor,y=grupo_etario,fill=grupo_etario,
+           label=glue("{valor} %")))+
+  geom_col()+ 
+  geom_text(position = position_stack(vjust = .5),size=8) +
+  scale_fill_dnmye(reverse = TRUE)+
+  theme(legend.position='none')+
+  labs(title = "Distribución de los cruceristas según grupo etario",
+       subtitle = glue("TOTAL PUERTOS DE CRUCEROS, {titulos}"),
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.")+
+  theme_minimal()+
+  theme(text = element_text(family = "Encode Sans Normal",size=20),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "none",
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank())
+
+rm(edad)
+
+
+
+
+```
+
+Junto con la información de perfil de los cruceristas, en el informe también se presentan datos relacionados a la distribución de cruceristas según tipo de embarcación. Para esto, se aplican distintos criterios de clasificación de las embarcaciones, por ejemplo, el tamaño: se diferenció a los _Very Large Cruise Vessel_ (VLCV), que serían las embarcaciones más grandes, con más de 100.000 GT (gross tonnage, una unidad de medida estandarizada del tamaño de los cruceros); del resto de las embarcaciones más pequeñas. Considerando este criterio de segmentacion, se observa que en la temporada 2019/20 los cruceros de mayor tamaño transportaron aproximadamente 1 de cada 3 cruceristas:
+
+
+
+```{r}
+
+#INSUMO para distribución de los pasajeros según tipo de crucero (VLCV)
+
+vlcv_a <- cruceristas %>%
+  filter(temporada==filtro_temp) %>% 
+  group_by(vlcv) %>% 
+  summarise(pasajeros=sum(crucerista)) %>%
+  mutate(puerto="TOTAL")
+
+
+vlcv_b <- cruceristas %>%
+  filter(temporada==filtro_temp) %>%
+  group_by(puerto,vlcv) %>% 
+  summarise(pasajeros=sum(crucerista)) %>%
+  rbind(vlcv_a) %>% 
+  mutate(vlcv=case_when(is.na(vlcv)~"Sin datos",
+                        TRUE~vlcv),
+         valor=round(prop.table(pasajeros),3)*100) %>% 
+  select(-(pasajeros))
+
+vlcv_fraseo <- vlcv_b %>% 
+  filter(vlcv=="VLCV") %>% 
+  arrange(puerto)
+  
+
+#GRÁFICO DE distribución de los pasajeros según tamaño de crucero (VLCV)
+
+ggplot(data=vlcv_b %>% mutate(puerto=factor(puerto,levels = c("TOTAL","CABA","Puerto Madryn","Ushuaia")),
+                              vlcv=factor(vlcv,levels = c("VLCV","Otros","Sin datos"))),
+       aes(x=puerto,y=valor,fill=vlcv,label=glue("{valor} %")))+
+  geom_col()+
+  geom_text(position = position_stack(vjust = .5),size=8)+
+  theme_minimal()+
+  scale_y_continuous(labels = function(x) paste0(x,"%"))+
+  labs(title = "Distribución de los pasajeros transportados según tamaño de embarcación, por puerto.",
+       subtitle = glue("{titulos}"),
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.")+
+  scale_fill_dnmye()+
+  theme(text = element_text(family = "Encode Sans Normal",size=20),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face="bold"),
+        panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "right",
+        strip.text.x = element_text(size=14))
+
+
+rm(vlcv_a,vlcv_b)
+
+  
+
+```
+
+
+Gracias a la información presentada, también podemos conocer el top 5 de cruceros que transportaron mayor cantidad de cruceristas, **destacando al _Costa Pacífica_, el _MSC Música_, _Celebrity Eclipse_, _Norwegian Star_ y el _MSC Poesia_**:
+
+
+```{r}
+
+###INSUMO PARA DISTRIBICIÓN DE PASAJEROS POR EMBARCACIÓN
+
+pax_x_cru <- cruceristas %>% 
+  filter(temporada==filtro_temp) %>% 
+  group_by(crucero) %>% 
+  summarise(valor=sum(crucerista)) %>%
+  arrange(desc(valor)) %>% 
+  mutate(ranking=row_number())
+
+
+top_10 <- pax_x_cru %>% 
+  filter(ranking<=10)
+
+ultimos <- pax_x_cru %>% 
+  filter(ranking>10) %>% 
+  adorn_totals() %>%  
+  mutate(crucero=case_when(crucero=="Total"~"OTROS")) %>% 
+  filter(crucero=="OTROS")
+
+pax_x_b <- rbind(top_10,ultimos) %>%
+  ungroup() %>%
+  mutate(valor_2=round(prop.table(valor),3)*100) %>% 
+  select(crucero,valor_2) %>%
+  rename(valor=valor_2) %>% 
+  mutate(ranking=row_number()) %>%
+  arrange(desc(ranking)) %>% 
+  select(crucero,valor)
+
+
+rm(pax_x_cru,ultimos,top_10)
+
+
+###GRÁFICO PARA DISTRIBICIÓN DE PASAJEROS POR EMBARCACIÓN
+
+orden_cruceros <- (pax_x_b$crucero)
+
+ggplot(data=pax_x_b %>%mutate(crucero = factor(crucero,levels=orden_cruceros)),
+       aes(x=valor,y=crucero,fill=crucero,
+           label=glue("{valor} %")))+
+  geom_col()+ 
+  geom_text(hjust = "inward",size=8) +
+  scale_fill_dnmye(reverse = TRUE)+
+  theme(legend.position='none')+
+  labs(title = "Distribución de los cruceristas por crucero",
+       subtitle = glue("{titulos}"),
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.")+
+  theme_minimal()+
+  theme(text = element_text(family = "Encode Sans Normal",size=20),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face="bold"),
+        legend.title = element_blank(),
+        legend.position = "none",
+        panel.grid.major.y = element_line(color = "grey",
+                                          size = 0.3,
+                                          linetype = 4),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x=element_blank())
+
+
+rm(orden_cruceros)
+
+
+```
+
+Mismo ejercicio se realizó para dar cuenta de la distribución de pasajeros por compañia naviera, apreciando **el peso de _MSC_ y _Costa_**:
+
+
+```{r}
+
+###INSUMO para gráfico de pasajeros por compañía naviera
+
+pax_x_oper <- cruceristas %>% 
+  filter(temporada==filtro_temp) %>% 
+  group_by(operador) %>% 
+  summarise(valor=sum(crucerista))%>%
+  arrange(desc(valor)) %>% 
+  mutate(ranking=row_number()) 
+
+top_10 <- pax_x_oper %>% 
+  filter(ranking<=10)
+
+ultimos <- pax_x_oper %>% 
+  filter(ranking>10) %>% 
+  adorn_totals() %>%  
+  mutate(operador=case_when(operador=="Total"~"OTROS")) %>% 
+  filter(operador=="OTROS")
+
+pax_x_oper_b <- rbind(top_10,ultimos) %>%
+  ungroup() %>%
+  mutate(valor_2=round(prop.table(valor),3)*100) %>% 
+  select(operador,valor_2) %>%
+  rename(valor=valor_2) %>% 
+  mutate(ranking=row_number()) %>%
+  arrange(desc(ranking)) %>% 
+  select(operador,valor)
+
+rm(pax_x_oper,top_10,ultimos)
+
+
+###Gráfico de pasajeros por compañía naviera
+
+
+orden_operador <- (pax_x_oper_b$operador)
+
+
+ggplot(data=pax_x_oper_b %>%mutate(operador = factor(operador,levels=orden_operador)),
+       aes(x=valor,y=operador,fill=operador,
+           label=glue("{valor} %")))+
+  geom_col()+ 
+  geom_text(hjust = "inward",size=8) +
+  scale_fill_dnmye(reverse = TRUE)+
+  theme(legend.position='none')+
+  labs(title = "Distribución de los cruceristas por compañía naviera",
+       subtitle = glue("{titulos}"),
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.")+
+  theme_minimal()+
+  theme(text = element_text(family = "Encode Sans Normal",size=20),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro")),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face="bold"),
+        legend.title = element_blank(),
+        legend.position = "none",
+        panel.grid.major.y = element_line(color = "grey",
+                                          size = 0.3,
+                                          linetype = 4),
+        panel.grid.minor.y = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.text.x=element_blank())
+
+
+rm(pax_x_oper_b,orden_operador)
+
+
+```
+
+
+Finalmente, se debe aclarar que **estos informes se actualizarán anualmente** (meses después de haber finalizado al temporada de cruceros) y esta primera publicación refiere a la temporada 2019/20, ya que durante las temporadas 2020/21 y 2021/22 el movimiento de cruceros fue prácticamente nulo debido a la situación de público conocimiento del COVID. Se espera una normalización de la actividad en la temporada 2022/23, por lo que el próximo informe se publicará luego de haber finalizado la misma.
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
+
+
