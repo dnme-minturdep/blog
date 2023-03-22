@@ -5,7 +5,7 @@ date: 2023-03-21
 output:
   distill::distill_article:
     self_contained: true
-draft: true
+draft: false
 ---
 
 
@@ -70,7 +70,7 @@ cruceros <- read_rds(glue("/srv/DataDNMYE/cruceros/entradas/base_cruceros_total.
 
 # PRESENTACIÓN
 
-**En el informe de Crucerismo Marítimo en la Argentina** **(PONER LINK DEL INFORME)** se presentan datos vinculados tanto al volumen y perfil de los cruceristas en nuestro país, como también la distribución de los pasajeros según las embarcaciones utilizadas (tamaño del crucero, empresa naviera, nombre del crucero, etc.).
+**En el [informe de Crucerismo Marítimo en la Argentina](https://tableros.yvera.tur.ar/recursos/biblioteca/dt9_cruceros.pdf)** se presentan datos vinculados tanto al volumen y perfil de los cruceristas en nuestro país, como también la distribución de los pasajeros según las embarcaciones utilizadas (tamaño del crucero, empresa naviera, nombre del crucero, etc.).
 
 Mensualmente, desde la **Dirección Nacional de Mercados y Estadística (DNMyE)** del Ministerio de Turismo y Deportes, en base a datos aportados por la Dirección Nacional de Migraciones (DNM), se llevan a cabo las procesamientos necesarios para realizar las estimaciones vinculadas al Turismo Internacional en la Argentina (cuyos resultados se pueden consultar en el [**Tablero de turismo internacional**](https://tableros.yvera.tur.ar/turismo_internacional/), el [**Reporte de Turismo Internacional**](https://tableros.yvera.tur.ar/internacional.html); el [**Informe de Turismo Internacional**](https://www.yvera.tur.ar/sinta/informe/info/turismo-internacional); también se pueden descargar los [**recursos de Turismo Internacional**](https://datos.yvera.gob.ar/dataset/turismo-internacional-total-pais)).
 
