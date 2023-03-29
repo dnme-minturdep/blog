@@ -1,6 +1,6 @@
 ---
 title: "Turismo en Argentina Productiva 2030"
-description: "Publicación del documento elaborado por el Ministerio de Turismo y Deportes, _Misión 11: Potenciar la actividad turística para el desarrollo territorial sustentable a partir de la gran biodiversidad local_"
+description: "Publicación del documento elaborado por el Ministerio de Turismo y Deportes - Misión 11: Potenciar la actividad turística para el desarrollo territorial sustentable a partir de la gran biodiversidad local"
 date: 2023-03-29
 output:
   distill::distill_article:
