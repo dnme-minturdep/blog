@@ -22,7 +22,7 @@ library(knitr)
 
 **Misiones del Plan Argentina Productiva 2030**
 
-```{r , out.height=400,out.width=500}
+```{r , out.height=400,out.width=600}
 include_graphics("misiones.PNG")
 ```
 
@@ -108,37 +108,23 @@ Se presenta, además, un estudio de los determinantes macroeconómicos del turis
 
 Las conclusiones, presentadas en términos orientativos en el documento, consideran que se puede extraer de estos análisis una lección de política pública para tener en cuenta, y que tienen que ver con las complicaciones derivadas de tener procesos sostenidos de apreciación cambiaria real en materia de divisas ligadas al turismo. Sobre estas bases se plantean más adelante las metas para el sector hacia 2030 y las políticas para contribuir a alcanzarlas. 
 
+**Evolución de los ingresos y egresos por turismo internacional (millones de USD)**
+
+```{r}
+include_graphics("grafico23_ing_egr_ti.svg")
+```
 
 # Políticas de turismo hacia un Plan 2030
 
 Las políticas reseñadas en el documento dan cuenta de programas, acciones y medidas que persiguen los objetivos planteados, y se encadenan secuencialmente a partir de la afectación que la pandemia COVID-19 tuvo sobre el sector turístico. Ejemplo de estas son las políticas de sostenimiento (como APTur, FACT, PreViaje), que se implementaron para transitar el shock negativo y la transición; el diseño de nuevas políticas de desarrollo que buscan atacar ciertos déficits y acompañar nuevas formas de turismo; la ejecución de estos nuevos programas y la generación continua de nuevas herramientas. Aunque, los diversos proyectos y metas están vinculados con múltiples acciones, el documento está transversalmente basado en algunas políticas específicas. En este sentido, el programa La Ruta Natural juega un rol central. En buena medida este funciona como paraguas de muchas de las iniciativas que se describen en el documento, articulando acciones de diagnóstico y planteo estratégico, calidad, desarrollo de infraestructura, promoción interna y externa. El programa fue elaborado bajo la premisa de que el sector tiene una dinámica territorial particular y que debe ser el territorio, con sus características específicas, el eje ordenador de una estrategia integral de promoción y desarrollo que persiga los objetivos ambientales, socioculturales, de calidad y socioeconómicos que requiere el desarrollo sustentable, con un abordaje federal y con la capacidad de vinculación de diversos sectores y actividades productivas.
 
-Por otra parte, el trabajo que acá se presenta es también fruto de un arduo trabajo de
-procesamiento, sistematización, limpieza y curaduría de múltiples fuentes de datos y la
-generación de diversos soportes para su consulta. Desde los tradicionales operativos que resultan en las estadísticas básicas de turismo, al procesamiento de una multiplicidad de registros administrativos y fuentes de otras organizaciones, desde la Dirección Nacional de Mercados y Estadística de la Subsecretaría de Desarrollo Estratégico se trabaja en lo que hoy conocemos como el Sistema de Información Turística de la Argentina (SINTA): un conjunto de herramientas y plataformas que facilitan el acceso a datos e información turística de Argentina.
-
-El Sistema Argentino de Calidad Turística (SACT) ocupa también un lugar preponderante en esta Misión. Se trata de un conjunto de herramientas orientadas a la mejora en la competitividad de las organizaciones que forman parte de la cadena de valor del turismo, cuya implementación se trabaja en conjunto entre el Ministerio de Turismo y Deportes y las jurisdicciones provinciales. Estas herramientas se hacen presentes en cada uno de los proyectos que componen la Misión. En particular, las Directrices de Turismo Sostenible y el programa Municipios Turísticos Sostenibles contribuyen al desarrollo del turismo sustentable del país. Las Directrices de Gestión de Destino Turístico Inteligente aportan a la implementación de la tecnología de la
-información en el sector. La vinculación del turismo con otras actividades económicas cuenta con dos ejemplos de políticas dentro del área de calidad: las Directrices de Gestión Turística de Bodegas y el sello CocinAR. La atracción de nómades digitales cuenta con el Sello Nómades Digitales para Alojamientos, bajo la órbita del SACT, como herramienta para su despliegue. Todas estas iniciativas, así como aquellas que no fueron mencionadas pero forman parte del mismo sistema, apuntan a la mejora de la competitividad de las organizaciones turísticas, objetivo especialmente relevante a la hora de perseguir la meta del último proyecto, la expansión del turismo internacional en nuestro país y la consiguiente generación de divisas, desafío nodal del Plan Argentina Productiva 2030.
+Otras iniciativas del Ministerio forman la columna vertebral de la misión: el Sistema de Información Turística de Argentina es un conjunto de herramientas y plataformas que facilitan el acceso a datos e información turística de Argentina. El Sistema Argentino de Calidad Turística (SACT), un conjunto de herramientas orientadas a la mejora en la competitividad de las organizaciones que forman parte de la cadena de valor del turismo, cuya implementación se trabaja en conjunto entre el Ministerio de Turismo y Deportes y las jurisdicciones provinciales, aporta sus recomendaciones a la totalidad de los proyectos de la misión.
 
 Las políticas reseñadas se complementan, además, con otros programas del Ministerio de Turismo y Deportes y, a modo de propuestas, se describen lineamientos de políticas a implementar en el futuro para lograr los objetivos propuestos en cada uno de los proyectos. Se trata, por lo tanto, de una mirada que busca integrar lo hecho hasta aquí con una agenda de futuro para los próximos años.
 
-**Líneas de acción y programas del Ministerio de Turismo y Deportes**
-
-```{r}
-include_graphics("tabla30_lineas_accion.png")
-```
-
-
 # Indicadores y metas hacia 2030
 
-La implementación de las políticas reseñadas en este documento, persiguiendo los cuatro proyectos presentados, procuran alcanzar, además, una serie de objetivos generales para el sector turístico en el país, relativos a su contribución económica en términos de actividad, empleo, exportaciones y a la estacionalidad de la actividad turística.
-
-Se plantea, hacia 2030, un aumento del PIB directo turístico del 40% respecto de 2019, en línea con el aumento del PIB general proyectado en el Plan. Por su parte, se apunta a un aumento de los puestos de trabajo en las industrias turísticas del 20%, pasando de 1,26 millones a 1,51 millones. Se espera, además, que los puestos de trabajo asalariados registrados ganen participación en el total, pasando del 43% al 51%. La tasa de pobreza de los ocupados en ramas turísticas, en el promedio 2016-2019, se encontraba en un 26%. En línea con los objetivos generales del Plan, la meta a 2030 es una reducción a la mitad de esa incidencia, pasando al 13% para el sector.
-
-Reducir la estacionalidad de la actividad turística es otro de los objetivos generales de la misión. Los tres meses de mayores llegadas de turistas internacionales representaron, en 2019, el 33% del total de llegadas del año. La meta hacia 2030 es que ese valor se reduzca a 30%.
-
-Asimismo, se plantean metas en materia de turismo sustentable, turismo de naturaleza, digitalización del turismo, nómades digitales, vinculación productiva e ingreso de divisas. A continuación, un cuadro con el resumen de metas e indicadores.
-Hasta aquí se presenta un resumen del contenido del documento, que está conformado por 6 capítulos: un primer capítulo donde se analizan los principales indicadores del turismo, se describen las características particulares del sector y las principales ramas de actividad involucradas. Además, se procura pensar estos conceptos y su relación de cara a los Objetivos del Desarrollo Sostenible (ODS) planteados en 2015 en el marco de la Agenda 2030 para el Desarrollo Sostenible de la Organización de las Naciones Unidas. Los cuatro capítulos subsiguientes se dedican a trabajar los cuatro proyectos en los que se estructura la Misión mencionados anteriormente. A continuación, un capítulo presenta el conjunto de políticas vinculadas con los proyectos de la Misión, llevadas adelante por el Ministerio de Turismo y Deportes de la Nación, en particular tras la irrupción de la pandemia del COVID-19 y, tal como se muestra en el capítulo de diagnóstico, su singular impacto en la actividad turística. Por último, se definen metas a alcanzar en 2030, producto de la implementación de las políticas propuestas.
+En línea con el espíritu general del Plan, la misión plantea un conjunto de metas a alcanzar en el año 2030. La implementación de las políticas reseñadas en este documento, persiguiendo los cuatro proyectos presentados, procuran alcanzar, además, una serie de objetivos generales para el sector turístico en el país, relativos a su contribución económica en términos de actividad, empleo, exportaciones y a la estacionalidad de la actividad turística.
 
 **Metas a 2030 de la Misión 11**
 
