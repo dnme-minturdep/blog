@@ -8,6 +8,7 @@ output:
     toc: true
     toc_floate: true
 draft: false
+preview: portadas-biblioteca-01.png
 ---
 
 
