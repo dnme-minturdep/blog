@@ -29,7 +29,7 @@ include_graphics("misiones.PNG")
 
 
 
-En este marco, la misión 11 se propone como objetivo desarrollar la actividad turística local partiendo del enorme potencial que Argentina tiene para promover el turismo de naturaleza como eje vertebral del desarrollo turístico. 
+En este marco, la Misión 11 se propone como objetivo desarrollar la actividad turística local partiendo del enorme potencial que Argentina tiene para promover el turismo de naturaleza como eje vertebral del desarrollo turístico. 
 
 Tras la pandemia, el turismo está renaciendo en nuestro país y en el resto del mundo, y en la próxima década habrá variadas oportunidades para potenciarlo y transformarlo virtuosamente. Se trata de una actividad profundamente federal, intensiva en la generación de empleo, con mayores oportunidades para la inserción laboral de jóvenes que otras ramas, y generadora de experiencias de bienestar individual y colectivo. El sector presenta varios desafíos: si bien antes de la pandemia era un complejo exportador muy relevante, en la última década fue una fuente severa de salida de divisas por la vía del turismo emisivo. Asimismo, el impacto ambiental del turismo es considerable, a la vez que hay un importante terreno para recorrer en materia de incorporación de nuevas tecnologías digitales, en la calidad de los servicios y en los encadenamientos virtuosos con otros sectores. También la actividad se caracteriza por una elevada concentración en pocos destinos y por una alta estacionalidad, que dificulta la generación de empleos estables.
 
