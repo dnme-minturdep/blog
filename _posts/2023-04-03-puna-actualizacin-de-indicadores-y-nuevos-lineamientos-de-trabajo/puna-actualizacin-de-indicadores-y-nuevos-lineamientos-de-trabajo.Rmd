@@ -11,11 +11,279 @@ draft: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(sf)
+library(comunicacion)
+library(herramientas)
+library(gt)
+library(cowplot)
+
 ```
 
 El Padrón Único Nacional de Alojamiento (PUNA) es la principal fuente de datos sobre la oferta de alojamiento de Argentina, dado que se elabora a partir de la consolidación de los registros de los distintos organismos provinciales y municipales de turismo y el INDEC. Para conocer más sobre la fuente visite el [post de bitácora del PUNA](https://bitacora.yvera.tur.ar/posts/2022-06-16-datos-puna/).
 
-En esta oportunidad se presentan los datos actualizados al año 2021, los cuales fueron compilados en el [documento de trabajo N°10](https://biblioteca.yvera.tur.ar/). Además, se muestra avances realizados en la georreferenciación de las localidades registradas en el PUNA, para un mejor conocimiento de su distribución territorial. Por último, se comentan algunas líneas de trabajo, presentes y futuras, en base a la gestión de la base de datos y sus usos.
+En esta oportunidad se presentan los datos actualizados al año 2021, los cuales fueron compilados en el [documento de trabajo N°10](https://biblioteca.yvera.tur.ar/). En el mismo, se muestran además, avances realizados en la georreferenciación de las localidades registradas en el PUNA, para un mejor conocimiento de su distribución territorial. Por último, se comentan algunas líneas de trabajo, presentes y futuras, en base a la gestión de la base de datos y sus usos.
 
 # Resumen de indicadores
 
+```{r}
+puna <- read_file_srv("puna/serie_puna.csv") %>% 
+  filter(anio == 2021) %>% 
+  etiquetar_provincia(provincia) %>% 
+  mutate(provincia_nombre = case_when(
+    str_detect(provincia_nombre, "Tierra") ~ "Tierra del Fuego",
+                                      TRUE ~ provincia_nombre)
+    )
+```
+
+En el año 2021, se registraron un total de 19.945 establecimientos y 783.687 plazas distribuidas a lo largo de todo el país.
+
+```{r}
+puna %>% 
+  group_by(tipo) %>% 
+  summarise(Establecimientos = sum(establecimientos),
+            Plazas = sum(plazas)) %>% 
+  ungroup() %>% 
+  janitor::adorn_totals() %>% 
+  pivot_longer(c("Establecimientos","Plazas")) %>% 
+  arrange(match(tipo, c("Hoteleros","Parahoteleros","Otros colectivos"))) %>% 
+  pivot_wider(names_from = "tipo", values_from = "value") %>% 
+  gt() %>% 
+  cols_label(name = "") %>% 
+  fmt_number(columns = c(2:5), decimals = 0, sep_mark = ".") %>% 
+  tab_source_note("Fuente: DNMyE en base a datos del PUNA") %>% 
+  tab_options(column_labels.font.weight = "bold")
+```
+
+El PUNA cuenta, entre sus variables, con una clasificación de los alojamientos. Esta clasificación se construye a partir de las categorías que registran las distintas provincias, las cuales se armonizan con fines comparativos y de análisis. Además, esta clasificación permite asociar la oferta de alojamiento con la elaboración de estrategias de desarrollo turístico, por ejemplo, al hablar de Turismo Rural nos puede interesar poner foco en los alojamientos clasificados como "Establecimientos rurales", mientras que para el Turismo Social nos centraríamos en los "Hoteles sindicales/mutuales".
+
+En la siguiente tabla se caracteriza cada una de las 27 categorías presentes en el PUNA de acuerdo a la cantidad de plazas, establecimientos y el promedio de plazas por establecimiento. De esta manera, se puede ver que las categorías con mayor cantidad de plazas no son necesariamente las que tienen más establecimientos o mayor promedio de plazas por establecimiento. 
+
+Por ejemplo, los hoteles 5 estrellas cuentan con pocos establecimientos, en comparación con el resto de las categorías, pero son los que tienen más plazas por establecimiento ya que suelen contar con muchas habitaciones y espacios para organizar eventos de todo tipo.
+
+```{r}
+data_cuadro1 <- puna %>% 
+  group_by(clasificacion_mintur) %>% 
+  summarise(establecimientos = sum(establecimientos),
+            plazas = sum(plazas)) %>% 
+  ungroup() %>% 
+  arrange(desc(plazas)) %>% 
+  mutate(rank_pla = row_number()) %>% 
+  arrange(desc(establecimientos)) %>% 
+   mutate(rank_est = row_number(),
+          prom_pla = plazas/establecimientos) %>% 
+  arrange(desc(prom_pla)) %>% 
+   mutate(rank_prom = row_number())
+
+data_cuadro1 %>% 
+  arrange(desc(plazas)) %>% 
+  gt() %>% 
+   cols_label(
+    clasificacion_mintur = "",
+    establecimientos = "Cantidad",
+    plazas = "Cantidad",
+    prom_pla = "Cantidad",
+    rank_pla = "Ranking",
+    rank_est = "Ranking",
+    rank_prom = "Ranking"
+  ) %>% 
+  fmt_number(columns = c(2:7), decimals = 0, dec_mark = ",", sep_mark = ".") %>% 
+   cols_align(
+    align = "center",
+    columns = c(establecimientos, plazas))  %>% 
+  opt_table_font(
+    font = "Encode Sans"
+  ) %>%
+  tab_spanner(
+    label = md("**Establecimientos**"),
+    columns = c(establecimientos, rank_est)) %>%
+  tab_spanner(
+    label = md("**Plazas**"),
+    columns = c(plazas, rank_pla)) %>%
+  tab_spanner(
+    label = md("**Plazas/establecimientos**"),
+    columns = c(prom_pla, rank_prom)) %>%
+   tab_options(column_labels.font.weight = "bold",
+              table.font.size = 11,
+              data_row.padding = px(2)) %>% 
+  sub_zero(columns = everything(),
+              zero_text  = "///")
+
+```
+
+
+# ¿Dónde se localizan los alojamientos?
+
+Otro dato de relevancia que ofrece el PUNA es la distribución territorial de los establecimientos y plazas. En este sentido, los registros a partir de los cuales se recopila la información brindan la posibilidad de ver los indicadores a nivel de [Ruta Natural](https://larutanatural.gob.ar/es), regiones, provincia, departamento/partido o localidad. Sin embargo, no se cuenta con una geolocalización, a nivel de latitud y longitud, de todos los alojamientos. 
+
+En relación a este punto, se trabajó en la georreferenciación local del PUNA para lo cual utilizó la [Base de Asentamientos Humanos de la República Argentina (BAHRA)](http://www.bahra.gob.ar/) para asignar una ubicación en el mapa a los establecimientos, a nivel de localidad. El ejericio permitió geolocalizar a más del 99% de los registros, en tanto se encontraron algunos obstáculos a la hora de cruzar ambas bases (por ejemplo, localidades en PUNA que no constituían entidades en el BAHRA).
+
+De esta forma, se pueden graficar los datos con mayor precisión, como se visualiza en la siguiente imagen:
+
+```{r}
+#Provincias
+argentina <- geoAr::get_geo("ARGENTINA","provincia") %>% 
+  geoAr::add_geo_codes() %>% 
+  select(provincia = name_iso)
+
+data_mapa <- puna %>%
+  group_by(provincia_nombre) %>% 
+  summarise(plazas = sum(plazas)) %>% 
+  ungroup() %>% 
+  left_join(argentina, by = c("provincia_nombre"="provincia")) %>% 
+  st_as_sf()
+
+caba <- data_mapa %>% 
+  filter(str_detect(provincia_nombre,"Ciudad"))
+
+arg_mapa <- data_mapa %>% 
+  ggplot() +
+  geom_sf(aes(fill = plazas)) +
+  scale_fill_dnmye(discrete = F, limits = c(min(data_mapa$plazas),
+                                            max(data_mapa$plazas)),
+                     breaks = c(min(data_mapa$plazas),
+                                            max(data_mapa$plazas)),
+                   #palette = "dicotomica",
+                   reverse = T) +
+  labs(fill = "Plazas\n ") + 
+  theme_void() +
+  theme(legend.position = "bottom",
+        text = element_text(size=9),
+        legend.key.height= unit(0.5, 'cm'))
+
+caba_mapa <- caba %>% 
+  ggplot() +
+  geom_sf(aes(fill = plazas)) +
+  scale_fill_dnmye(discrete = F, limits = c(min(data_mapa$plazas),
+                                            max(data_mapa$plazas)),
+                   #palette = "dicotomica", 
+                   reverse = T) +
+  theme_void() +
+  theme(legend.position = "none")
+
+mapa_prov <- arg_mapa %>% 
+   ggdraw() +
+  draw_plot(caba_mapa,
+    x = 0.75, 
+    y = 0.6,
+    width = 0.1, 
+    height = 0.1)
+
+#Deptos
+puna_deptos <- read_sf("puna_departamentos_bahra.gpkg")
+
+caba <- puna_deptos %>% 
+  filter(str_detect(provincia,"ciudad"))
+
+arg_mapa <- ggplot() +
+  geom_sf(data = argentina, fill = "grey") +
+  geom_sf(data = puna_deptos, aes(fill = plazas)) +
+  scale_fill_dnmye(discrete = F, limits = c(min(puna_deptos$plazas),
+                                            max(puna_deptos$plazas)),
+                    breaks = c(min(puna_deptos$plazas),
+                                            max(puna_deptos$plazas)),
+                   #palette = "dicotomica",
+                   reverse = T) +
+  labs(fill = "") +
+  theme_void() +
+  theme(legend.position = "bottom",
+        text = element_text(size=9),
+        legend.key.height= unit(0.5, 'cm'))
+
+caba_mapa <- caba %>% 
+  ggplot() +
+  geom_sf(aes(fill = plazas)) +
+   # geom_sf_label(aes(label = plazas), size = 3, 
+   #              label.padding = unit(1, units = "mm"),
+   #              label.size = 0.4) +
+  scale_fill_dnmye(discrete = F, limits = c(min(puna_deptos$plazas),
+                                            max(puna_deptos$plazas)),
+                   #palette = "dicotomica", 
+                   reverse = T) +
+  theme_void() +
+  theme(legend.position = "none")
+
+mapa_depto <- arg_mapa %>% 
+   ggdraw() +
+  draw_plot(caba_mapa,
+    x = 0.77, 
+    y = 0.6,
+    width = 0.1, 
+    height = 0.1)
+
+#Localidades
+puna_localidades <- read_sf("puna_localidades_bahra.gpkg") %>% 
+  etiquetar_provincia(id_col = provincia, new_name = "provincia_nombre") %>% 
+  mutate(provincia_nombre = str_replace(
+    provincia_nombre,
+     "Tierra del Fuego, Antártida e Islas del Atlántico Sur", "Tierra del Fuego"))
+
+mapa_loc <- ggplot() +
+  geom_sf(data = argentina, fill = "white") +
+  geom_sf(data = puna_localidades, aes(color = plazas), 
+          alpha = 0.7, size = 1) +
+   scale_color_dnmye(discrete = F, limits = c(min(puna_localidades$plazas),
+                                            max(puna_localidades$plazas)),
+                     breaks = c(min(puna_localidades$plazas),
+                                            max(puna_localidades$plazas)),
+                   #palette = "dicotomica",
+                   reverse = T) +
+  labs(color = "") +
+  theme_void() +
+   theme(legend.position = "bottom",
+        text = element_text(size=9),
+        legend.key.height= unit(0.5, 'cm'))
+
+plot_grid(mapa_prov, mapa_depto, mapa_loc, 
+          ncol = 3)
+
+```
+
+A su vez, podemos bajar en el análisis espacial hacia el interior de una provincia o departamento/partido, por ejemplo de la provincia de Buenos Aires y ver la distribución de localidades registradas en el PUNA.
+```{r}
+data_prov <- puna_localidades %>% 
+  filter(provincia == "buenos aires")
+
+labels <- data_prov %>%
+  filter(localidad %in% c("mar del plata",
+                          "villa gesell",
+                          "pinamar")) %>% 
+  mutate(localidad = toupper(localidad))
+
+ggplot() +
+  geom_sf(data = puna_deptos %>% filter(provincia == "buenos aires"), 
+          fill = "white", color = "grey") +
+  geom_sf(data = data_prov, 
+          aes(size = plazas),
+          color = dnmye_colores("purpura"),
+          alpha = 0.6) +
+  ggrepel::geom_label_repel(data = labels,
+                  aes(geometry = geom, label = localidad), 
+                  size = 3, 
+                label.padding = unit(1, units = "mm"),
+                direction = "x", nudge_x = -.8,
+                stat = "sf_coordinates",
+                min.segment.length = 0.1,
+                label.size = 0.3) +
+  labs(size = "Plazas") +
+  theme_void() +
+  theme(legend.position = "left")
+```
+
+# Líneas de trabajo
+
+Respecto de la georreferenciación, el ejercicio realizado abre las puertas para avanzar en al menos dos líneas de trabajo con datos espaciales, a saber:
+
+- Cruce con otra información geográfica para conocer conectividad, cercanía a atractivos, etc., así como realizar análisis exploratorios en el campo de la geoestadística para su aplicación en la gestión del turismo.
+- Avanzar en la asignación de latitud y longitud a nivel de establecimiento, para mejorar la calidad de los datos y su análisis.
+
+Por otro parte, datatur..
+
+# Recursos
+
+- [Documento de trabajo]()
+
+- [Datos abiertos](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento)
+
+- [Tablero](https://tableros.yvera.tur.ar/puna)
