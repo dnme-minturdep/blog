@@ -1,0 +1,21 @@
+---
+title: "PUNA: actualización de indicadores y nuevos lineamientos de trabajo"
+description: |
+  Publicación de información actualizada sobre alojamiento colectivo al 2021 y novedades en el análisis y gestión de los datos.
+date: 2023-04-03
+output:
+  distill::distill_article:
+    self_contained: false
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+El Padrón Único Nacional de Alojamiento (PUNA) es la principal fuente de datos sobre la oferta de alojamiento de Argentina, dado que se elabora a partir de la consolidación de los registros de los distintos organismos provinciales y municipales de turismo y el INDEC. Para conocer más sobre la fuente visite el [post de bitácora del PUNA](https://bitacora.yvera.tur.ar/posts/2022-06-16-datos-puna/).
+
+En esta oportunidad se presentan los datos actualizados al año 2021, los cuales fueron compilados en el [documento de trabajo N°10](https://biblioteca.yvera.tur.ar/). Además, se muestra avances realizados en la georreferenciación de las localidades registradas en el PUNA, para un mejor conocimiento de su distribución territorial. Por último, se comentan algunas líneas de trabajo, presentes y futuras, en base a la gestión de la base de datos y sus usos.
+
+# Resumen de indicadores
+
