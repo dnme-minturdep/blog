@@ -5,8 +5,8 @@ description: |
 date: 2023-04-03
 output:
   distill::distill_article:
-    self_contained: false
-draft: true
+    self_contained: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +23,7 @@ library(cowplot)
 
 El Padrón Único Nacional de Alojamiento (PUNA) es la principal fuente de datos sobre la oferta de alojamiento de Argentina, dado que se elabora a partir de la consolidación de los registros de los distintos organismos provinciales y municipales de turismo y el INDEC. Para conocer más sobre la fuente visite el [post de bitácora del PUNA](https://bitacora.yvera.tur.ar/posts/2022-06-16-datos-puna/).
 
-En esta oportunidad se presentan los datos actualizados al año 2021, los cuales fueron compilados en el [documento de trabajo N°10](https://biblioteca.yvera.tur.ar/). En el mismo, se muestran además, avances realizados en la georreferenciación de las localidades registradas en el PUNA, para un mejor conocimiento de su distribución territorial. Por último, se comentan algunas líneas de trabajo, presentes y futuras, en base a la gestión de la base de datos y sus usos.
+En esta oportunidad se presentan los datos actualizados al año 2021, los cuales fueron compilados en el [documento de trabajo N°10](https://biblioteca.yvera.tur.ar/). En el mismo se muestra, además, avances realizados en la georreferenciación de las localidades registradas en el PUNA, para un mejor conocimiento de su distribución territorial. Por último, se comentan algunas líneas de trabajo, presentes y futuras, en base a la gestión de la base de datos y sus usos.
 
 # Resumen de indicadores
 
@@ -37,7 +37,7 @@ puna <- read_file_srv("puna/serie_puna.csv") %>%
     )
 ```
 
-En el año 2021, se registraron un total de 19.945 establecimientos y 783.687 plazas distribuidas a lo largo de todo el país.
+En el año 2021, se registró un total de 19.945 establecimientos y 783.687 plazas a lo largo de todo el país.
 
 ```{r}
 puna %>% 
@@ -52,7 +52,6 @@ puna %>%
   gt() %>% 
   cols_label(name = "") %>% 
   fmt_number(columns = c(2:5), decimals = 0, sep_mark = ".") %>% 
-  tab_source_note("Fuente: DNMyE en base a datos del PUNA") %>% 
   tab_options(column_labels.font.weight = "bold")
 ```
 
@@ -115,11 +114,11 @@ data_cuadro1 %>%
 
 # ¿Dónde se localizan los alojamientos?
 
-Otro dato de relevancia que ofrece el PUNA es la distribución territorial de los establecimientos y plazas. En este sentido, los registros a partir de los cuales se recopila la información brindan la posibilidad de ver los indicadores a nivel de [Ruta Natural](https://larutanatural.gob.ar/es), regiones, provincia, departamento/partido o localidad. Sin embargo, no se cuenta con una geolocalización, a nivel de latitud y longitud, de todos los alojamientos. 
+Otro dato de relevancia que ofrece el PUNA es la distribución territorial de los establecimientos y plazas. En este sentido, los registros a partir de los cuales se recopila la información, brindan la posibilidad de ver los indicadores a nivel de [Ruta Natural](https://larutanatural.gob.ar/es), regiones, provincia, departamento/partido o localidad. Sin embargo, no se cuenta con una geolocalización, a nivel de latitud y longitud, de todos los alojamientos. 
 
-En relación a este punto, se trabajó en la georreferenciación local del PUNA para lo cual utilizó la [Base de Asentamientos Humanos de la República Argentina (BAHRA)](http://www.bahra.gob.ar/) para asignar una ubicación en el mapa a los establecimientos, a nivel de localidad. El ejericio permitió geolocalizar a más del 99% de los registros, en tanto se encontraron algunos obstáculos a la hora de cruzar ambas bases (por ejemplo, localidades en PUNA que no constituían entidades en el BAHRA).
+En relación a este punto, se trabajó en la georreferenciación local del PUNA, para lo cual se utilizó la [Base de Asentamientos Humanos de la República Argentina (BAHRA)](http://www.bahra.gob.ar/) para asignar una ubicación en el mapa a los establecimientos, a nivel de localidad. El ejercicio permitió geolocalizar a más del 99% de los registros, en tanto se encontraron algunos obstáculos a la hora de cruzar ambas bases (por ejemplo, localidades en PUNA que no constituían entidades en el BAHRA).
 
-De esta forma, se pueden graficar los datos con mayor precisión, como se visualiza en la siguiente imagen:
+De esta forma, se pueden graficar los datos con mayor precisión, pasando de una agrupación por provincia (polígonos), a una por departamento/partido (polígonos más pequeños), a una por localidad (puntos), tal como se visualiza en la siguiente imagen:
 
 ```{r}
 #Provincias
@@ -171,7 +170,7 @@ mapa_prov <- arg_mapa %>%
     height = 0.1)
 
 #Deptos
-puna_deptos <- read_sf("puna_departamentos_bahra.gpkg")
+puna_deptos <- read_sf("/srv/DataDNMYE/capas_sig/puna_departamentos_bahra.gpkg")
 
 caba <- puna_deptos %>% 
   filter(str_detect(provincia,"ciudad"))
@@ -213,7 +212,7 @@ mapa_depto <- arg_mapa %>%
     height = 0.1)
 
 #Localidades
-puna_localidades <- read_sf("puna_localidades_bahra.gpkg") %>% 
+puna_localidades <- read_sf("/srv/DataDNMYE/capas_sig/puna_localidades_bahra.gpkg") %>% 
   etiquetar_provincia(id_col = provincia, new_name = "provincia_nombre") %>% 
   mutate(provincia_nombre = str_replace(
     provincia_nombre,
@@ -241,6 +240,7 @@ plot_grid(mapa_prov, mapa_depto, mapa_loc,
 ```
 
 A su vez, podemos bajar en el análisis espacial hacia el interior de una provincia o departamento/partido, por ejemplo de la provincia de Buenos Aires y ver la distribución de localidades registradas en el PUNA.
+
 ```{r}
 data_prov <- puna_localidades %>% 
   filter(provincia == "buenos aires")
@@ -253,19 +253,21 @@ labels <- data_prov %>%
 
 ggplot() +
   geom_sf(data = puna_deptos %>% filter(provincia == "buenos aires"), 
-          fill = "white", color = "grey") +
+          fill = "white", color = dnmye_colores("gris oscuro")) +
   geom_sf(data = data_prov, 
           aes(size = plazas),
           color = dnmye_colores("purpura"),
-          alpha = 0.6) +
+          alpha = 0.7) +
   ggrepel::geom_label_repel(data = labels,
                   aes(geometry = geom, label = localidad), 
                   size = 3, 
                 label.padding = unit(1, units = "mm"),
-                direction = "x", nudge_x = -.8,
+                #direction = "x", 
+                nudge_x = 2,
                 stat = "sf_coordinates",
                 min.segment.length = 0.1,
                 label.size = 0.3) +
+  coord_sf(xlim = c(-63.38, -54.66)) +
   labs(size = "Plazas") +
   theme_void() +
   theme(legend.position = "left")
@@ -278,7 +280,9 @@ Respecto de la georreferenciación, el ejercicio realizado abre las puertas para
 - Cruce con otra información geográfica para conocer conectividad, cercanía a atractivos, etc., así como realizar análisis exploratorios en el campo de la geoestadística para su aplicación en la gestión del turismo.
 - Avanzar en la asignación de latitud y longitud a nivel de establecimiento, para mejorar la calidad de los datos y su análisis.
 
-Por otro parte, datatur..
+Por otro parte, desde la Dirección Nacional de Mercados y Estadística se viene trabajando en la elaboración del [Sistema Federal de Gestión de Datos Turísticos de la Argentina](https://datatur.yvera.tur.ar/ ), un portal para la gestión y consolidación de indicadores turísticos por parte de los organismos públicos nacionales, provinciales y locales.
+
+Dicho portal cuenta con un primer módulo operativo que permite la integración de datos de eventos y temporadas. Un segundo módulo apunta a gestionar los datos del PUNA, ofreciendo a los organismos la posibilidad de informar altas y bajas, realizar modificaciones, calcular indicadores y descargar registros. De esta forma, se podrá administrar, consolidar y analizar la información de la oferta de alojamiento de una manera más sistemática.
 
 # Recursos
 
@@ -287,3 +291,7 @@ Por otro parte, datatur..
 - [Datos abiertos](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento)
 
 - [Tablero](https://tableros.yvera.tur.ar/puna)
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
