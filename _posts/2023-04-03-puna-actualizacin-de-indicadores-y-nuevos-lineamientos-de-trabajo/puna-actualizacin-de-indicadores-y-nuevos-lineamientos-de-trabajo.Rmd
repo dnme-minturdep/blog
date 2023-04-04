@@ -23,7 +23,7 @@ library(cowplot)
 
 El Padrón Único Nacional de Alojamiento (PUNA) es la principal fuente de datos sobre la oferta de alojamiento de Argentina, dado que se elabora a partir de la consolidación de los registros de los distintos organismos provinciales y municipales de turismo y el INDEC. Para conocer más sobre la fuente visite el [post de bitácora del PUNA](https://bitacora.yvera.tur.ar/posts/2022-06-16-datos-puna/).
 
-En esta oportunidad se presentan los datos actualizados al año 2021, los cuales fueron compilados en el [documento de trabajo N°10](https://biblioteca.yvera.tur.ar/). En el mismo se muestra, además, avances realizados en la georreferenciación de las localidades registradas en el PUNA, para un mejor conocimiento de su distribución territorial. Por último, se comentan algunas líneas de trabajo, presentes y futuras, en base a la gestión de la base de datos y sus usos.
+En esta oportunidad se presentan los datos actualizados al año 2021, los cuales fueron compilados en el [documento de trabajo N°10](https://tableros.yvera.tur.ar/recursos/biblioteca/dt10_puna.pdf). En el mismo se muestra, además, avances realizados en la georreferenciación de las localidades registradas en el PUNA, para un mejor conocimiento de su distribución territorial. Por último, se comentan algunas líneas de trabajo, presentes y futuras, en base a la gestión de la base de datos y sus usos.
 
 # Resumen de indicadores
 
@@ -286,7 +286,7 @@ Dicho portal cuenta con un primer módulo operativo que permite la integración 
 
 # Recursos
 
-- [Documento de trabajo]()
+- [Documento de trabajo](https://tableros.yvera.tur.ar/recursos/biblioteca/dt10_puna.pdf)
 
 - [Datos abiertos](https://datos.yvera.gob.ar/dataset/padron-unico-nacional-alojamiento)
 
