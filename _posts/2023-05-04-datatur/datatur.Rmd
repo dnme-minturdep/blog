@@ -15,7 +15,7 @@ draft: true
 knitr::opts_chunk$set(echo = FALSE, fig.align = 'center')
 ```
 
-La Dirección Nacional de Mercados y Estadísticas puso en funcionamiento una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos nacionales, provinciales y sub-provinciales concontribuir al fortalecimiento de los sistemas de estadísticas subnacionales, con el objetivo de generar información robusta y confiable de la actividad turística de nuestro país.
+La Dirección Nacional de Mercados y Estadísticas puso en funcionamiento una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos nacionales, provinciales y sub-provinciales para contribuir al fortalecimiento de los sistemas de estadísticas subnacionales, con el objetivo de generar información robusta y confiable de la actividad turística de nuestro país.
 
 ```{r}
 knitr::include_graphics("land.png")
@@ -23,7 +23,7 @@ knitr::include_graphics("land.png")
 
 ### Un Sistema para la Armonización
 
-El Sistema Federal de Gestión de Datos Turísticos (`<data>TUR`) es una plataforma modular y forma parte del proyecto de armonización de las estadísticas del turismo en Argentina. El primer módulo aborda la integración de los datos estadísticos de eventos y temporadas del turismo entre los organismos participantes, mientras que el segundo módulo aborda los registros relacionados a los padrones de alojamientos de las diferentes jurisdicciones.
+El Sistema Federal de Gestión de Datos Turísticos (`<data>TUR`) es una plataforma modular y forma parte del proyecto de armonización de las estadísticas del turismo en Argentina. El primer módulo está constituido por los datos estadísticos de eventos y temporadas del turismo entre los organismos participantes, mientras que el segundo módulo aborda los registros relacionados a los padrones de alojamientos de las diferentes jurisdicciones.
 
 ```{r, out.width= '110%'}
 knitr::include_graphics("home.png")
@@ -31,31 +31,30 @@ knitr::include_graphics("home.png")
 
 ### ¿Por qué?
 
-Previamente al uso de la plataforma, las solicitudes de información estadística se realizaban a través de una nota formal por mail, la cual se reforzaba a través de otros medios (whatsapp, telefónico, etc). Cada uno de los organismos provinciales y municipales de turismo en temporada y en cada uno de sus eventos se realizaba a través de diferentes extensiones de archivos (word, excel, pdf, jpg, etc) lo que dificultaba la recepción, elaboración y procesamiento de la información recibida.
+Previamente al uso de la plataforma, las solicitudes de información estadística se realizaban a través de una nota formal por mail, la cual se reforzaba a través de otros medios (whatsapp, telefónico, etc). Cada uno de los organismos provinciales y municipales de turismo en temporada y en cada uno de sus eventos, enviaban sus informes estadísticos a través de diferentes extensiones de archivos (word, excel, pdf, jpg, etc) lo que dificultaba la recepción, elaboración y procesamiento de la información recibida.
 
-Es por este motivo que siempre se buscó implantar un sistema homogéneo y armonizado en lo referente a la metodología  de recolección y análisis de datos del turismo interno de los destinos turísticos de la Argentina.
+Es por este motivo que se buscó implantar un sistema homogéneo y armonizado en lo referente a la metodología de recolección y análisis de datos del turismo interno de los destinos turísticos de la Argentina.
 
 ### Módulo de datos estadísticos
 
-El módulo de datos estadísticos del turismo (DEST) ya se encuentra en funcionamiento y está siendo utilizado por áreas provinciales y municipales responsables de las estadísticas del turismo para informar a la Dirección Nacional de Mercados y Estadísticas del Ministerio de Turismo de la Nación los indicadores que ellas elaboran sobre la temporada estival, los fines de semana largos y otros eventos locales relevados.
+El módulo de datos estadísticos del turismo (DEST) ya se encuentra en funcionamiento y está siendo utilizado por áreas provinciales y municipales responsables de las estadísticas de turismo. A través del mismo, informan a la Dirección Nacional de Mercados y Estadísticas del Ministerio de Turismo de la Nación, los indicadores que ellas elaboran sobre las temporadas estival e invernal, los fines de semana largos y otros eventos locales relevados.
 
 ```{r, out.width= '110%'}
 knitr::include_graphics("lista.png")
 ```
 
-El módulo DEST da un marco sistemático e institucional para la comunicación de estos indicadores mediante una interfaz sencilla y amigable, y que contempla la posibilidad de adaptar las indicadores y eventos o temporadas a las características de cada jurisdicción. Estos datos son usualmente relevados y comunicados al inicio y al cierre de cada evento y temporada, de forma que resulta fundamental una carga rápida y controlada de los mismos.
+El módulo DEST da un marco sistemático e institucional para la comunicación de estos indicadores mediante una interfaz sencilla y amigable, y que contempla la posibilidad de adaptar los indicadores y eventos o temporadas a lo que produce cada jurisdicción. Estos datos son usualmente relevados y comunicados al inicio y al cierre de cada evento y temporada, de forma que resulta fundamental una carga rápida y controlada de los mismos.
 
 ```{r, out.width= '110%'}
 knitr::include_graphics("form.png")
 ```
 
-Además el módulo DEST resguarda el historial de datos declarados y permite su descarga en formato tabular para que los usuarios puedan comparar, analizar y compartir la información relevada en cualquier momento. Así se facilita la comunicación y gestión de indicadores de la actividad turística elaborados por los diferentes organismos del país, se promueve su estandarización y normalización, y se agiliza su intercambio.
-
+Además el módulo DEST resguarda el historial de datos declarados y permite su descarga en formato tabular para que los usuarios puedan comparar, analizar y compartir la información relevada en cualquier momento. De esta manera, se facilita la comunicación y gestión de los indicadores de la actividad turística elaborados por los diferentes organismos, se promueve su estandarización y normalización, como así también se agiliza su intercambio.
 
 ### Más módulos por venir
 
-El próximo módulo en ser puesto en funcionamiento, el módulo del Padrón Único Nacional de Alojamientos (PUNA), está diseñado en el mismo sentido que el módulo DEST como una herramienta parte de la estrategia de Armonización para la recolección, procesamiento, análisis y comunicación de las estadísticas del turismo.
+El próximo módulo que será puesto en funcionamiento es el módulo del Padrón Único Nacional de Alojamientos (PUNA), el cual está diseñado con el mismo objetivo que contempla el módulo DEST, como una herramienta que forma parte de la estrategia de Armonización para la recolección, procesamiento, análisis y comunicación de las estadísticas del turismo.
 
-::: infobox
+::: {.infobox}
 Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
 :::
