@@ -1,5 +1,5 @@
 ---
-title: "`<data>TUR`: puesta en marcha del Sistema Federal de Gestión de Datos Turísticos"
+title: "<data>TUR: puesta en marcha del Sistema Federal de Gestión de Datos Turísticos"
 description: |
   Puesta en producción de una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos.
 date: 2023-05-19
@@ -26,7 +26,9 @@ knitr::include_graphics("land.png")
 
 ### Un Sistema para la Armonización
 
-El [Sistema Federal de Gestión de Datos Turísticos (`<data>TUR`)](https://datatur.yvera.tur.ar/) es una plataforma modular y forma parte del proyecto de armonización de las estadísticas del turismo en Argentina. El primero de los módulos está constituido por un gestor de datos estadísticos de eventos y temporadas del turismo entre los organismos participantes, mientras que el segundo aborda los registros relacionados a los registros de alojamientos de las diferentes jurisdicciones.
+El [Sistema Federal de Gestión de Datos Turísticos (`<data>TUR`)](https://datatur.yvera.tur.ar/) es una plataforma modular y forma parte del proyecto de armonización de las estadísticas del turismo en Argentina. La puesta a punto del sistema viene siendo conversada en reuniones de trabajo con todas las jurisdicciones. Las mismas suponen pruebas, ajustes, incorporación de sugerencias, nuevas herramientas y capacitaciones. 
+
+El primero de los módulos está constituido por un gestor de datos estadísticos de eventos y temporadas del turismo entre los organismos participantes, mientras que el segundo aborda los registros relacionados a los registros de alojamientos de las diferentes jurisdicciones.
 
 ```{r, out.width= '110%'}
 knitr::include_graphics("home.png")
@@ -34,13 +36,13 @@ knitr::include_graphics("home.png")
 
 ### ¿Por qué?
 
-Previamente al uso de la plataforma, el intercambio de información de esta Dirección con las distintas jurisdicciones se realizaba a a partir de solicitudes de información estadística. Las mismas se realizaban a través de una nota formal por correo electrónico, la cual se reforzaba a través de otros medios de contacto directos (mensajería, teléfono, etc.). Cada uno de los organismos provinciales y municipales de turismo enviaban los respectivos informes estadísticos a través de distintas plataformas y soportes diferentes (archivos digitales con extensiones de procesadores de texto, planillas de cálculos, presentaciones, u otros formatos como pdf, jpg o audio) lo que dificultaba la recepción, elaboración y procesamiento de la información recibida.
+Previamente al uso de la plataforma, el intercambio de información de esta Dirección con las distintas jurisdicciones se realizaba a partir de solicitudes de información estadística. Las mismas se realizaban a través de una nota formal por correo electrónico, la cual se reforzaba a través de otros medios de contacto directos (mensajería, teléfono, etc.). Cada uno de los organismos provinciales y municipales de turismo enviaban los respectivos informes estadísticos a través de distintas plataformas y soportes diferentes (archivos digitales con extensiones de procesadores de texto, planillas de cálculos, presentaciones, u otros formatos como pdf, jpg o audio) lo que dificultaba la recepción, elaboración y procesamiento de la información recibida.
 
 El objetivo es implantar un sistema homogéneo y armonizado en lo referente a la metodología de recolección y análisis de datos del turismo interno de los destinos turísticos de la Argentina. 
 
 ### Módulo de datos estadísticos
 
-El **módulo de datos estadísticos del turismo (DEST)**, con nuevas soluciones en desarrollo,  ya está siendo utilizado por áreas provinciales y municipales responsables de las estadísticas de turismo. A través del mismo, informan a la Dirección Nacional de Mercados y Estadísticas del Ministerio de Turismo de la Nación, los indicadores que ellas elaboran sobre las temporadas estival e invernal, los fines de semana largos y otros eventos locales relevados. 
+El **módulo de datos estadísticos del turismo (DEST)**, con nuevas soluciones en desarrollo,  ya está siendo utilizado por áreas provinciales y municipales responsables de las estadísticas de turismo. A través del mismo informan a la DNMyE los indicadores que ellas elaboran sobre las temporadas estival e invernal, los fines de semana largos y otros eventos locales relevados. 
 
 ```{r, out.width= '110%'}
 knitr::include_graphics("lista.png")
