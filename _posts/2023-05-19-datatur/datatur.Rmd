@@ -1,7 +1,7 @@
 ---
-title: "<data>TUR: puesta en marcha del Sistema Federal de Gestión de Datos Turísticos"
+title: "Puesta en marcha del Sistema Federal de Gestión de Datos Turísticos"
 description: |
-  Puesta en producción de una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos.
+  Puesta en producción de <data>TUR, la una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos.
 date: 2023-05-19
 output:
   distill::distill_article:
@@ -22,13 +22,11 @@ knitr::include_graphics("land.png")
 ```
 
 
-
-
 ### Un Sistema para la Armonización
 
-El [Sistema Federal de Gestión de Datos Turísticos (`<data>TUR`)](https://datatur.yvera.tur.ar/) es una plataforma modular y forma parte del proyecto de armonización de las estadísticas del turismo en Argentina. La puesta a punto del sistema viene siendo conversada en reuniones de trabajo con todas las jurisdicciones. Las mismas suponen pruebas, ajustes, incorporación de sugerencias, nuevas herramientas y capacitaciones. 
+El [Sistema Federal de Gestión de Datos Turísticos (`<data>TUR`)](https://datatur.yvera.tur.ar/) es una plataforma modular y forma parte del proyecto de armonización de las estadísticas del turismo en Argentina. El mismo se integra a herramientas y materiales ya existentes, como ser el [MONITOR de estadísticas de Turismo en las Provincias](https://provincias.yvera.tur.ar/), o los recursos para el curso de [Ciencia de Datos para el Turismo](https://armonizacion.yvera.tur.ar/capacitaciones.html#ciencia-de-datos-para-el-turismo). La puesta a punto del sistema viene siendo conversada en reuniones de trabajo con las jurisdicciones. Las mismas suponen pruebas, ajustes, incorporación de sugerencias, nuevas herramientas y capacitaciones. 
 
-El primero de los módulos está constituido por un gestor de datos estadísticos de eventos y temporadas del turismo entre los organismos participantes, mientras que el segundo aborda los registros relacionados a los registros de alojamientos de las diferentes jurisdicciones.
+El primero de los módulos está constituido por un gestor de datos estadísticos de eventos y temporadas del turismo entre los organismos participantes. El segundo aborda la gestión de información de registros de alojamientos de las diferentes jurisdicciones.
 
 ```{r, out.width= '110%'}
 knitr::include_graphics("home.png")
@@ -36,11 +34,11 @@ knitr::include_graphics("home.png")
 
 ### ¿Por qué?
 
-Previamente al uso de la plataforma, el intercambio de información de esta Dirección con las distintas jurisdicciones se realizaba a partir de solicitudes de información estadística. Las mismas se realizaban a través de una nota formal por correo electrónico, la cual se reforzaba a través de otros medios de contacto directos (mensajería, teléfono, etc.). Cada uno de los organismos provinciales y municipales de turismo enviaban los respectivos informes estadísticos a través de distintas plataformas y soportes diferentes (archivos digitales con extensiones de procesadores de texto, planillas de cálculos, presentaciones, u otros formatos como pdf, jpg o audio) lo que dificultaba la recepción, elaboración y procesamiento de la información recibida.
+En la experiencia previa al desarrollo de esta plataforma, el intercambio de información de esta Dirección con las distintas jurisdicciones se realizaba a partir de solicitudes de información estadística. Las mismas se realizaban a través de una nota formal por correo electrónico, la cual se reforzaba a través de otros medios de contacto directos (mensajería, teléfono, etc.). Cada uno de los organismos provinciales y municipales de turismo enviaban los respectivos informes estadísticos a través de distintas plataformas y soportes diferentes (archivos digitales con extensiones de procesadores de texto, planillas de cálculos, presentaciones, u otros formatos como pdf, jpg o audio) lo que dificultaba la recepción, elaboración y procesamiento de la información recibida.
 
-El objetivo es implantar un sistema homogéneo y armonizado en lo referente a la metodología de recolección y análisis de datos del turismo interno de los destinos turísticos de la Argentina. 
+El objetivo es implementar un sistema homogéneo y armonizado en lo referente a la metodología de recolección y análisis de datos del turismo interno de los destinos turísticos de la Argentina. 
 
-### Módulo de datos estadísticos
+### DEST: Módulo de datos estadísticos
 
 El **módulo de datos estadísticos del turismo (DEST)**, con nuevas soluciones en desarrollo,  ya está siendo utilizado por áreas provinciales y municipales responsables de las estadísticas de turismo. A través del mismo informan a la DNMyE los indicadores que ellas elaboran sobre las temporadas estival e invernal, los fines de semana largos y otros eventos locales relevados. 
 
@@ -58,9 +56,9 @@ Además el módulo DEST resguarda el historial de datos declarados y permite su 
 
 ### Más módulos por venir
 
-Ya en versión de desarrollo para iniciar proceso de pruebas, el próximo módulo que será puesto en funcionamiento es el módulo del **Padrón Único Nacional de Alojamientos (PUNA)**, el cual está diseñado con el mismo objetivo que contempla el módulo DEST, como una herramienta que forma parte de la estrategia de Armonización para la recolección, procesamiento, análisis y comunicación de las estadísticas del turismo. En específico, se busca generar una instrumento que permita mantener la actualización y compilación de las fuentes de información que nutren las [estadísticas de establecimientos de alojamiento turístico en la Argentina](https://tableros.yvera.tur.ar/puna/).
+Ya en versión de desarrollo para iniciar proceso de pruebas, el módulo del **Padrón Único Nacional de Alojamientos (PUNA)** será el próximo en ser puesto en funcionamiento. El mismo está diseñado con el mismo objetivo que contempla el módulo DEST, como una herramienta que forma parte de la estrategia de Armonización para la recolección, procesamiento, análisis y comunicación de las estadísticas vinculadas a establecimientos de alojamiento turístico en la Argentina. En específico, se busca generar una instrumento que permita mantener la actualización y compilación de las fuentes de información que nutren, por ejemplo, el tablero [PUNA](https://tableros.yvera.tur.ar/puna/).  
 
-Por último, aunque aún en una etapa inicial de desarrollo, se planifica la creación de otros dos módulos sobre los que se detallara en entradas posteriores: (i) _Big data para el turismo_ y (ii) _Inteligencia Turística_, en el sentido del desarrollo de destinos turísticos inteligentes, tal como proponemos en la [MISION 11 del Plan Argentina Productiva 2030: Plan de desarrollo productivo, industrial y tecnológico](https://tableros.yvera.tur.ar/recursos/biblioteca/mision_11.pdf). 
+Por último, aunque aún en una etapa inicial de desarrollo, se planifica la creación de otros dos módulos sobre los que se detallará en entradas posteriores: (i) _Big data para el turismo_ y (ii) _Inteligencia Turística_, en el sentido del desarrollo de destinos turísticos inteligentes, tal como proponemos en la [MISION 11 del Plan Argentina Productiva 2030: Plan de desarrollo productivo, industrial y tecnológico](https://tableros.yvera.tur.ar/recursos/biblioteca/mision_11.pdf). 
 
 
 
