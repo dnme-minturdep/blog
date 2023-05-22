@@ -1,7 +1,7 @@
 ---
 title: "Puesta en marcha del Sistema Federal de Gestión de Datos Turísticos"
 description: |
-  Puesta en producción de <data>TUR, la una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos.
+  Puesta en producción de `<data>TUR`, la una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos.
 date: 2023-05-19
 output:
   distill::distill_article:
@@ -58,7 +58,7 @@ Además el módulo DEST resguarda el historial de datos declarados y permite su 
 
 Ya en versión de desarrollo para iniciar proceso de pruebas, el módulo del **Padrón Único Nacional de Alojamientos (PUNA)** será el próximo en ser puesto en funcionamiento. El mismo está diseñado con el mismo objetivo que contempla el módulo DEST, como una herramienta que forma parte de la estrategia de Armonización para la recolección, procesamiento, análisis y comunicación de las estadísticas vinculadas a establecimientos de alojamiento turístico en la Argentina. En específico, se busca generar una instrumento que permita mantener la actualización y compilación de las fuentes de información que nutren, por ejemplo, el tablero [PUNA](https://tableros.yvera.tur.ar/puna/).  
 
-Por último, aunque aún en una etapa inicial de desarrollo, se planifica la creación de otros dos módulos sobre los que se detallará en entradas posteriores: (i) _Big data para el turismo_ y (ii) _Inteligencia Turística_, en el sentido del desarrollo de destinos turísticos inteligentes, tal como proponemos en la [MISION 11 del Plan Argentina Productiva 2030: Plan de desarrollo productivo, industrial y tecnológico](https://tableros.yvera.tur.ar/recursos/biblioteca/mision_11.pdf). 
+Por último, se planifica la creación de otros dos módulos sobre los que se detallará en entradas posteriores: (i) _Big data para el turismo_ y (ii) _Inteligencia Turística_, en el sentido del desarrollo de destinos turísticos inteligentes, tal como proponemos en la [MISIÓN 11 del Plan Argentina Productiva 2030: Plan de desarrollo productivo, industrial y tecnológico](https://tableros.yvera.tur.ar/recursos/biblioteca/mision_11.pdf). 
 
 
 
