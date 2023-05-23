@@ -6,7 +6,7 @@ date: 2023-05-17
 output:
   distill::distill_article:
     self_contained: true
-draft: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}
@@ -121,7 +121,7 @@ Un posible caso de uso de esta fuente de datos es el de generar información que
 
 Respecto de la ETI ya mencionamos dos tipos de restricciones eventuales que el operativo tiene (cobertura espacial y límites del cuestionario). Por otro lado, la información de visitas en los Parques Nacionales surge del **Registro Nacional de Autorizaciones, Recaudaciones e Infracciones (RENARI) de la Administración de Parques Nacionales (APN),** quien recopila y procesa los datos de visitantes. La información suministrada permite la clasificación de las visitas en residentes argentinos y no residentes en 36 Parques Nacionales de la Argentina. En efecto, la fuente de APN es explotada para un fin distinto del que fue creado y resulta de utilidad para ello: permite dar cuenta lo más fielmente posible del volumen de visitantes, con la posibilidad de apertura que distingue entre tipo residentes y no residentes (sin más detalle sobre el país de origen).
 
-No quiere decir esto que la fuente de datos está exenta de limitaciones. Sabemos que los datos que provienen de estas fuentes pueden presentar fuertes sesgos porque no vienen de una selección aleatoria, ni estuvieron diseñados para responder el tipo de preguntas que nosotros queremos hacer. Sin embargo, entendemos que la fuente de datos que acá presentamos tiene la potencialidad de informar cosas que los recursos tradicionales no, tal como procuramos mostrar con el siguiente ejemplo, teniendo siempre en cuenta su potencialidad y sus limitaciones.
+Respecto de la fuente de IFAs que presentamos, tampoco se encuentra exenta de limitaciones. Sabemos que los datos que provienen de estas fuentes pueden presentar fuertes sesgos porque no vienen de una selección aleatoria, ni estuvieron diseñados para responder el tipo de preguntas que nosotros queremos hacer. Sin embargo, entendemos que tiene la potencialidad de informar cosas que los recursos tradicionales no, tal como procuramos mostrar con el siguiente ejemplo, teniendo siempre en cuenta su potencialidad y sus limitaciones.
 
 Parte del trabajo entonces es analizar los datos y en la medida de las posibilidades buscar validar su calidad a partir de otra información disponible. Así, por ejemplo, cuando analizamos IFAs relativos a turismo receptivo, buscamos compararlo contra la información que disponemos a partir de los registros de la Dirección Nacional de Migraciones. El grado de correlación entre las series nos ayuda a pensar al menos que los datos tienen un comportamiento análogo a lo largo del tiempo.
 
@@ -129,7 +129,7 @@ Parte del trabajo entonces es analizar los datos y en la medida de las posibilid
 knitr::include_graphics("serie_ifas_dnm.png")
 ```
 
-El mapa que a continuación presenta una muestra de 10 mil señales emitidas por dispositivos móviles identificados con origen extranjero (país de residencia del IFA)[^1]. Cada punto corresponde a una coordenada geográfica aproximada. El territorio argentino está a su vez delimitado por una capa de polígonos correspondiente a [**16 de las 17 rutas naturales**](https://larutanatural.gob.ar/) (se excluye el *Continente Blanco*). Al hacer *click* sobre cada punto se distingue IFAs únicos (truncados para preservar el dato), fecha de registro y nacionalidad de origen.
+El siguiente mapa presenta una muestra de 10 mil señales emitidas por dispositivos móviles identificados con origen extranjero (país de residencia del IFA)[^1]. Cada punto corresponde a una coordenada geográfica aproximada. El territorio argentino está a su vez delimitado por una capa de polígonos correspondiente a [**16 de las 17 rutas naturales**](https://larutanatural.gob.ar/) (se excluye el *Continente Blanco*). Al hacer *click* sobre cada punto se distingue IFAs únicos (truncados para preservar el dato), fecha de registro y nacionalidad de origen.
 
 [^1]: Las señales son una pequeña fracción de unos casi 16,7 millones de registros de más de 592 mil dispositivos distintos, a lo largo y ancho del territorio argentino para los 12 meses previos a la pandemia.
 
