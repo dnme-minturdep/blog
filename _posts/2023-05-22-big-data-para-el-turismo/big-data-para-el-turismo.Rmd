@@ -2,7 +2,7 @@
 title: "Big data para el turismo"
 description: |
   El uso de fuentes alternativas para una mejor comprensión del sector turístico en Argentina. El turismo receptivo en #LaRutaNatural
-date: 2023-05-17
+date: 2023-05-23
 output:
   distill::distill_article:
     self_contained: true
