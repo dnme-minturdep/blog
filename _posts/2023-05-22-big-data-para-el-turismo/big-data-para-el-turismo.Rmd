@@ -45,7 +45,7 @@ Por último, vale destacar que los datos en cuestión provienen de una fuente es
 
 ### Fuentes alternativas como complemento de información
 
-Desde la DNMyE se administran diversos operativos estadísticos que tienen como objetivo la caracterización las diferentes formas de turismo: la [**Encuesta de Turismo Internacional (ETI)**](https://bitacora.yvera.tur.ar/posts/2022-05-31-intro-eti/) y la [**Encuesta de Ocupación Hotelera (EOH)**](https://bitacora.yvera.tur.ar/posts/2022-05-24-intro-eoh/), en conjunto con el INDEC, y la [**Encuesta de Viajes y Turismo de los Hogares (EVyTH)**](https://bitacora.yvera.tur.ar/posts/2022-06-06-intro-evyth/). Todos estos, en conjunto, conforman el Sistema de Estadísticas de Turismo de Argentina, insumo fundamental para, entre otras cosas, el desarrollo de la [**Cuenta Satelite de Turismo de Argentina (CST-A)**](https://bitacora.yvera.tur.ar/posts/2022-05-11-cst-parte2/)**.**
+Desde la DNMyE se administran diversos operativos estadísticos que tienen como objetivo la caracterización las diferentes formas de turismo: la [**Encuesta de Turismo Internacional (ETI)**](https://bitacora.yvera.tur.ar/posts/2022-05-31-intro-eti/) y la [**Encuesta de Ocupación Hotelera (EOH)**](https://bitacora.yvera.tur.ar/posts/2022-05-24-intro-eoh/), en conjunto con el INDEC, y la [**Encuesta de Viajes y Turismo de los Hogares (EVyTH)**](https://bitacora.yvera.tur.ar/posts/2022-06-06-intro-evyth/). Todos estos, en conjunto, conforman el Sistema de Estadísticas de Turismo de Argentina, insumo fundamental para, entre otras cosas, el desarrollo de la [**Cuenta Satélite de Turismo de Argentina (CST-A)**](https://bitacora.yvera.tur.ar/posts/2022-05-11-cst-parte2/)**.**
 
 Para estas, de un modo esquemático, las formas de turismo se clasifican de acuerdo al origen y destino de los visitantes: Interno (quienes se desplazan en el mismo país que residen); Receptivo (no residentes que viajan al país) y Emisivo (residentes que viajan a otro país).
 
@@ -129,7 +129,7 @@ Parte del trabajo entonces es analizar los datos y en la medida de las posibilid
 knitr::include_graphics("serie_ifas_dnm.png")
 ```
 
-El siguiente mapa presenta una muestra de 10 mil señales emitidas por dispositivos móviles identificados con origen extranjero (país de residencia del IFA)[^1]. Cada punto corresponde a una coordenada geográfica aproximada. El territorio argentino está a su vez delimitado por una capa de polígonos correspondiente a [**16 de las 17 rutas naturales**](https://larutanatural.gob.ar/) (se excluye el *Continente Blanco*). Al hacer *click* sobre cada punto se distingue IFAs únicos (truncados para preservar el dato), fecha de registro y nacionalidad de origen.
+El siguiente mapa presenta una muestra de 10 mil señales emitidas por dispositivos móviles identificados con origen extranjero (país de residencia del IFA)[^1]. Cada punto corresponde a una coordenada geográfica aproximada. El territorio argentino está a su vez delimitado por una capa de polígonos correspondiente a [**16 de las 17 rutas naturales**](https://larutanatural.gob.ar/) (se excluye el *Continente Blanco*). Al hacer *click* sobre cada punto se distinguen IFAs únicos (truncados para preservar el dato), fecha de registro y nacionalidad de origen.
 
 [^1]: Las señales son una pequeña fracción de unos casi 16,7 millones de registros de más de 592 mil dispositivos distintos, a lo largo y ancho del territorio argentino para los 12 meses previos a la pandemia.
 
@@ -212,7 +212,7 @@ geo_ifas_ext_sample %>%
 
 ### Zoom in: La Ruta Natural Patagonia Andina
 
-Al tener información desagregada de señales con referencia espacial podemos analizar puntos de interés de áreas específicas. Por ejemplo, se puede filtrar de la muestra anterior aquellos datos que se corresponden con el polígono de la **Patagónia Andina**. Al mismo tiempo, podemos avanzar en visualizar características de interés (como colorear por el país de origen identificado en el conjunto de datos).
+Al tener información desagregada de señales con referencia espacial podemos analizar puntos de interés de áreas específicas. Por ejemplo, se puede filtrar de la muestra anterior aquellos datos que se corresponden con el polígono de la **Patagonia Andina**. Al mismo tiempo, podemos avanzar en visualizar características de interés (como colorear por el país de origen identificado en el conjunto de datos).
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 
@@ -243,13 +243,13 @@ La idea detrás de este ejercicio es que podemos trabajar estos datos con la mis
 
 #### Analizar visitas a Imperdibles
 
-Así como hicimos *zoom* hacia el polígono de una *\#RutaNatural* específica, podemos indagar sobre cualquier referencia geográfica de interés (y momento del tiempo del periodo abarcado por los datos). Siguiendo con el ejemplo de visitas a Parques Nacionales, podemos explorar muchos de ellos dentro de los "Imperdibles" catalogados por el programa [**La Ruta Natural (Imperdibles - Patagónia Andina)**](https://larutanatural.gob.ar/es/ruta/5/patagonia-andina).
+Así como hicimos *zoom* hacia el polígono de una *\#RutaNatural* específica, podemos indagar sobre cualquier referencia geográfica de interés (y momento del tiempo del periodo abarcado por los datos). Siguiendo con el ejemplo de visitas a Parques Nacionales, podemos explorar muchos de ellos dentro de los "Imperdibles" catalogados por el programa [**La Ruta Natural (Imperdibles - Patagonia Andina)**](https://larutanatural.gob.ar/es/ruta/5/patagonia-andina).
 
 ```{r echo=FALSE}
 knitr::include_graphics("lrn.png")
 ```
 
-El uso de este recurso, siguiendo el argumento, nos permitiría potencialmente estimar una proporción de los visitantes extranjeros por país de residencia; dato no incluido en los registros administrativos con los que trabajamos usualmente. El siguiente mapa muestra, con distinción de nacionalidad de origen y fecha de visita, IFAs que fueron registrados en el interior de alguno de los **Imperdibles de la Ruta Natural Patagónia Andina** (polígonos verdes): Lanín, Siete Lagos, Villa Pehuenia y lagos Aluminé y Moquehue, etc.
+El uso de este recurso, siguiendo el argumento, nos permitiría potencialmente estimar una proporción de los visitantes extranjeros por país de residencia; dato no incluido en los registros administrativos con los que trabajamos usualmente. El siguiente mapa muestra, con distinción de nacionalidad de origen y fecha de visita, IFAs que fueron registrados en el interior de alguno de los **Imperdibles de la Ruta Natural Patagonia Andina** (polígonos verdes): Lanín, Siete Lagos, Villa Pehuenia y lagos Aluminé y Moquehue, etc.
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 
