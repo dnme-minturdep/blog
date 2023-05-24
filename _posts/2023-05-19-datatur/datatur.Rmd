@@ -15,7 +15,7 @@ draft: false
 knitr::opts_chunk$set(echo = FALSE, fig.align = 'center')
 ```
 
-La Dirección Nacional de Mercados y Estadísticas puso en funcionamiento una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos nacionales, provinciales y locales para contribuir al fortalecimiento de los sistemas de estadísticas subnacionales, con el objetivo de generar información robusta y confiable de la actividad turística de nuestro país.
+La Dirección Nacional de Mercados y Estadísticas (DNMyE) puso en funcionamiento una nueva plataforma web para el intercambio y la gestión de datos del turismo entre organismos nacionales, provinciales y locales para contribuir al fortalecimiento de los sistemas de estadísticas subnacionales, con el objetivo de generar información robusta y confiable de la actividad turística de nuestro país.
 
 ```{r}
 knitr::include_graphics("land.png")
@@ -40,11 +40,14 @@ El objetivo es implementar un sistema homogéneo y armonizado en lo referente a 
 
 ### DEST: Módulo de datos estadísticos
 
-El **módulo de datos estadísticos del turismo (DEST)**, con nuevas soluciones en desarrollo,  ya está siendo utilizado por áreas provinciales y municipales responsables de las estadísticas de turismo. A través del mismo informan a la DNMyE los indicadores que ellas elaboran sobre las temporadas estival e invernal, los fines de semana largos y otros eventos locales relevados. 
+El diseño funcional del **módulo de datos estadísticos del turismo (DEST)** nació de un intercambio colaborativo entre la DNMyE y el [Área de Datos de Fundar](https://fund.ar/area/datos/). El mismo consistió en un relevamiento de los procesos internos de intercambio entre la DNMyE y las jurisdicciones; un análisis de los metadatos asociados al proceso; definiciones de roles, segmentos y problemas a resolver asociados; todo en línea con el diseño de un _Producto Mínimo Viable_. 
+
+Habiendo avanzado luego en su desarrollo y pruebas piloto, mientras se avanza en el desarrollo de nuevas soluciones,  DEST ya está siendo utilizado por áreas provinciales y municipales responsables de las estadísticas de turismo. A través del mismo informan a la DNMyE los indicadores que ellas elaboran sobre las temporadas estival e invernal, los fines de semana largos y otros eventos locales relevados. 
 
 ```{r, out.width= '110%'}
 knitr::include_graphics("lista.png")
 ```
+
 
 El módulo DEST da un marco sistemático e institucional para la comunicación de estos indicadores mediante una interfaz sencilla y amigable, y que contempla la posibilidad de adaptar los indicadores y eventos o temporadas a lo que produce cada jurisdicción. Estos datos son usualmente relevados y comunicados al inicio y al cierre de cada evento y temporada, de forma que resulta fundamental una carga rápida y controlada de los mismos.
 
