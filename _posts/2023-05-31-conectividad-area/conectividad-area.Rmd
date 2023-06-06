@@ -1,8 +1,7 @@
 ---
 title: "Conectividad Aérea"
 description: "Publicación del Informe y Reporte de Conectividad Aérea en la Argentina, que recopila información turística del mercado aerocomercial del país."
-author: []
-date: 2023-05-31
+date: 2023-06-08
 output:
   distill::distill_article:
     self_contained: true
@@ -69,15 +68,13 @@ cabotaje <- cabotaje %>%
   filter(region_destino != "No hay info") 
 ```
 
-# PRESENTACIÓN
+A partir de la colaboración con la [Administración Nacional de Aviación Civil (ANAC) dependiente del Ministerio de Transporte de la Nación](https://www.argentina.gob.ar/anac), la Dirección Nacional de Mercados y Estadística (DNMYE) pone a disposición dos nuevos recursos, un documento de trabajo y un reporte, para el análisis del mercado aerocomercial y el flujo de pasajeros en el país. Los mismos, en conjunto al [Tablero de Conectividad Aérea](https://tableros.yvera.tur.ar/conectividad/) del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/), suponen una nueva fuente de datos para el estudio de una dimensión clave de la actividad turística nacional.
 
-A partir de la colaboración con la [Administración Nacional de Aviación Civil (ANAC) dependiente del Ministerio de Transporte de la Nación](https://www.argentina.gob.ar/anac), la Dirección Nacional de Mercados y Estadística (DNMYE) pone a disposición dos nuevos recursos, un documento de trabajo y un reporte, para el análisis del mercado aerocomercial y el flujo de pasajeros en el país. Los mismos, en conjunto al [Tablero de Conectividad Aérea](%22https://tableros.yvera.tur.ar/conectividad/%22) del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/), suponen una nueva fuente de datos para el estudio de una dimensión clave de la actividad turística nacional.
-
-Ambos recursos utilizan datos que provienen del Sistema Integrado de Aviación Civil (SIAC) y son facilitados por la ANAC. La DNMYE realiza un ulterior procesamiento de los mismos para reducir el universo de análisis a aquellos movimientos aéreos relevantes para la actividad turística. Es por eso que del total de movimientos registrados por el SIAC sólo se presenta la información correspondiente a movimientos de las principales líneas aerocomerciales, excluyendo los movimientos de vuelos charter, trabajos aéreos, instrucción, vuelos oficiales y vuelos privados. 
+Ambos recursos utilizan datos que provienen del Sistema Integrado de Aviación Civil (SIAC) y son facilitados por la ANAC. La DNMYE realiza un ulterior procesamiento de los mismos para reducir el universo de análisis a aquellos movimientos aéreos relevantes para la actividad turística. Es por eso que, del total de movimientos registrados por el SIAC, sólo se presenta la información correspondiente a movimientos de las principales líneas aerocomerciales, excluyendo aquellos de vuelos charter, trabajo aéreos, instrucción, vuelos oficiales y vuelos privados. 
 
 # DOCUMENTO DE TRABAJO
 
-El ["Documento de Trabajo N°11: Conectividad Aérea. Diagnóstico turístico del mercado aerocomercial de Argentina."](https://tableros.yvera.tur.ar/recursos/biblioteca/conectividad_aerea.pdf), disponible en la [Biblioteca](https://biblioteca.yvera.tur.ar/) del [Sistema de Información Turística de Argentina (SINTA)](https://www.yvera.tur.ar/sinta/) realiza un análisis descriptivo de información estadística vinculada al mercado de cabotaje y al mercado internacional aerocomercial en lo referido a vuelos, pasajeros, asientos, rutas aéreas y aerolíneas, entre los años 2017 y 2023.
+El ["Documento de Trabajo N°11: Conectividad Aérea. Diagnóstico turístico del mercado aerocomercial de Argentina."](https://tableros.yvera.tur.ar/recursos/biblioteca/conectividad_aerea.pdf), disponible en la [Biblioteca](https://biblioteca.yvera.tur.ar/) del SINTA, realiza un análisis descriptivo de información estadística vinculada al mercado de cabotaje y al internacional aerocomercial en lo referido a vuelos, pasajeros, asientos, rutas aéreas y aerolíneas, entre los años 2017 y 2023.
 
 ```{r}
 cabotaje %>% 
@@ -130,7 +127,7 @@ cabotaje %>%
   guides(color = guide_legend(nrow = 1))
 ```
 
-El análisis de los datos muestra que, desde el año 2017, el mercado aéreo de cabotaje ha ido creciendo paulatinamente en términos de vuelos, asientos disponibles y pasajeros transportados, pese al parate que supuso la pandemia. Tal es así que, a mayo de 2023, la gran mayoría de los indicadores ha recuperado y hasta superado los valores previos a la crisis sanitaria.
+El análisis de los datos muestra que, desde el año 2017, el mercado aéreo de cabotaje ha ido creciendo paulatinamente en términos de vuelos, asientos disponibles y pasajeros transportados, pese al parate que supuso la pandemia. Tal es así que, a mayo de 2023, la gran mayoría de los indicadores han recuperado y hasta superado los valores previos a la crisis sanitaria.
 
 ```{r}
 valores_2019 <- cabotaje %>% 
@@ -180,7 +177,7 @@ cabotaje %>%
   guides(color = guide_legend(nrow = 1))
 ```
 
-En lo que respecta al mercado comercial, no solo los indicadores de desempeño han mejorado, sino que también aquellos vinculados a la conectividad aérea. Por un lado, en la actualidad, existen más rutas aéreas y más conexiones federales que hace 4 años atras y, por el otro, el mercado aerocomercial se ha ido desconcentrado con la consolidación de nuevos actores.
+Sin embargo, no solo los indicadores de desempeño han mejorado, sino que también aquellos vinculados a la conectividad aérea. En la actualidad, no solo existen más rutas aéreas y más conexiones federales que hace 4 años atrás, sino que también, el mercado aerocomercial se ha ido desconcentrando con la consolidación de nuevos actores.
 
 ```{r}
 aeropuertos <- readxl::read_xlsx("/srv/DataDNMYE/aerocomercial/libros_de_codigos/ANAC/aeropuertos_nuevos.xlsx", col_types = "text") %>% 
@@ -275,7 +272,7 @@ ggplot()+
                                 "Nuevas rutas" = dnmye_colores("rosa")),
                      limits = c("Rutas discontinuadas", "Nuevas rutas"))+
   labs(title = "Rutas Aéreas",
-       subtitle = "Comparativa enero",
+       subtitle = "Enero",
        color = "",
        # caption = "Fuente: MINTURDEP en base a información de ANAC.\n Nota: Los valores de 2023 correponden al total de rutas aéreas a marzo de 2023."
        ) +
@@ -286,7 +283,7 @@ ggplot()+
         plot.subtitle = element_text(hjust = 0.5))
 ```
 
-En lo referido al mercado internacional aerocomercial, la pandemia significó un quiebre abrupto en la actividad económica. En línea con lo que ocurrido alrededor del mundo[^1], la recuperación del mercado aéreo fue mucho más lenta que en el de cabotaje y varios de los indicadores se encuentran aún por debajo de los existentes a principios del 2020. Sin embargo, se espera que en los próximos meses del 2023 se reactiven viejos corredores aéreos detenidos durante la crisis mundial, aumenten su frecuencia servicios existentes y se sumen nuevas conexiones y compañías al mercado.
+En lo referido al mercado internacional, la pandemia significó un quiebre abrupto en la actividad económica. En línea con lo ocurrido alrededor del mundo[^1], la recuperación del mercado aéreo fue mucho más lenta que en el de cabotaje y varios de los indicadores se encuentran aún por debajo de los existentes a principios del 2020. Sin embargo, se espera que en los próximos meses del 2023 se reactiven viejos corredores aéreos detenidos durante la crisis, aumenten su frecuencia servicios existentes y se sumen nuevas conexiones y compañías al mercado.
 
 [^1]: https://www.iata.org/en/iata-repository/publications/economic-reports/air-passenger-market-analysis-march-2023/
 
@@ -375,7 +372,7 @@ internacional %>%
                                    vjust = 1)) 
 ```
 
-En resumen, el continente americano y, más precisamente, Brasil, Chile y Estados Unidos, se erigen como los principales orígenes y destinos inmediatos de los vuelos que van y vienen desde Argentina. A su vez Aerolíneas Argentinas y, en una menor medida, LATAM, se ubican como las principales operadoras de vuelos internacionales y el Aeropuerto Internacional Ministro Pistarini de Ezeiza como el principal nodo del país.
+En resumen, el continente americano y, más precisamente, Brasil, Chile y Estados Unidos, se erigen como los principales orígenes y destinos inmediatos de los vuelos que van y vienen desde Argentina. A su vez, Aerolíneas Argentinas y, en una menor medida, LATAM, se ubican como las principales operadoras de vuelos internacionales, y, el Aeropuerto Internacional Ministro Pistarini de Ezeiza, como el principal nodo del país.
 
 ```{r}
 internacional %>% 
@@ -439,7 +436,7 @@ internacional %>%
 
 # REPORTE
 
-De manera complementaria al Documento de Trabajo, la Dirección Nacional de Mercados y Estadística elabora mensualmente un informe sintético que reúne los datos actualizados del flujo aerocomercial turístico correspondientes al mes previo, nutriéndose de las mismas estadísticas de vuelos antes mencionadas en este blog. En esta oportunidad, se publica el último Informe Mensual de Conectividad Aérea, correspondiente al mes de Mayo.
+De manera complementaria al Documento de Trabajo, la Dirección Nacional de Mercados y Estadística elabora mensualmente un informe sintético que reúne los datos actualizados del flujo aerocomercial turístico correspondientes al mes previo a la fecha de publicación, nutriéndose de las mismas estadísticas de vuelos antes mencionadas en este blog. En esta oportunidad, se publica el último Informe Mensual de Conectividad Aérea, correspondiente al mes de Mayo.
 
 
 ```{r}
@@ -507,7 +504,7 @@ freq_ciudad_dest_23 %>%
   gt() %>% 
   tab_header(
     title = md("__CIUDADES DE DESTINO POR VUELOS DE CABOTAJE__"),
-    subtitle = md("__ABRIL__")) %>%  
+    subtitle = md("__MAYO__")) %>%  
   tab_source_note(
     source_note = md("**Fuente:** MINTURDEP en base a información de ANAC.")) %>% 
   cols_label(
