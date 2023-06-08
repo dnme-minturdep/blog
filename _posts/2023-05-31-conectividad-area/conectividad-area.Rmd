@@ -4,8 +4,8 @@ description: "Publicación del Informe y Reporte de Conectividad Aérea en la Ar
 date: 2023-06-08
 output:
   distill::distill_article:
-    self_contained: true
-draft: true
+    self_contained: false
+draft: false
 ---
 
 ```{r setup, include=FALSE}
