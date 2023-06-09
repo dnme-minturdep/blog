@@ -70,7 +70,7 @@ cabotaje <- cabotaje %>%
 
 A partir de la colaboración con la [Administración Nacional de Aviación Civil (ANAC) dependiente del Ministerio de Transporte de la Nación](https://www.argentina.gob.ar/anac), la Dirección Nacional de Mercados y Estadística (DNMYE) pone a disposición dos nuevos recursos, un documento de trabajo y un reporte, para el análisis del mercado aerocomercial y el flujo de pasajeros en el país. Los mismos, en conjunto al [Tablero de Conectividad Aérea](https://tableros.yvera.tur.ar/conectividad/) del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/), suponen una nueva fuente de datos para el estudio de una dimensión clave de la actividad turística nacional.
 
-Ambos recursos utilizan datos que provienen del Sistema Integrado de Aviación Civil (SIAC) y son facilitados por la ANAC. La DNMYE realiza un ulterior procesamiento de los mismos para reducir el universo de análisis a aquellos movimientos aéreos relevantes para la actividad turística. Es por eso que, del total de movimientos registrados por el SIAC, sólo se presenta la información correspondiente a movimientos de las principales líneas aerocomerciales, excluyendo aquellos de vuelos charter, trabajo aéreos, instrucción, vuelos oficiales y vuelos privados. 
+Ambos recursos utilizan datos que provienen del Sistema Integrado de Aviación Civil (SIAC) y son facilitados por la ANAC. La DNMYE realiza un ulterior procesamiento de los mismos para reducir el universo de análisis a aquellos movimientos aéreos relevantes para la actividad turística. Es por eso que, del total de movimientos registrados por el SIAC, sólo se presenta la información correspondiente a movimientos de las principales líneas aerocomerciales, excluyendo aquellos de vuelos charter, trabajo aéreos, instrucción, vuelos oficiales y vuelos privados.
 
 # DOCUMENTO DE TRABAJO
 
@@ -285,7 +285,7 @@ ggplot()+
 
 En lo referido al mercado internacional, la pandemia significó un quiebre abrupto en la actividad económica. En línea con lo ocurrido alrededor del mundo[^1], la recuperación del mercado aéreo fue mucho más lenta que en el de cabotaje y varios de los indicadores se encuentran aún por debajo de los existentes a principios del 2020. Sin embargo, se espera que en los próximos meses del 2023 se reactiven viejos corredores aéreos detenidos durante la crisis, aumenten su frecuencia servicios existentes y se sumen nuevas conexiones y compañías al mercado.
 
-[^1]: https://www.iata.org/en/iata-repository/publications/economic-reports/air-passenger-market-analysis-march-2023/
+[^1]: <https://www.iata.org/en/iata-repository/publications/economic-reports/air-passenger-market-analysis-march-2023/>
 
 ```{r}
 # Filtramos los casos internacionales.
@@ -436,8 +436,7 @@ internacional %>%
 
 # REPORTE
 
-De manera complementaria al Documento de Trabajo, la Dirección Nacional de Mercados y Estadística elabora mensualmente un informe sintético que reúne los datos actualizados del flujo aerocomercial turístico correspondientes al mes previo a la fecha de publicación, nutriéndose de las mismas estadísticas de vuelos antes mencionadas en este blog. En esta oportunidad, se publica el último Informe Mensual de Conectividad Aérea, correspondiente al mes de Mayo.
-
+De manera complementaria al Documento de Trabajo, la Dirección Nacional de Mercados y Estadística elabora mensualmente un informe sintético que reúne los datos actualizados del flujo aerocomercial turístico correspondientes al mes previo a la fecha de publicación, nutriéndose de las mismas estadísticas de vuelos antes mencionadas en este blog. En esta oportunidad, se publica el último [Informe Mensual de Conectividad Aérea](https://tableros.yvera.tur.ar/conectividad.html), correspondiente al mes de Mayo.
 
 ```{r}
 freq_ciudad_dest_23 <- cabotaje %>% 
@@ -571,6 +570,18 @@ freq_ciudad_dest_23 %>%
       rows = as.numeric(posicion_23) < as.numeric(posicion_22)))
 ```
 
+# RECURSOS
+
+Accedé a los recursos de conectividad aérea publicados por la DNMyE:
+
+-   [Tablero Interactivo](https://tableros.yvera.tur.ar/conectividad/)
+-   [Reporte Mensual](https://tableros.yvera.tur.ar/conectividad.html)
+
+Además podés consultar las publicaciones de ANAC:
+
+-   [Informes ANAC](https://datos.anac.gob.ar/estadisticas/)
+
+-   [Datos Abiertos ANAC](https://datos.gob.ar/bg/dataset/transporte-aterrizajes-despegues-procesados-por-administracion-nacional-aviacion-civil-anac)
 
 ::: {.infobox}
 Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
