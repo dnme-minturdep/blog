@@ -25,10 +25,10 @@ La **modalidad de cursada será virtual**, con el fin de poder hacer accesible e
 
 **Ante dudas o consultas, [podés acceder al archivo de preguntas frecuentes](https://www.argentina.gob.ar/sites/default/files/preguntas_frecuentes_-_diplomatura_0.pdf) o dirigirte por correo electrónico a [estadistica\@turismo.gob.ar](mailto:estadistica@turismo.gob.ar){.email}**
 
-## ARMONIZACION 
+## ARMONIZACIÓN 
 
 El programa se enmarca en el desarrollo de acciones propuestas en el proyecto de [Armonización de Estadísticas Provinciales de Turismo](https://armonizacion.yvera.tur.ar/)
-que la Dirección Nacional de Mercados y Estadística re edito a partir del año 2021. El mismo se propuso contribuir al fortalecimiento de los sistemas de estadística provinciales con el objetivo de generar información robusta y confiable de la actividad turística, a partir de tres ejes principales:
+que la Dirección Nacional de Mercados y Estadística reeditó a partir del año 2021. El mismo se propuso contribuir al fortalecimiento de los sistemas de estadística provinciales con el objetivo de generar información robusta y confiable de la actividad turística, a partir de tres ejes principales:
 
 (i) **actualización metodológica**, que promovimos con el desarrollo de Documentos Técnicos, publicados bajo la etiqueta Metodología en la [BIBLIOTECA del Sistema de Información Turístico de la Argentina (SINTA)](https://biblioteca.yvera.tur.ar/)
     [^1];
