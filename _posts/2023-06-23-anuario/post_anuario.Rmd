@@ -2,7 +2,7 @@
 title: "La DNMyE retoma la publicación de los Anuarios Estadísticos de Turismo"
 description: |
   Con la publicación del Anuario 2021 se reanuda el trabajo de compilación de estadísticas del turismo que se realizó entre 2005 y 2015. Esta nueva edición presenta características novedosas en términos de formato, reproducibilidad y contenido.
-preview: 
+preview: portadas-biblioteca.png
 date: 
 output:
   distill::distill_article:
