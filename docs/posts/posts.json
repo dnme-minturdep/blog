@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2023-08-23-datos-abiertos-de-conectividad-aerea/",
+    "title": "Datos abiertos de Conectividad Aérea",
+    "description": "Publicación de datos abiertos sobre transporte aerocomercial en Argentina, con información sobre vuelos, pasajeros y asientos.",
+    "author": [],
+    "date": "2023-08-23",
+    "categories": [],
+    "contents": "\nEn vistas de profundizar el trabajo realizado hasta el momento en colaboración con la Administración Nacional de Aviación Civil (ANAC), dependiente del Ministerio de Transporte de la Nación, la Dirección Nacional de Mercados y Estadística (DNMYE) publica de manera abierta un nuevo conjunto de datos sobre Conectividad Aerocomercial en el país.\nEn esta oportunidad, los datasets, accesibles a través del portal de datos abiertos del Sistema de Información Turística de la Argentina (SINTA), contienen información sobre vuelos, pasajeros, asientos, aerolíneas comerciales y rutas comerciales desde el año 2017. Los datos pueden ser encontrados de manera agregada y desagregada, con una frecuencia diaria, aunque también de manera mensual, trimestral y anual, lo cual permite observar su evolución en el tiempo.\nDe esta manera, se puede ver, por ejemplo, la cantidad de rutas federales que conectan el país por mes.\n\n\n\nA partir del gráfico, se observa que el número de rutas federales ha ido en constante crecimiento desde el quiebre que supuso para la actividad la pandemia durante el año 2020. De esta manera, y pese a las fluctuaciones propias de la demanda estacional, en la actualidad, hay un record de rutas aéreas que unen localidades del interior del país sin pasar por ningún aeropuerto del área metropolitana de Buenos Aires.\nEn este marco, estos recursos, en conjunto con los recientemente publicados Documento de Trabajo N°11, reporte mensual y Tablero de Conectividad Aérea, suponen una nueva fuente de datos para el análisis del mercado aerocomercial y el flujo de pasajeros en el país, una dimensión clave de la actividad turística nacional.\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2023-08-23-datos-abiertos-de-conectividad-aerea/datos-abiertos-de-conectividad-aerea_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2023-08-23T14:59:35-03:00",
+    "input_file": "datos-abiertos-de-conectividad-aerea.knit.md"
+  },
+  {
     "path": "posts/2023-08-17-ods-turismo/",
     "title": "El turismo en los Objetivos de Desarrollo Sostenible",
     "description": "La DNMyE publica un documento de trabajo que describe el aporte del turismo\nal cumplimiento de los Objetivos de Desarrollo Sostenible, acompañado de un tablero de seguimiento de los\nindicadores propuestos para evaluar su desempeño",
