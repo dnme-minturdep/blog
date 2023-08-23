@@ -1,0 +1,147 @@
+---
+title: "Datos abiertos de Conectividad Aérea"
+description: |
+  Publicación de datos abiertos sobre transporte aerocomercial en Argentina, con información sobre vuelos, pasajeros y asientos.
+date: 2023-08-23
+output:
+  distill::distill_article:
+    self_contained: false
+draft: false
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(comunicacion)
+library(herramientas)
+library(lubridate)
+
+
+base_total <- read_file_srv("/srv/DataDNMYE/aerocomercial/anac/base_anac_agrupada_diaria.parquet") 
+
+publicacion_mes_anio <- strftime(Sys.Date(), '%B %Y')
+
+datos_mes_anio <- strftime(max(base_total$Fecha), '%B')
+  
+datos_mes_anio_bis <- strftime(max(base_total$Fecha), '%d-%m-%Y')
+
+# Cabotaje
+cabotaje <- base_total %>% 
+  filter(clasificacion_vuelo == "Cabotaje") %>% 
+  mutate(region_destino = case_when(destino_provincia_etiqueta == "Buenos Aires" ~ "Buenos Aires",
+                                    destino_provincia_etiqueta == "Ciudad Autónoma de Buenos Aires" ~ "AMBA",
+                                    destino_provincia_etiqueta == "Córdoba" ~ "Córdoba",
+                                    destino_provincia_etiqueta == "Tierra del Fuego, Antártida e Islas del Atlántico Sur" ~ "Patagonia",
+                                    destino_provincia_etiqueta == "Santa Cruz" ~ "Patagonia",
+                                    destino_provincia_etiqueta == "Chubut" ~ "Patagonia",
+                                    destino_provincia_etiqueta == "Neuquén" ~ "Patagonia",
+                                    destino_provincia_etiqueta == "Río Negro" ~ "Patagonia",
+                                    destino_provincia_etiqueta == "La Pampa" ~ "Patagonia",
+                                    destino_provincia_etiqueta == "Mendoza" ~ "Cuyo",
+                                    destino_provincia_etiqueta == "San Juan" ~ "Cuyo",
+                                    destino_provincia_etiqueta == "San Luis" ~ "Cuyo",
+                                    destino_provincia_etiqueta == "La Rioja" ~ "Norte",
+                                    destino_provincia_etiqueta == "Catamarca" ~ "Norte",
+                                    destino_provincia_etiqueta == "Salta" ~ "Norte",
+                                    destino_provincia_etiqueta == "Jujuy" ~ "Norte",
+                                    destino_provincia_etiqueta == "Santiago del Estero" ~ "Norte",
+                                    destino_provincia_etiqueta == "Tucumán" ~ "Norte",
+                                    destino_provincia_etiqueta == "Santa Fe" ~ "Litoral",
+                                    destino_provincia_etiqueta == "Chaco" ~ "Litoral",
+                                    destino_provincia_etiqueta == "Formosa" ~ "Litoral",
+                                    destino_provincia_etiqueta == "Misiones" ~ "Litoral",
+                                    destino_provincia_etiqueta == "Corrientes" ~ "Litoral",
+                                    destino_provincia_etiqueta == "Entre Ríos" ~ "Litoral",
+                                    T ~ "No hay info"),
+         region_destino = case_when(destino_aeropuerto_etiqueta %in% c("Aeropuerto Int. Ministro Pistarini", "Aeropuerto Int. de San Fernando", "Aeropuerto El Palomar") ~ "AMBA",
+                                    T ~ region_destino))
+
+#Filtramos de momento los casos sin info.
+cabotaje <- cabotaje %>% 
+  filter(region_destino != "No hay info") 
+
+```
+
+En vistas de profundizar el trabajo realizado hasta el momento en colaboración con la [Administración Nacional de Aviación Civil (ANAC), dependiente del Ministerio de Transporte de la Nación](https://www.argentina.gob.ar/anac){target="_blank"}, la Dirección Nacional de Mercados y Estadística (DNMYE) publica de manera abierta un nuevo [conjunto de datos sobre Conectividad Aerocomercial en el país](https://datos.yvera.gob.ar/dataset/conectividad-aerea){target="_blank"}.
+
+En esta oportunidad, los datasets, accesibles a través del [portal de datos abiertos](https://datos.yvera.gob.ar/){target="_blank"} del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target="_blank"}, contienen información sobre **vuelos, pasajeros, asientos, aerolíneas comerciales y rutas comerciales desde el año 2017**. Los datos pueden ser encontrados de manera agregada y desagregada, con una frecuencia diaria, aunque también de manera mensual, trimestral y anual, lo cual permite observar su evolución en el tiempo.
+
+De esta manera, se puede ver, por ejemplo, la cantidad de rutas federales que conectan el país por mes.
+
+```{r}
+valores_vacios <- data.table::data.table(anio_local = 2020,
+                             mes_local = 4:10,
+                             total_rutas = 0)
+
+rutas_federales <- cabotaje %>%
+  filter(!str_detect(ruta_nombre, "Ezeiza|El Palomar|Ciudad de Buenos Aires")) %>%
+  group_by(anio_local, mes_local, ruta_nombre) %>% 
+  summarise(total_vuelos = sum(vuelos, na.rm = T)) %>% 
+  filter(total_vuelos >= 4) %>% 
+  group_by(anio_local, mes_local, .drop = F) %>%
+  summarise(total_rutas = n_distinct(ruta_nombre)) %>% 
+  bind_rows(valores_vacios) %>% 
+  mutate(fecha = lubridate::my(paste0(mes_local,"-", anio_local))) %>% 
+ ggplot(aes(x = fecha,
+             y = total_rutas,
+             text = paste("Fecha:",
+                          format(fecha,"%b-%y"),
+                          "<br> Total:",
+                          format(total_rutas,
+                                                           big.mark=".", decimal.mark = ",", digits=0)))) +
+  geom_segment(aes(xend = fecha,
+                   y = 0,
+                   yend = total_rutas),
+               color = dnmye_colores("cian"))+
+  geom_point(color = dnmye_colores("cian"),
+             size = 1.25,
+             fill = alpha(dnmye_colores("cian"), 0.3),
+             alpha = 0.7,
+             shape = 21,
+             stroke = 2) + 
+  geom_point(data = cabotaje %>%
+               filter(!str_detect(ruta_nombre, "Ezeiza|El Palomar|Ciudad de Buenos Aires")) %>%
+               group_by(anio_local, mes_local, ruta_nombre) %>% 
+               summarise(total_vuelos = sum(vuelos, na.rm = T)) %>% 
+               filter(total_vuelos >= 4) %>% 
+               group_by(anio_local, mes_local, .drop = F) %>%
+               summarise(total_rutas = n_distinct(ruta_nombre)) %>% 
+               bind_rows(valores_vacios) %>% 
+               mutate(fecha = lubridate::my(paste0(mes_local,"-", anio_local))) %>%
+               filter(mes_local == month(max(cabotaje$Fecha))),
+             color = dnmye_colores("rosa"),
+             size = 1,
+             fill = alpha(dnmye_colores("rosa"), 0.3),
+             alpha = 0.7,
+             shape = 21,
+             stroke = 1.5) + 
+  scale_y_continuous(limits = c(0, 75),
+                     breaks = seq(0, 75, 15))+
+  scale_x_date(date_breaks = "4 month", 
+               date_labels = "%b-%y")+
+  scale_fill_dnmye(palette = "cualitativa", reverse = -1)+
+  labs(title = "Cantidad de rutas aéreas federales",
+       subtitle = "Con al menos 4 frecuencias mensuales",
+       y = "",
+       x = "",
+       color = "",
+       caption = "Fuente: MINTURDEP en base a información de ANAC.\n Comprende rutas aéreas que no conenctan con el AMBA.\n Nota: En rojo, los meses de agosto.") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 45,
+                                   hjust = 1,
+                                   vjust = 1))
+
+rutas_federales
+```
+
+A partir del gráfico, se observa que el número de rutas federales ha ido en constante crecimiento desde el quiebre que supuso para la actividad la pandemia durante el año 2020. De esta manera, y pese a las fluctuaciones propias de la demanda estacional, en la actualidad, hay un record de rutas aéreas que unen localidades del interior del país sin pasar por ningún aeropuerto del área metropolitana de Buenos Aires.
+
+En este marco, estos recursos, en conjunto con los recientemente publicados *[Documento de Trabajo N°11](https://tableros.yvera.tur.ar/recursos/biblioteca/conectividad_aerea.pdf){target="_blank"}*, [reporte mensual](https://tableros.yvera.tur.ar/conectividad.html){target="_blank"} y [Tablero de Conectividad Aérea](https://tableros.yvera.tur.ar/conectividad/){target="_blank"}, suponen una nueva fuente de datos para el análisis del mercado aerocomercial y el flujo de pasajeros en el país, una dimensión clave de la actividad turística nacional.
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
