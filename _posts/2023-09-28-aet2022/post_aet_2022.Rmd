@@ -4,7 +4,7 @@ description: "En línea con la reanudación de la publicación del informe anual
 output:
   distill::distill_article:
     self_contained: true
-draft: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}
