@@ -84,11 +84,11 @@ La información publicada surge como un sub-producto de los procesamientos reali
 
 # PRINCIPALES RESULTADOS
 
-La estructura de este nuevo informe es muy similar a la que se puede observar en el de la temporada 19/20, destacándose, en primera instancia, dos ejes grandes temáticos:
+La estructura de este nuevo informe es muy similar a la que se puede observar en el de la temporada 19/20, destacándose, en primera instancia, dos ejes temáticos principales:
 
 - **Volumen y perfil de los cruceristas:** 
 
-Este informe nos permite monitoriear la evolución del crucerismo en nuestro país. De esta manera, se aprecia cómo **en la última temporada la actividad volvió a mostrar valores pre-pandémicos**, superando a la temporada 2019/2020 (y con valores levemente inferiores a los de la temporada 2018/19):
+Este informe nos permite monitorear la evolución del crucerismo en nuestro país. De esta manera, se aprecia cómo **en la última temporada la actividad volvió a mostrar valores pre-pandémicos**, superando a la temporada 2019/2020 (y con valores levemente inferiores a los de la temporada 2018/19):
 
 
 ```{r out.height= "80%", out.width="100%"}
@@ -167,7 +167,7 @@ Dado que la información se elabora en base a datos provistos por la _Dirección
 
 Con el fin de visibilizar el fenómeno de los cruceros que realizan movimientos internos, como novedad en este informe, se agregan estadísticas del crucerismo en el puerto de Ushuaia generadas por el _INFUETUR_ a través de la _Dirección de Planificación y Desarrollo Turístico_ en base a datos elaborados por el _equipo de investigación de Turismo Antártico, de la Universidad Nacional de Tierra del Fuego, Antártida e Islas del Atlántico Sur_.
 
-En esta sección del informe se observa cómo, en el Puerto de Ushuaia,**en la última temporada se registró el valor más elevado de cruceristas de las últimas siete temporadas**. También se aprecia que los cruceros que realizaron viajes "Antárticos" realizaron el mayor aporte al volumen total de cruceristas:
+En esta sección del informe se observa cómo, en el Puerto de Ushuaia, **en la última temporada se registró el valor más elevado de cruceristas de las últimas siete temporadas**. También se aprecia que los cruceros que realizaron viajes "Antárticos" hicieron el mayor aporte al volumen total de cruceristas:
 
 
 ```{r}
@@ -221,7 +221,7 @@ ggplot(data = pax_temp, aes(y=cruceristas,x=anio,label=cruceristas,fill=tipo_via
 ```
 
 
-Dentro de esta sección, **también se podrán apreciar datos vinculados a la evolución de los cruceros registrados y la cantidad de recaladas por temporada**.
+Dentro de este apartado **también se podrán apreciar datos vinculados a la evolución de los cruceros registrados y la cantidad de recaladas por temporada**.
 
 El informe se encuentra disponible en https://biblioteca.yvera.tur.ar/, **y se puede acceder al mismo a través del siguiente link (poner link)**
 
