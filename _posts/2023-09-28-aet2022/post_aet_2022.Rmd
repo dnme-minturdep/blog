@@ -91,12 +91,12 @@ grafico_turismo_interno
 
 Cada uno de los capítulos cuenta con fichas técnicas y está acompañado del listado de recursos disponibles con los cuales se elaboró. En este sentido, el [Sistema de Información Turística de Argentina](https://www.yvera.tur.ar/sinta/) pone a disposición la gran mayoría de los datos contenidos en el AET, en diversos formatos: datos abiertos, reportes, tableros e informes.
 
-El trabajo realizado contó con la participación de toda la DNMyE, que trabajó colaborativamente aprovechando las ventajas de los entornos de control de versiones. Como fuera mencionado, el [código fuente del anuario]() está disponible para su reproducción o actualización futura por parte de la dirección.
+Para la realización del AET, se contó con la participación de toda la DNMyE, que trabajó colaborativamente aprovechando las ventajas de los entornos de control de versiones. Como fuera mencionado, el [código fuente del anuario](https://github.com/dnme-minturdep/anuario_2022) está disponible para su reproducción o actualización futura por parte de la dirección.
 
 Accedé a los recursos de *Anuario Estadístico de Turismo* en:
 
--   [Anuario Estadístico de Turismo 2022 (AET 2022)]()
--   [Código fuente del AET 2022]()
+-   [Anuario Estadístico de Turismo 2022 (AET 2022)](https://dnme-minturdep.github.io/anuario_2022/)
+-   [Código fuente del AET 2022](https://github.com/dnme-minturdep/anuario_2022)
 -   [Biblioteca: ediciones 2006-2015 y 2021 del AET](https://biblioteca.yvera.tur.ar/)
 
 
