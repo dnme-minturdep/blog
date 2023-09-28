@@ -5,6 +5,7 @@ output:
   distill::distill_article:
     self_contained: true
 draft: false
+preview: aet_2022.png
 ---
 
 ```{r setup, include=FALSE}
