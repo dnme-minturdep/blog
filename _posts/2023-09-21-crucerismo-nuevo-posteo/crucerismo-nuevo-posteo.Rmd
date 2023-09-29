@@ -223,11 +223,13 @@ ggplot(data = pax_temp, aes(y=cruceristas,x=anio,label=cruceristas,fill=tipo_via
 
 Dentro de este apartado **también se podrán apreciar datos vinculados a la evolución de los cruceros registrados y la cantidad de recaladas por temporada**.
 
-El informe se encuentra disponible en https://biblioteca.yvera.tur.ar/, **y se puede acceder al mismo a través del siguiente link (poner link)**
+El informe se encuentra disponible en https://biblioteca.yvera.tur.ar/, **y se puede acceder al mismo a través del siguiente [link](https://tableros.yvera.tur.ar/recursos/biblioteca/informe_cruceros_22_23.pdf).**
 
-**La información también se encuentra presenta en el [Tablero Interactivo de Crucerismo Marítimo en la Argentina](https://tableros.yvera.tur.ar/crucerismo/).**
+# NUEVO DATASET EN EL PORTAL DE DATOS ABIERTOS
 
-Además, se creo un nuevo dataset de **[Crucerismo Marítimo en la Argentina](Poner link)**, en el cual se pueden descargar recursos en formato _csv_ que **refieren al volumen de cruceristas por temporada, mes, puerto, edad, género, condición de residencia, país de residencia y crucero.** 
+**La información también se presenta en el [Tablero Interactivo de Crucerismo Marítimo en la Argentina](https://tableros.yvera.tur.ar/crucerismo/)**, con datos disponibles hasta la temporada 19/20 y **proximamente se actualizarán con los valores de la última temporada**.
+
+Además, se creo un nuevo dataset de **[Crucerismo Marítimo en la Argentina](https://datos.yvera.gob.ar/dataset/crucerismo-maritimo)**, en el cual se pueden descargar recursos en formato _csv_ que **refieren al volumen de cruceristas por temporada, mes, puerto, edad, género, condición de residencia, país de residencia y crucero.** 
 
 
 ::: {.infobox}
