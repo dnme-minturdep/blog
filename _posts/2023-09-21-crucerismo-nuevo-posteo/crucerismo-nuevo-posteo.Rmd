@@ -2,11 +2,11 @@
 title: "Crucerismo Marítimo en la Argentina"
 description: |
   Publicación del Informe de Crucerismo Marítimo en la Argentina con información de la última temporada.
-date: 2023-09-21
+date: 2023-09-29
 output:
   distill::distill_article:
     self_contained: true
-draft: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}
