@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2023-10-12-areas-protegidas/",
+    "title": "Áreas Protegidas",
+    "description": "Publicación del Informe de visitas en Áreas Protegidas en Argentina, que recopila información de visitas en Parques Nacionales y Provinciales del país.",
+    "author": [],
+    "date": "2023-10-12",
+    "categories": [],
+    "contents": "\r\nPresentación\r\nCon el propósito de ampliar el trabajo realizado hasta el momento en colaboración con la Dirección de Mercadeo de la Dirección Nacional de Uso Público, dependiente de la Administración de Parques Nacionales, la Dirección Nacional de Mercados y Estadística (DNMyE) incluye datos sobre visitas en áreas protegidas provinciales en el informe de visitas en Parques Nacionales que se venía publicando.\r\nA partir de febrero 2023, en el informe disponible en el SINTA, se agrega información histórica de visitas por condición de residencia en las Áreas Protegidas Naturales del Chubut y las visitas del Parque Provincial Ischigualasto, en la provincia de San Juan, ampliando la información de visitas a destinos vinculados al Turismo de Naturaleza en el país.\r\nEn el siguiente gráfico se puede observar la evolución histórica del total de las visitas del Sitio de Patrimonio de la Humanidad compuesto por el Parque Provincial Ischigualasto y el Parque Nacional Talampaya.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nAsimismo, se observa la estacionalidad de las visitas en ambas áreas protegidas en el año 2022, con picos de afluencia durante las vacaciones de invierno, y en los meses de abril y septiembre - octubre.\r\n\r\n\r\n\r\n\r\n\r\n\r\nEn el caso de la provincia del Chubut, se puede ver la evolución histórica de las visitas en tanto en áreas protegidas nacionales como provinciales, y observar la importancia del Área Natural Protegida Península Valdés dentro de la provincia.\r\n Nota: a partir del 2014 el PN Lago Puelo registró visitantes en forma mensual, mientras que del 2008 al 2013 se registraban los visitantes sólo los meses de temporada alta (enero a Semana Santa y diciembre).\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nEn cuanto a la estacionalidad, se observa que el primer trimestre concentra la mayor cantidad de visitas en la totalidad de las áreas protegidas, siguiendo en importancia el cuarto trimestre, donde la ocurrencia del fin de semana largo de octubre atrae visitantes en plena temporada de ballenas.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2023-10-25T16:17:45-03:00",
+    "input_file": "areas-protegidas.knit.md"
+  },
+  {
     "path": "posts/2023-09-28-aet2022/",
     "title": "La DNMyE publica el Anuario Estadístico de Turismo 2022",
     "description": "En línea con la reanudación de la publicación del informe anual estadístico del turismo (AET), iniciada con el AET 2021, aquí se presenta el AET 2022, que contiene las estadísticas que muestran la recuperación del sector tras la profunda crisis atravesada por la pandemia COVID-19.",
