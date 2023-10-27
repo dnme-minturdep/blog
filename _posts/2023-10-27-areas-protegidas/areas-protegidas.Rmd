@@ -1,0 +1,286 @@
+---
+title: "Áreas Protegidas"
+description: Publicación del Informe de visitas en Áreas Protegidas en Argentina, que recopila información de visitas en Parques Nacionales y Provinciales del país.
+date: 2023-10-27
+output:
+  distill::distill_article:
+    self_contained: false
+draft: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+# Presentación
+
+Con el propósito de ampliar el trabajo realizado hasta el momento en colaboración con la Dirección de Mercadeo de la Dirección Nacional de Uso Público, dependiente de la Administración de Parques Nacionales, la Dirección Nacional de Mercados y Estadística (DNMyE) incluye datos sobre visitas en áreas protegidas provinciales en el informe de visitas en Parques Nacionales que se venía publicando.
+
+A partir de febrero 2023, en el informe disponible en el [SINTA](https://www.yvera.tur.ar/sinta/informe/info/areas-protegidas), se agrega información histórica de visitas por condición de residencia en las Áreas Protegidas Naturales del Chubut y las visitas del Parque Provincial Ischigualasto, en la provincia de San Juan, ampliando la información de visitas a destinos vinculados al Turismo de Naturaleza en el país.
+
+En el siguiente gráfico se puede observar la evolución histórica del total de las visitas del Sitio de Patrimonio de la Humanidad compuesto por el Parque Provincial Ischigualasto y el Parque Nacional Talampaya.
+
+```{r}
+library(tidyverse)
+library(herramientas)
+library(comunicacion)
+library(ggrepel)
+library(ggtext)
+library(glue)
+
+#se levanta la base PN
+parques_nacionales <- read_file_srv("/DataDNMYE/areas_protegidas/areas_protegidas_nacionales/pivot_pn.xlsx", sheet=2)
+
+# se levanta base de Ischigualasto
+
+parque_isch <- read_file_srv("/areas_protegidas/areas_protegidas_provinciales/Base_parq_prov_ischigualasto.xlsx", sheet=2)
+
+# se arman insumos para tablas de evolución 2008 al 2022
+
+talampaya <- parques_nacionales %>% 
+  filter(parque_nacional == "talampaya", anio < 2023) %>% 
+  group_by(anio) %>% 
+  summarise(visitantes = sum(visitantes)) %>% 
+  ungroup() %>% 
+  mutate(area_protegida = "Talampaya")
+
+ischig <- parque_isch %>% 
+  mutate(anio = substr(indice_tiempo, 1,4)) %>% 
+  group_by(anio) %>% 
+  summarise(visitantes =sum(visitas)) %>% 
+  ungroup() %>% 
+  filter(anio > 2007 & anio <2023) %>% 
+  mutate(area_protegida = "Ischigualasto")
+
+#se juntan las tablas de Talampaya e Ishig
+
+data_areas_protegidas <- rbind(talampaya, ischig)  
+  
+
+  
+```
+
+
+```{r}
+#Calculo totales para agreagar al gráfico
+totales <- data_areas_protegidas %>% group_by(anio) %>%
+  summarise(total = sum(visitantes)) %>% ungroup()
+
+#Grafico 1 - evolución de las visitas por parque
+
+ggplot()+
+  geom_area(data= data_areas_protegidas, aes(anio, visitantes, group = area_protegida, fill= area_protegida), position = position_dodge(), alpha = 0.8)+
+  geom_line(data = totales, aes(anio, total, group =1), color= dnmye_colores("gris oscuro"))+
+  geom_point(data = totales, mapping = aes(anio, total), color= dnmye_colores("gris oscuro") )+
+  geom_label(data = totales, aes(anio, total, label = round(total/1000)), size = 3, vjust = -1, label.padding = unit(1, "mm"),
+             fontface="bold",show.legend = FALSE)+
+  scale_y_continuous(limits = c(-10, max(totales$total)*1.1),
+                     labels = function(x){paste0(x/1000," mil")})+
+  scale_fill_manual(values = c("Talampaya"= dnmye_colores("purpura"), 
+                               "Ischigualasto" = dnmye_colores("azul verde")
+                                 ))+
+  theme_minimal()+
+  theme(legend.position = "none", plot.subtitle = element_markdown())+
+  labs(title = "Evolución de las visitas en el SPM Ischigualasto - Talampaya",  subtitle = glue("**en miles. Años 2008 - 2022.** <span style='color:{dnmye_colores('purpura')}'>**Talampaya**</span>**,** <span style='color:{dnmye_colores('azul verde')}'>**Ischigualasto**</span> **y** <span style='color:{dnmye_colores('gris oscuro')}'>**Total**</span> "), caption = "Fuente: DNMyE en base a datos de APN y PP Ischigualasto",x= "", y= "Visitantes", fill= "Áreas Protegidas")
+```
+
+
+
+
+
+
+```{r}
+# ggplot(data_areas_protegidas, aes(anio, visitantes, group = area_protegida, color= area_protegida ))+
+#   geom_line()+
+#   geom_point()+
+#   geom_line(data = totales, aes(anio, total, group =1), color= "grey")+
+#   geom_label(data = filter(data_areas_protegidas, area_protegida == "Talampaya"), aes(label = round(visitantes/1000)), size = 3, vjust = 1.5, label.padding = unit(1, "mm"),
+#              fontface="bold",show.legend = FALSE)+
+#  geom_label(data = filter(data_areas_protegidas, area_protegida == "Ischigualasto"), aes(label = round(visitantes/1000)), size = 3, vjust = -.7, label.padding = unit(1, "mm"),fontface="bold",
+#             show.legend = FALSE)+
+#   scale_y_continuous(limits = c(-10, max(totales$total)*1.1),
+#                      labels = function(x){paste0(x/1000," mil")})+
+#   scale_color_dnmye()+
+#   theme_minimal()+
+#   theme(legend.position = "bottom")+
+#   labs(title = "Evolución de las visitas en el SPM Ischigualasto - Talampaya", subtitle = "Años 2008 - 2022", caption = "Fuente: DNMyE en base a datos de APN y PP Ischigualasto",x= "Año", y= "Visitantes", color= "Áreas Protegidas")
+
+```
+
+
+Asimismo, se observa la estacionalidad de las visitas en ambas áreas protegidas en el año 2022, con picos de afluencia durante las vacaciones de invierno, y en los meses de abril y septiembre - octubre. 
+
+```{r}
+
+talampayam <- parques_nacionales %>% 
+  filter(parque_nacional == "talampaya", anio == 2022) %>% 
+  mutate(indice_tiempo = paste(anio,mes, sep="-")) %>% 
+  group_by(indice_tiempo) %>% 
+  summarise(visitantes = sum(visitantes)) %>% 
+  ungroup() %>% 
+  mutate(area_protegida = "Talampaya")
+
+ischigm <- parque_isch %>% 
+  mutate(anio = substr(indice_tiempo, 1,4)) %>% 
+  filter(anio == 2022) %>% 
+  group_by(indice_tiempo) %>% 
+  summarise(visitantes =sum(visitas)) %>% 
+  ungroup() %>% 
+  mutate(area_protegida = "Ischigualasto")
+
+
+data_areas_protegidasm <- rbind(talampayam, ischigm) %>% 
+  mutate(indice_tiempo = as.Date(paste(indice_tiempo, "01", sep = "-"))) 
+  
+
+
+```
+
+
+```{r}
+
+ggplot(data_areas_protegidasm, aes(indice_tiempo, visitantes, group = area_protegida, color= area_protegida ))+
+  geom_line()+
+  geom_point()+
+  scale_y_continuous(limits = c(0, max(data_areas_protegidasm$visitantes)*1.1),
+                     labels = function(x){paste0(x/1000," mil")})+
+  scale_x_date(date_labels = "%B",date_breaks = "1 month")+
+  scale_color_dnmye()+
+  theme_minimal()+
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 45))+
+  labs(title = "Evolución mensual de las visitas en el SPM Ischigualasto - Talampaya", subtitle = "Año 2022", caption = "Fuente: DNMyE en base a datos de APN y PP Ischigualasto",x= "Mes", y= "Visitantes", color= "Áreas Protegidas")
+
+```
+
+
+En el caso de la provincia del Chubut, se puede ver la evolución histórica de las visitas en tanto en áreas protegidas nacionales como provinciales, y observar la importancia del Área Natural Protegida Península Valdés dentro de la provincia.
+
+
+ <font size="2"> *Nota: a partir del 2014 el PN Lago Puelo registró visitantes en forma mensual, mientras que del 2008 al 2013 se registraban los visitantes sólo los meses de temporada alta (enero a Semana Santa y diciembre).*</font> 
+
+```{r}
+# se levanta base de areas protegidas del Chubut
+
+parques_ch <- read_file_srv("/areas_protegidas/areas_protegidas_provinciales/base_trabajo/bases_chubut.csv") %>% 
+  filter(Mes != "total") %>% 
+  mutate(Mes = case_when(Mes == "setiembre" ~ "septiembre", TRUE  ~ Mes ))
+
+
+# se arman insumos para tablas de evolución 2008 al 2022
+
+parques_nac_ch <- parques_nacionales %>% 
+  filter(parque_nacional %in% c("los alerces", "lago puelo"), anio < 2023) %>% 
+  group_by(anio, area_protegida = parque_nacional) %>% 
+  summarise(visitantes = sum(visitantes)) %>% 
+  ungroup() %>% 
+  mutate(area_protegida = str_to_title(area_protegida))
+
+chubut <- parques_ch %>% 
+  group_by(anio, area_protegida) %>% 
+  summarise(visitantes =sum(visitantes)) %>% 
+  ungroup() %>% 
+  filter(anio > 2007 & anio <2023)  
+  
+
+#se juntan las tablas de nacionales y prov
+
+data_areas_protegidasch <- rbind(parques_nac_ch, chubut)
+
+
+```
+
+
+```{r}
+
+ggplot(data_areas_protegidasch, aes(anio, visitantes, group = area_protegida, color= area_protegida ))+
+  geom_line()+
+  geom_point()+
+  scale_y_continuous(labels = function(x){paste0(x/1000," mil")})+
+  scale_x_continuous(breaks = seq(2008,2022))+
+  scale_color_dnmye()+
+  theme_minimal()+
+  theme(legend.position = "bottom")+
+  guides(color=guide_legend(nrow=3,byrow=TRUE))+
+  labs(title = "Evolución de las visitas en las Áreas Naturales Protegidas del Chubut", subtitle = "Años 2008 - 2022", caption = "Fuente: DNMyE en base a datos de APN y al Departamento Observatorio Turistico del Chubut",x="", y= "Visitantes", color= "")
+  
+
+
+```
+
+
+```{r}
+
+#generacion de mes como numérico
+
+tabla_mes <- data.frame(Mes = tolower(c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre")), mes = c("01","02","03","04","05","06", "07", "08", "09", "10", "11", "12")) 
+
+
+
+```
+
+
+```{r}
+
+parques_ch <- left_join(parques_ch, tabla_mes) 
+
+tabla_mensual <- parques_ch %>% 
+  filter(anio == 2022) %>% 
+ mutate(indice_tiempo = paste(anio,mes, sep="-")) %>% 
+  group_by(indice_tiempo, area_protegida) %>% 
+  summarise(visitantes = sum(visitantes)) %>% 
+  ungroup() 
+
+
+  # tabla_mensual_pn <- parques_nacionales %>% 
+  # filter(parque_nacional %in% c("los alerces", "lago puelo"), anio == 2019) %>% 
+  # mutate(indice_tiempo = paste(anio,mes, sep="-")) %>%
+  # group_by(indice_tiempo, area_protegida = parque_nacional) %>% 
+  # summarise(visitantes = sum(visitantes)) %>% 
+  # ungroup() %>% 
+  # mutate(area_protegida = str_to_title(area_protegida))
+  
+  #se juntan las tablas de nacionales y prov
+
+# datamensual_areas_protegidasch <- rbind(tabla_mensual, tabla_mensual_pn) %>% 
+  datamensual_areas_protegidasch <- tabla_mensual %>% 
+  mutate(indice_tiempo = as.Date(paste(indice_tiempo, "01", sep = "-")))
+  
+  
+```
+
+En cuanto a la estacionalidad, se observa que  el primer trimestre concentra la mayor cantidad de visitas en la totalidad de las áreas protegidas, siguiendo en importancia el cuarto trimestre, donde la ocurrencia del fin de semana largo de octubre atrae visitantes en plena temporada de ballenas.
+
+```{r}
+ggplot(datamensual_areas_protegidasch, aes(indice_tiempo, visitantes, group = area_protegida, color= area_protegida ))+
+  geom_line()+
+  geom_point()+
+  #scale_y_continuous(labels = function(x){paste0(x/1000," mil")})+
+  scale_x_date(date_labels = "%B",date_breaks = "1 month")+
+  scale_color_dnmye()+
+  theme_minimal()+
+  theme(legend.position = "bottom", axis.text.x = element_text(vjust = 0.5, hjust =  1, angle = 45))+
+  guides(color=guide_legend(nrow=3,byrow=TRUE))+
+  labs(title =  "Evolución de las visitas en las areas protegidas del Chubut", subtitle = "Año 2022", caption = "Fuente: DNMyE en base a datos del Departamento Observatorio Turistico del Chubut",x="", y= "Visitantes", color= "")
+  
+
+
+
+```
+
+## Recursos
+
+Para más información visitá los distintos recursos sobre Áreas Protegidas del SINTA:
+
+- [Datos abiertos](https://datos.yvera.gob.ar/dataset?groups=turismo-naturaleza)
+
+- [Informes](https://www.yvera.tur.ar/sinta/informe/info/areas-protegidas)
+
+- [Reporte](https://tableros.yvera.tur.ar/areas_protegidas.html)
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
