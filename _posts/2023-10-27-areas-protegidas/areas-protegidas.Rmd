@@ -263,7 +263,7 @@ ggplot(datamensual_areas_protegidasch, aes(indice_tiempo, visitantes, group = ar
   theme_minimal()+
   theme(legend.position = "bottom", axis.text.x = element_text(vjust = 0.5, hjust =  1, angle = 45))+
   guides(color=guide_legend(nrow=3,byrow=TRUE))+
-  labs(title =  "Evolución de las visitas en las areas protegidas del Chubut", subtitle = "Año 2022", caption = "Fuente: DNMyE en base a datos del Departamento Observatorio Turistico del Chubut",x="", y= "Visitantes", color= "")
+  labs(title =  "Evolución de las visitas en las Áreas Naturales Protegidas del Chubut", subtitle = "Año 2022", caption = "Fuente: DNMyE en base a datos del Departamento Observatorio Turistico del Chubut",x="", y= "Visitantes", color= "")
   
 
 
