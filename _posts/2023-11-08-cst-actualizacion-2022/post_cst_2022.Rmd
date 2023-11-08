@@ -1,0 +1,179 @@
+---
+title: "Actualización de la Cuenta Satélite de Turismo de Argentina (CST-A)"
+description: |
+ Publicación de la estimación definitiva de los indicadores de 2019 y 2020, junto con la estimación provisoria de 2021 y 2022.
+output:
+  distill::distill_article:
+    self_contained: true
+    toc: true
+    toc_floate: true
+draft: true    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Presentación
+
+La Dirección Nacional de Mercados y Estadística (DNMyE), en conjunto con la Dirección Nacional de Cuentas Nacionales del Instituto Nacional de Estadística y Censos (DNCN-INDEC) presenta la actualización para los años recientes de la Cuenta Satélite de Turismo de Argentina (CST-A). [Como se mencionara al momento de su primera publicación](https://bitacora.yvera.tur.ar/posts/2022-02-01-cuenta-satelite/){target=”_blank”}, la CST-A es la herramienta recomendada internacionalmente que permite cuantificar el aporte de la actividad turística a la economía argentina en su conjunto. Entre los indicadores más relevantes se encuentran el Producto Bruto Interno Directo Turístico (PIBDT), el Valor Agregado Directo Turístico (VABDT), el Valor agregado bruto de la industria del turismo (VABIT) y el empleo de la industria del turismo.
+
+La CST-A se nutre de los operativos estadísticos que lleva adelante la DNMyE, y que forman parte del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target=”_blank”} y de las cuentas de producción para los sectores turísticos y los cuadros de oferta y utilización, elaborados por la DNCN-INDEC. El desarrollo más detallado de la CST-A se realizó en esta oportunidad en 2019 y en 2020. Luego, se extendió el análisis con un ejercicio de estimación para obtener la serie temporal de la participación del turismo en la economía argentina para el año 2021 y 2022 (datos provisorios). 
+
+# Algunos resultados
+
+
+## Principales indicadores 
+
+Los años que abarca esta nueva publicación permiten dimensionar el impacto de la pandemia en la actividad turística: debido a la emergencia sanitaria, las restricciones a la movilidad de las personas generaron una caída de enorme magnitud en la cantidad de visitantes a nivel mundial y en nuestro país en particular. El peso de la producción de bienes y servicios de la economía debida al consumo directo de visitantes pasó del 1,8% en 2019 al 0,9% en 2020 y al 0,8% en 2021. El año 2022 mostró una recuperación que retorna al indicador a niveles cercanos a la prepandemia (1,7% del PIB total). Otro indicador que provee la CST-A es el valor agregado bruto de las industrias turísticas, en relación a la economía total. Este indicador también muestra las consecuencias de la pandemia en el sector: mientras que en los años 2016-2019 estuvo en torno al 5%, en 2020 y 2021 solo representó poco más del 3% del valor agregado total. En 2022 la recuperación lo elevó al 4,4%.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(tidyverse) 
+
+library(comunicacion)
+cst <- readxl::read_excel("CST SERIES 2004_2016-2022.xlsx") %>% 
+  janitor::clean_names()
+```
+
+```{r}
+cst %>% 
+  pivot_longer(cols=c("producto_bruto_interno_directo_turistico_pbidt","valor_agregado_bruto_de_las_industrias_turisticas_vabit"),names_to = "var",values_to="val") %>% 
+  mutate(var = case_when(var == "producto_bruto_interno_directo_turistico_pbidt"~ "PIBDT",
+                         var == "valor_agregado_bruto_de_las_industrias_turisticas_vabit"~ "VABIT")) %>% 
+  ggplot(aes(x=as.factor(anio),y=val,group=var,fill=var))+
+  geom_col(position = position_dodge2())+
+  geom_label(aes(label=paste0(format(round(100*val,2),decimal.mark=","),"%")),show.legend = F,label.padding =  unit(0.2, "lines"),
+           position = position_dodge(width = 1),
+           vjust = -0.05,
+           size=3)+
+  scale_y_continuous(labels = scales::percent_format())+
+  theme_minimal()+
+  coord_cartesian(clip="off")+
+  scale_fill_dnmye(name="")+
+  theme(legend.position = "bottom")+
+  labs(x="",y="",title="Producto interno directo turístico (PIBDT) y Valor agregado bruto \n de las industrias turísticas (VABIT)",
+       subtitle="Como porcentaje del total. Años 2004 y 2016 a 2022")
+```
+
+La recuperación que se observa en 2022 estuvo liderada por el movimiento turístico interno, como muestran los datos publicados de la [Encuesta de Viajes y Turismo de los Hogares (EVyTH)](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth){target=”_blank”} y la ocupación de viajeros residentes relevada por la [Encuesta de Ocupación Hotelera](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-ocupacion-hotelera-eoh){target=”_blank”}, que alcanzan valores record de turistas internos y pernoctaciones de viajeros residentes, respectivamente. En la CST-A puede verse cómo el peso del gasto turístico interno -aquel que realizan los visitantes residentes en Argentina- aumentó su participación en los años posteriores a 2019, en detrimento del gasto turístco receptor -el que realizan los visitantes no residentes en nuestro país-. Los datos de la [Estimación de Turismo Internacional por todas las vías de acceso](https://www.yvera.tur.ar/sinta/informe/info/turismo-internacional){target=”_blank”} dan una idea cabal de la profunda caída en los ingresos de turistas internacionales a nuestro país que, a diferencia del turismo interno, en el año 2022 no retornó al nivel prepandemia. Los datos recientes indican que la recuperación inició en el año 2023 y que, a partir de abril de este año, la cantidad de viajes de turistas internacionales supera los valores de 2019, año de mayor nivel de ese indicador.
+
+
+```{r}
+cst_gasto <- cst %>%  
+  mutate(peso_gasto_interno=gasto_turistico_interno/consumo_turistico_interior,
+         peso_gasto_receptor = gasto_turistico_receptor/consumo_turistico_interior,
+         peso_otros = otros_componentes_del_consumo_turistico/consumo_turistico_interior) %>% 
+  pivot_longer(cols = c("peso_gasto_interno","peso_gasto_receptor","peso_otros"),values_to = "val",names_to="var")
+cst_gasto %>% 
+  ggplot(aes(x=as.factor(anio),y=val,group=var,fill=var))+
+  geom_col()+
+  geom_label(aes(label=paste0(format(round(100*val,2),decimal.mark=","),"%")),
+             show.legend = FALSE,
+             size=3,
+              position = position_stack(vjust = 0.5))+
+  scale_fill_dnmye(name="",labels=c("Interno","Receptor","Otros"))+
+  scale_y_continuous(labels = scales::percent_format())+
+  theme_minimal()+
+  labs(x="",y="",title="Componentes del gasto turístico",
+       subtitle="Como porcentaje del consumo turístico interior. Años 2004 y 2016 a 2022",
+       caption="**Nota:** “Otros componentes del consumo turístico” incluye <br> los servicios imputados asociados con alojamiento en segundas viviendas propias. ")+
+  theme(legend.position = "top",
+        plot.caption = ggtext::element_markdown(hjust = -.2))
+```
+
+## Apertura sectorial
+
+```{r}
+vab_sectores <- openxlsx::read.xlsx("vab_sectores.xlsx") %>% 
+  janitor::clean_names() 
+```
+```{r}
+vab_pesos <- vab_sectores %>% 
+  select(-total_industrias_turisticas) %>% 
+  pivot_longer(cols=-anio,names_to="sector",values_to = "vab") %>% 
+  mutate(sector_agrup = case_when(sector == "x2_industria_de_provision_de_alimentos_y_bebidas"~"Gastronomía",
+                                  sector %in% c("x3_transporte_de_pasajeros_por_ferrocarril","x4_transporte_de_pasajeros_por_carretera","x5_transporte_de_pasajeros_por_agua","x6_transporte_aereo_de_pasajeros","x7_alquiler_de_equipos_para_el_transporte_y_servicios_complementarios") ~ "Transporte",
+                                  sector == "x1_alojamiento_para_visitantes" ~ "Alojamiento",
+                                  sector == "x8_agencias_de_viajes_y_otros_servicios_de_reserva" ~ "Agencias de viajes",
+                                  sector == "x9_industria_cultural_deportiva_y_de_recreacion" ~ "Otras industrias turísticas",
+         sector == "x10_venta_al_por_menor_de_combustible_para_vehiculos_automotores_y_motocicletas" ~ "Venta de combustibles")) %>% 
+  group_by(anio,sector_agrup) %>% 
+    summarise(vab = sum(vab)) %>% 
+    group_by(anio) %>% 
+  mutate(peso_vab = vab/sum(vab))
+```
+
+La CST-A estima el Valor Bruto de Producción (VBP) y el Valor Agregado Bruto (VAB) para las ramas de actividad consideradas características del turismo. Para ello, se seleccionó un conjunto de actividades con el máximo nivel de desagregación del Clasificador Nacional de Actividades Económicas, que se agrupa en 10 actividades. A su vez, de allí surgen 6 grandes grupos: alojamiento, transporte de pasajeros (en todas sus modalidades), gastronomía, agencias de viajes, expendio de combustibles y otras actividades turísticas (entre las que se encuentran actividades culturales, deportivas y de recreación).
+
+La participación de cada grupo se ha ido modificando a lo largo de la serie. En 2022, las industrias de alojamiento, agencias de viajes y de venta de combustibles han aumentado su participación respecto de 2019, mientras que el transporte de pasajeros y las otras industrias turísticas la han reducido. La gastronomía, por su parte, mantuvo estable su participación.
+
+
+```{r}
+vab_pesos %>% 
+ggplot(aes(x=as.factor(anio),y=peso_vab,fill=sector_agrup,group=sector_agrup))+
+  geom_col()+
+  scale_y_continuous(labels = scales::percent_format())+
+  theme_minimal()+
+  labs(x="",y="",title="Valor agregado bruto de las industrias turísticas",
+       subtitle="Participación porcentual sobre el total. Años 2004 y 2016 a 2022")+
+  scale_fill_dnmye(name="")+
+  theme(legend.position = "bottom")+
+  geom_label(aes(label=paste0(format(round(100*peso_vab,2),decimal.mark=","),"%")),
+             show.legend = FALSE,
+            position = position_stack(vjust = 0.5), size = 2.5)
+```
+
+## Empleo en industrias turísticas
+
+La CST-A presenta también una estimación del empleo en las industrias turísticas, bajo la misma metodología que las Cuentas Nacionales emplean para la estimación de los puestos de trabajo en la economía en su conjunto. El impacto de la pandemia en el empleo turístico fue severo: los puestos de trabajo totales disminuyeron un 19% en 2020 respecto del año anterior (238 mil puestos de trabajo menos) y en 2021 la caída seguía siendo similar (-18% vs. 2019). El año 2022 muestra una importante recuperación: la incorporación de 177 mil puestos de trabajo implica un incremento interanual del 17%. Sin embargo, el empleo en turismo, en 2022, se ubicaría aún 4% por debajo de 2019. Es de esperar que la recuperación en el empleo continúe en 2023. A modo de ilustración, los puestos de trabajo en Hoteles y restaurantes estimados por la Cuenta de Generación del Ingreso e Insumo de mano de obra del INDEC se encontraban, en el primer semestre de este año, un 2,3% por encima del mismo período de 2019.
+
+La participación del empleo en las industrias turísticas en el año 2020 representó el 5,2% del total del empleo en el país, 5% en el año 2021 y del 5,5% se estimó para el año 2022. 
+
+```{r}
+empleo <- openxlsx::read.xlsx("empleo_it.xlsx") %>% 
+  rename("anio"=X1)
+```
+
+```{r}
+empleo <- pivot_longer(empleo,cols = -anio,names_to="cat",values_to = "empleo")
+```
+
+```{r}
+empleo %>% 
+  filter(cat != "Total") %>% 
+  mutate(cat = str_replace_all(cat,"[.]"," ")) %>% 
+ggplot(aes(x=as.factor(anio),y=empleo,fill=cat,group=cat))+
+  geom_col()+
+  scale_y_continuous(labels = scales::number_format(big.mark = "."))+
+  theme_minimal()+
+  labs(x="",y="",title="Empleo en las industrias turísticas",
+       subtitle="Puestos de trabajo por categoría. En miles. Años 2004 y 2016 a 2022")+
+  scale_fill_dnmye(name="")+
+  theme(legend.position = "bottom")+
+  coord_cartesian(clip="off")+
+  geom_label(aes(label=format(round(empleo,0),big.mark=".",decimal.mark=",")),
+             show.legend = FALSE,
+            position = position_stack(vjust = 0.5), size = 2.5)+
+  geom_label(data=empleo %>% filter(cat == "Total"),aes(label=format(round(empleo,0),big.mark=".",decimal.mark=",")),
+             show.legend = FALSE,vjust=0,size=3)
+```
+
+La CST-A permite, además, la apertura de los puestos de trabajo en los distintos grupos de actividades características del turismo. 
+
+Estos indicadores, asi como otros disponibles, permiten abordar el impacto económico que tiene el turismo en nuestro país, valiéndose de la herramienta recomendada para su estudio exhaustivo. Es por ello que la CST-A es un pilar del sistema de estadísticas de turismo y continuará con sucesivas actualizaciones en los próximos años.
+
+
+Para recorrer los resultados de la CST-A visite:
+
+-   [Sección del SINTA](https://www.yvera.tur.ar/sinta/informe/info/cuenta-satelite-de-turismo){target=”_blank”} con los cuadros estadísticos y documentos metodológicos
+-   [Difusión de la primera publicación](https://bitacora.yvera.tur.ar/posts/2022-02-01-cuenta-satelite/){target=”_blank”}
+-   [Recorrido por las tablas de la CST-A](https://bitacora.yvera.tur.ar/posts/2022-05-11-cst-parte2/){target=”_blank”}
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href='https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/' target='_blank'>*SintIA*</a>: <a href='https://t.me/RDatinaBot' target='_blank'>@RDatinaBot</a> 🤖
+:::
+   
