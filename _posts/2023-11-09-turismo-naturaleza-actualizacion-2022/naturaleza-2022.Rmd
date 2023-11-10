@@ -1,0 +1,216 @@
+---
+title: "Turismo de naturaleza: actualización de indicadores"
+description: "Nueva versión del informe que caracteriza a los viajeros residentes y no residentes que realizaron actividades de naturaleza en Argentina" 
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(lubridate)
+library(herramientas)
+```
+
+# Presentación
+
+La Dirección Nacional de Mercados y Estadística del Ministerio de Turismo y Deportes de la Nación presenta la actualización de los indicadores contenidos en el informe que caracteriza cuantitativamente los principales aspectos del Turismo de Naturaleza en Argentina. 
+
+El turismo de naturaleza o turismo activo natural -que incluye al turismo aventura, el ecoturismo y otras prácticas en las que la naturaleza ocupa un rol protagónico- es un segmento estratégico para el sector turístico de Argentina y uno de los de mayor crecimiento en nuestro país y el mundo. La pandemia de COVID-19 no hizo más que reafirmar esta tendencia. 
+
+Argentina cuenta con un patrimonio natural incomparable, que explica gran parte del flujo turístico interno y receptivo, como lo demuestra la participación significativa que han tenido en el país a lo largo de los años las actividades de turismo de naturaleza realizadas por visitantes extranjeros: desde 2014, en promedio, 1 de cada 5 turistas no residentes que visitaron Argentina realizaron algún tipo de actividad relacionada al turismo de naturaleza, y en el año 2022 dicha participación alcanzó un máximo de 32%. También entre los turistas residentes en la Argentina se observa que la participación del turismo de naturaleza ha logrado revertir la tendencia decreciente de los últimos años (del 31,5% en 2012 al 17,2% del turismo total en 2019) al situarse en el 31% en 2022.
+
+El Ministerio de Turismo y Deportes lanzó, en 2020, La Ruta Natural, el primer programa integral de desarrollo y promoción del turismo de naturaleza de Argentina. La página web de promoción [larutanatural.gob.ar](https://larutanatural.gob.ar/){target=”_blank”} fue lanzada en 2022 y cuenta con traducción al inglés y portugués.
+
+Como fuera mencionado, el documento brinda información estadística relacionada con las prácticas turísticas en entornos naturales. Para ello se consideró la realización de actividades relativas al turismo de naturaleza captadas por la Encuesta de Turismo Internacional (ETI) para turistas no residentes y la Encuesta de Viajes y Turismo de los Hogares (EVyTH) para turistas residentes. Se incorporaron, además, las visitas a Parques Nacionales.
+
+## ¿Qué se entiende por Turismo de Naturaleza según la ETI y la EVyTH?
+
+Según la ETI[^eti_tablet], se pueden consideran las siguientes actividades:
+
+-   Turismo aventura.
+-   Actividades de baja diﬁcultad en medios naturales.
+-   Visita a parques nacionales.
+-   Actividades en la nieve.
+
+
+[^eti_tablet]: En octubre de 2022, se produjo la migración del formulario en papel del relevamiento al formulario tablet y, a su vez, se modificó la batería de preguntas vinculadas a las actividades realizadas. Con la modificación del cuestionario, las actividades que forman parte del turismo de naturaleza se reemplazaron por observación de aves y o fauna; turismo aventura; visitas a áreas naturales o
+parques nacionales; actividades en la nieve; senderismo/treking; y otras actividades
+en la naturaleza.  
+
+
+Según la EVyTH, se consideran las siguientes actividades:
+
+-   Visita a espacios rurales como estancias, granjas, etc.
+-   Visita a parques nacionales o provinciales, reservas, etc.
+-   Esquí, snowboard, u otro deporte de nieve.
+-   Deportes de aventura como mountain bike, montañismo, rafting, travesías, ala delta, etc.
+-   Otras actividades en espacios abiertos y naturales.
+
+# Principales resultados
+## Turismo internacional
+
+
+```{r}
+ti_naturaleza <- data.frame(
+                  Año = c(2014L, 2015L, 2016L, 2017L, 2018L, 2019L, 2022L),
+          Total.turistas = c(2828771L,2640394L,
+                             2579355L,2692085L,3163961L,3431860L,1497637L),
+     turistas_naturaleza = c(601029L,628308L,
+                             556505L,631762L,702703L,1061239L,477801L),
+      part_naturaleza = c(21.2, 23.8, 21.6, 23.5, 22.2, 30.9, 31.9)
+   ) %>% janitor::clean_names()
+
+```
+
+
+La participación de turistas que realizaron actividades de naturaleza tuvo un incremento significativo en el año 2019, cuando pasó de 22,2% al 30,9%. Luego del bienio 2020-21, en el que la emergencia sanitaria provocó una caída inédita en el volumen de turistas internacionales, la participación del turismo de naturaleza volvió a mostrar una participación elevado, incrementándose hasta alcanzar el 31,9% de los turistas estimados por la ETI.
+
+
+```{r}
+ti_naturaleza %>% 
+  ggplot(aes(x=as.character(ano),y=part_naturaleza,group=1))+
+  geom_col(fill=comunicacion::dnmye_colores(1))+
+ geom_label(aes(label=paste0(format(part_naturaleza,decimal.mark=","),"%")))+
+  scale_y_continuous(limits = c(0,NA))+
+  theme_minimal()+
+  theme(panel.grid.major.x = element_blank())+
+  labs(x="",y="",title = "Turistas internacionales de naturaleza",
+       subtitle = "Turistas que realizaron actividades de naturaleza como porcentaje del total de turistas",caption="Fuente: Encuesta de Turismo Internacional (ETI)")
+```
+
+Los turistas que realizan esta modalidad de turismo tienen, a lo largo de la serie analizada,
+un gasto diario promedio y una estadía mayores a los del total de los turistas.
+
+Los turistas que mayormente realizaron este tipo de turismo, durante el año 2022,
+fueron los brasileños (23% de participación), seguidos por los turistas residentes en
+países de Resto de América (19%) y los europeos (19%).
+
+El informe aquí presentado amplía el perfil de estos turistas, puntualizando las actividades específicas que realizaron, los aspectos que motivaron sus viajes, la evaluación que hicieron de las distintas dimensiones de su estadía, entre otra información de perfil.
+
+## Turismo interno
+```{r}
+interno_naturaleza <- data.frame(
+                   anio = c(2012L,2013L,2014L,
+                            2015L,2016L,2017L,2018L,2019L,2020L,2021L,
+                            2022L),
+         turistas_total = c(29330580L,30242823L,
+                            28923565L,27172794L,25564905L,30374885L,
+                            27522410L,26756716L,12298739L,17917470L,31047267L),
+     turista_naturaleza = c(9236126L,7502189L,
+                            6359266L,5901941L,6236922L,8133340L,5062657L,
+                            4601683L,1930694L,3863155L,9632597L),
+        part_naturaleza = c(31.5,24.8,22,21.7,
+                            24.4,26.8,18.4,17.2,15.7,21.6,31) 
+   ) %>% janitor::clean_names()
+
+```
+El turismo de los residentes en Argentina realizado dentro del país tiene también un importante segmento de turistas de naturaleza. En el último año, la participación de esta modalidad se elevó a 31%, con el agregado de que 2022 fue un año récord de turismo interno desde que se inició la estimación en 2012.[^anuario]
+
+[^anuario]: Para consultar los datos estadísticos de turismo de 2022 y los años previos puede visitar el [Anuario Estadístico de Turismo 2022](https://dnme-minturdep.github.io/anuario_2022/)
+
+```{r}
+interno_naturaleza %>% 
+  ggplot(aes(x=as.character(anio),y=part_naturaleza,group=1))+
+  geom_col(fill=comunicacion::dnmye_colores(4))+
+ geom_label(aes(label=paste0(format(part_naturaleza,decimal.mark=","),"%")))+
+  scale_y_continuous(limits = c(0,NA))+
+  theme_minimal()+
+  theme(panel.grid.major.x = element_blank())+
+  labs(x="",y="",title = "Turistas internos de naturaleza",
+       subtitle = "Turistas que realizaron actividades de naturaleza como porcentaje del total de turistas",caption="Fuente: Encuesta de Viajes y Turismo de los Hogares (EVyTH))")
+
+```
+
+Al igual que con el turismo internacional, los turistas internos de naturaleza presentan estadías mayores y un gasto diario promedio más elevado que el del total de turistas.
+Los turistas residentes que realizaron actividades vinculadas a la naturaleza viajaron
+principalmente por la Provincia de Buenos Aires (PBA) y el Litoral (25,1% y 20,3%,
+respectivamente); la participación de la PBA en este tipo de turismo fue menor a la
+observada en el total de turistas (38,1% en estos últimos), en tanto que la Patagonia
+mostró un peso relativo mayor entre quienes realizan turismo de naturaleza (15,6%
+vs 7,8%), similar a lo ocurrido en Cuyo (11,6% vs 7,5%).
+
+Otros indicadores de perfil, como las activides realizadas, el medio de transporte utilizado, el motivo del viaje, entre otros, se encuentra disponible en el informe.
+
+# Fuente complementaria: visitas a parques nacionales
+
+Una de las actividades características del turismo de naturaleza es la visita a áreas naturales protegidas. Entre estas se encuetran los Parques Nacionales, que cuentan con registros que permiten cuantificar las visitas que reciben. A partir de la información provista por la Administración de Parques Nacionales, el [SINTA](https://datos.yvera.gob.ar/dataset/parques-nacionales){target=”_blank”} publica los datos abiertos de visitas a parques nacionales según tipo de residencia del visitante y por región de destino. Por otra parte, el [Anuario Estadístico de Turismo](https://dnme-minturdep.github.io/anuario_2022/parques-nacionales.html){target=”_blank”} tiene un capítulo dedicado a los Parques Nacionales en Argentina, con información específica de cada parque nacional.
+
+Los datos de 2022 se muestran en línea con la expansión de visitantes a parques nacionales que muestra el turismo interno a partir de la EVyTH. El volumen de visitantes no residentes en 2022 aún se encontraba afectado por la pandemia de COVID-19. 
+
+```{r}
+parques <- read_csv("http://datos.yvera.gob.ar/dataset/458bcbe1-855c-4bc3-a1c9-cd4e84fedbbc/resource/a570af75-ed33-427c-9797-980fc0cd8fd1/download/visitas-residentes-y-no-residentes.csv")
+```
+
+
+```{r}
+parques_anual <- parques %>% 
+  mutate(anio = year(indice_tiempo)) %>% 
+  group_by(anio,origen_visitantes) %>% 
+  summarise(visitas = sum(visitas,na.rm = T))
+```
+
+```{r}
+parques_anual %>% 
+ggplot(aes(x=as.character(anio),y=visitas,group=origen_visitantes))+
+  geom_col(aes(fill=origen_visitantes),position=position_dodge2())+
+  theme_minimal()+
+  comunicacion::scale_fill_dnmye(name="")+
+  scale_y_continuous(labels = scales::number_format(scale=1/1e+6,suffix=" M"))+
+  theme(legend.position = "bottom")+
+    labs(x="",y="",title="Visitas a parques nacionales por origen de los visitantes",
+         subtitle = "En millones")
+```
+
+El nivel de visitas a parques nacionales de visitantes residentes se encontró, en 2022, un 22% por encima de 2019. Se destaca el aumento en 5 de las 6 regiones del país: Buenos Aires, Cuyo, Litoral, Norte y Patagonia. El total de visitas a parques nacionales alcanzó los valores máximos de toda la serie en las regiones de Buenos Aires, Cuyo y Norte.
+
+```{r}
+parques_region <- read_csv("http://datos.yvera.gob.ar/dataset/458bcbe1-855c-4bc3-a1c9-cd4e84fedbbc/resource/e8f7c0d7-02f9-4fdd-aa83-d61c13f565ae/download/visitas-residentes-y-no-residentes-por-region.csv")
+
+parques_region_anual <- parques_region %>% 
+  mutate(anio = year(indice_tiempo)) %>% 
+  group_by(anio,origen_visitantes,region_de_destino) %>% 
+  summarise(visitas = sum(visitas,na.rm = T)) 
+```
+
+
+```{r}
+parques_region_anual %>% 
+  mutate(region_de_destino = str_to_title(region_de_destino)) %>% 
+  #filter(origen_visitantes != "total") %>% 
+ggplot(aes(x=anio,y=visitas,group=origen_visitantes))+
+  geom_col(aes(fill=origen_visitantes),position=position_dodge2())+
+  theme_minimal()+
+  comunicacion::scale_fill_dnmye(name="")+
+  scale_y_continuous(labels = scales::number_format(scale=1/1e+6,suffix=" M"))+
+  theme(legend.position = "bottom")+
+    labs(x="",y="",title="Visitas a parques nacionales por origen de los visitantes",
+         subtitle = "En millones")+
+  facet_wrap(~region_de_destino,scales = "free_y",ncol=2)
+```
+
+```{r}
+ti_historico <- read_file_srv("/srv/DataDNMYE/turismo_internacional/bases_proceso/series/serie_anual_pais_1990.xlsx", 
+                                 sheet = "receptivo")
+
+turistas_anual <- ti_historico %>% 
+  group_by(anio) %>% 
+  summarise(viajes_turistas = sum(viajes_turistas,na.rm = T))
+
+```
+
+```{r}
+visitas_turistas <- parques_anual %>%
+  filter(origen_visitantes == "no residentes") %>% 
+  left_join(turistas_anual) %>% 
+  mutate(ratio_parques = visitas/viajes_turistas)
+```
+
+Accedé al documento de Turismo de Naturaleza en el siguiente [link](https://www.yvera.tur.ar/sinta/informe/info/informes-de-turismo-de-naturaleza){target=”_blank”}
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
