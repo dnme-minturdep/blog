@@ -17,28 +17,30 @@ editor_options:
 
 Contar con datos es fundamental para conocer la realidad. A su vez, es imprescindible que estos se encuentren actualizados y con la mayor accesibilidad posible. La necesidad de explorarlos y trabajarlos es elemental para la correcta toma de decisiones. 
 
-El tablero **ÚLTIMOS DATOS DEL TURISMO EN ARGENTINA** presenta los principales indicadores publicados en el [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target=”_blank”}, permitiendo conocer los resultados más recientes del turismo receptivo, la ocupación hotelera, el turismo interno y la conectividad aérea en nuestro país. A su vez, se presentan los resultados de indicadores relativos al turismo elaborados por otros organismos,  como el Estimador Mensual de Actividad Económica (EMAE), el empleo privado registrado (MTEySS) y las llegadas de turistas a nivel mundial (OMT).  
+El tablero [**ÚLTIMOS DATOS DEL TURISMO EN ARGENTINA**](https://tableros.yvera.tur.ar/) presenta los principales indicadores publicados en el [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target=”_blank”}, permitiendo conocer los resultados más recientes del turismo receptivo, la ocupación hotelera, el turismo interno y la conectividad aérea en nuestro país. A su vez, se presentan los resultados de indicadores relativos al turismo elaborados por otros organismos,  como el Estimador Mensual de Actividad Económica (EMAE), el empleo privado registrado (MTEySS) y las llegadas de turistas a nivel mundial (OMT).  
 
 
 # Tablero
 
 ## Datos principales
 
-El tablero consta de nueve tarjetas que abarcan los **últimos resultados** de los siguientes indicadores:
+Con el objetivo de visualizar un panorama de los **últimos resultados turísticos**, el tablero presenta nueve tarjetas que abarcan los principales indicadores publicados en el [Sistema de Información Turistica de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/), a partir de las siguientes bases de información:
 
--   La cantidad de viajes de turistas no residentes;
+-   A partir de los datos de la [Encuesta de Turismo Internacional (ETI)](https://tableros.yvera.tur.ar/internacional.html), la cantidad de **viajes de turistas no residentes**;
 
--   La cantidad de turistas internos; 
+-   Con la información de la [Encuesta de Turismo Interno (EVyTH)](https://tableros.yvera.tur.ar/interno.html), la cantidad de **turistas internos**; 
 
--   La cantidad de viajeros hospedados y pernoctaciones;
+-   La cantidad de **viajeros hospedados y pernoctaciones** a través de la [Encuesta de Ocupación Hotelera](https://tableros.yvera.tur.ar/eoh.html);
 
--   La cantidad de puestos de trabajo registrados en el sector "Hoteles y Restaurantes";
+-   La cantidad de **pasajeros en vuelos de cabotaje e internacionales** en base a los datos del [tablero de Conectividad Aérea](https://tableros.yvera.tur.ar/conectividad/);
 
--   La variación interanual de la actividad económica en el sector de "Hoteles y Restaurantes";
+Asimismo, con la informacion de otros organismos también relevamos los siguientes indicadores: 
 
--   La cantidad de pasajeros en vuelos de cabotaje e internacionales;
+-   Con información proveniente del MTEySS en base a la [Situación y Evolución del Trabajo Registrado (SIPA)](https://www.argentina.gob.ar/trabajo/estadisticas), obtenemos la cantidad de **puestos de trabajo registrados en el sector "Hoteles y Restaurantes"**;
 
--   La cantidad de llegadas de turistas al mundo;
+-   Información proveniente del INDEC en base al [Estimador mensual de actividad económica (EMAE)](https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-9-48) nos permite elaborar la **variación interanual de la actividad económica en el sector de "Hoteles y Restaurantes" y en el total de la economía**;
+
+-   Por último, la cantidad de **llegadas de turistas al mundo**, en base a la información proveniente del [panel de datos de turismo de la OMT](https://www.unwto.org/tourism-data/global-and-regional-tourism-performance);
 
 
 ```{r, echo = FALSE, out.width='100%'}
