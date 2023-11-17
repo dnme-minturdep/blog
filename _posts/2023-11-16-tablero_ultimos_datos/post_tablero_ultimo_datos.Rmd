@@ -17,14 +17,15 @@ editor_options:
 
 Contar con datos es fundamental para conocer la realidad. A su vez, es imprescindible que estos se encuentren actualizados y con la mayor accesibilidad posible. La necesidad de explorarlos y trabajarlos es elemental para la correcta toma de decisiones. 
 
-El tablero **ÚLTIMOS DATOS DEL TURISMO EN ARGENTINA** presenta los principales indicadores publicados en el [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target=”_blank”}, permitiendo conocer los resultados más recientes del turismo receptivo, la ocupación hotelera, el turismo interno y la conectividad aérea en nuestro país. A su vez, se presentan los resultados de indicadores relativos al turismo elaborados por otros organismos,  como el Estimador Mensual de Actividad Económica (EMAE), el empleo privado registrado registrado (MTEySS) y las llegadas de turistas a nivel mundial (OMT).  
+El tablero **ÚLTIMOS DATOS DEL TURISMO EN ARGENTINA** presenta los principales indicadores publicados en el [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target=”_blank”}, permitiendo conocer los resultados más recientes del turismo receptivo, la ocupación hotelera, el turismo interno y la conectividad aérea en nuestro país. A su vez, se presentan los resultados de indicadores relativos al turismo elaborados por otros organismos,  como el Estimador Mensual de Actividad Económica (EMAE), el empleo privado registrado (MTEySS) y las llegadas de turistas a nivel mundial (OMT).  
 
 
 # Tablero
 
 ## Datos principales
 
-El tablero consta de nueve tarjetas que abarcan los **últimos resultados** de los siguientes indicadores: 
+El tablero consta de nueve tarjetas que abarcan los **últimos resultados** de los siguientes indicadores:
+
 -   La cantidad de viajes de turistas no residentes;
 
 -   La cantidad de turistas internos; 
@@ -33,7 +34,7 @@ El tablero consta de nueve tarjetas que abarcan los **últimos resultados** de l
 
 -   La cantidad de puestos de trabajo registrados en el sector "Hoteles y Restaurantes";
 
--   La variación interanual de la actividad economica en el sector de "Hoteles y Restaurantes";
+-   La variación interanual de la actividad económica en el sector de "Hoteles y Restaurantes";
 
 -   La cantidad de pasajeros en vuelos de cabotaje e internacionales;
 
@@ -45,7 +46,7 @@ knitr::include_graphics("img/tablero.PNG")
 ```
 
 
-En cada una de la tarjetas, se podrá encontrar la variable a la cuál hace referencia, por ejemplo "Turismo internacional", junto al último resultado publicado y su referencia de tiempo. A su vez también incorporamos un dato adicional, como ser la variación interanual de 8 indicadores, ya que en el caso de la actividad economica en el sector de "Hoteles y Restaurantes", se optó por dar a conocer, adicionalmente, la variación interanual de la actividad en el total de la economía.
+En cada una de la tarjetas se podrá encontrar la variable a la cuál hace referencia, por ejemplo **"Turismo interno"**, junto al último resultado publicado y su referencia de tiempo (mes o trimestre). A su vez también incorporamos un dato adicional, como ser la variación interanual de 8 indicadores, ya que en el caso de la actividad económica en el sector de "Hoteles y Restaurantes", se optó por dar a conocer, adicionalmente, la variación interanual de la actividad en el total de la economía.
 
 ```{r, echo = FALSE, out.width='100%'}
 knitr::include_graphics("img/tarjeta_evyth.PNG")
@@ -55,7 +56,7 @@ knitr::include_graphics("img/tarjeta_evyth.PNG")
 
 ## Información gráfica
 
-En cada una de las tarjetas se puede conocer, a través de un serie histórica, el comportamiento de la variable en el tiempo y, adicionalmente, un gráfico de barras permite ver el comportamiento específico del mes o trimestre y compararlo con el mismo período de los años anteriores.
+Al mismo tiempo, dentro de cada tarjeta se encontrará, a través de una serie histórica, el comportamiento de la variable en el tiempo y, adicionalmente, un gráfico de barras permite ver el comportamiento específico del mes o trimestre y compararlo con el mismo período de los años anteriores.
 
 ```{r, echo = FALSE, out.width='100%'}
 knitr::include_graphics("img/tarjeta_TI.PNG")
@@ -63,14 +64,14 @@ knitr::include_graphics("img/tarjeta_TI.PNG")
 
 ## Recursos
 
-Por último, clickeando en el ícono de información, se podrá acceder a todos los recursos de cada indicador publicado, ya sea a través de informes, tableros y/o bases de datos abiertos. 
+Por último, un click en el ícono de información permitirá acceder a todos los recursos de cada indicador publicado, ya sea a través de informes, tableros y/o bases de datos abiertos. 
 
 
 ```{r, echo = FALSE, out.width='100%'}
 knitr::include_graphics("img/tarjeta_eoh.PNG")
 ```
 
-A su vez la DNMyE elabora mes a mes el [Informe mensual de estadísticas de turismo (IMET)](https://biblioteca.yvera.tur.ar/coyuntura.html){target=”_blank”} con la evolución de todos estos indicadores. 
+Para conocer más en profundidad estos indicadores, la DNMyE elabora mes a mes el [Informe mensual de estadísticas de turismo (IMET)](https://biblioteca.yvera.tur.ar/coyuntura.html){target=”_blank”} con la evolución de los mismos.
 
 
 
