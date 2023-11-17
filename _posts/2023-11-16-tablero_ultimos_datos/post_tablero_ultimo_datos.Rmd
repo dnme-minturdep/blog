@@ -24,19 +24,19 @@ El tablero [**ÚLTIMOS DATOS DEL TURISMO EN ARGENTINA**](https://tableros.yvera.
 
 ## Datos principales
 
-Con el objetivo de visualizar un panorama de los **últimos resultados turísticos**, el tablero presenta nueve tarjetas que abarcan los principales indicadores publicados en el [Sistema de Información Turistica de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/), a partir de las siguientes bases de información:
+Con el objetivo de visualizar un panorama de los **últimos resultados turísticos**, el tablero presenta nueve tarjetas que abarcan los principales indicadores publicados en el [Sistema de Información Turistica de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target=”_blank”}, a partir de las siguientes bases de información:
 
--   A partir de los datos de la [Encuesta de Turismo Internacional (ETI)](https://tableros.yvera.tur.ar/internacional.html), la cantidad de **viajes de turistas no residentes**;
+-   A partir de los datos de la [Estimación del Turismo Internacional por todas las vías de acceso](https://www.yvera.tur.ar/sinta/informe/info/turismo-internacional){target=”_blank”}, la cantidad de **viajes de turistas no residentes**;
 
--   Con la información de la [Encuesta de Turismo Interno (EVyTH)](https://tableros.yvera.tur.ar/interno.html), la cantidad de **turistas internos**; 
+-   Con la información de la [Encuesta de Turismo Interno (EVyTH)](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth), la cantidad de **turistas internos**; 
 
--   La cantidad de **viajeros hospedados y pernoctaciones** a través de la [Encuesta de Ocupación Hotelera](https://tableros.yvera.tur.ar/eoh.html);
+-   La cantidad de **viajeros hospedados y pernoctaciones** a través de la [Encuesta de Ocupación Hotelera](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-ocupacion-hotelera-eoh);
 
--   La cantidad de **pasajeros en vuelos de cabotaje e internacionales** en base a los datos del [tablero de Conectividad Aérea](https://tableros.yvera.tur.ar/conectividad/);
+-   La cantidad de **pasajeros en vuelos de cabotaje e internacionales** en base a los datos del [tablero de Conectividad Aérea](https://tableros.yvera.tur.ar/conectividad/){target=”_blank”};
 
 Asimismo, con la informacion de otros organismos también relevamos los siguientes indicadores: 
 
--   Con información proveniente del MTEySS en base a la [Situación y Evolución del Trabajo Registrado (SIPA)](https://www.argentina.gob.ar/trabajo/estadisticas), obtenemos la cantidad de **puestos de trabajo registrados en el sector "Hoteles y Restaurantes"**;
+-   Con información proveniente del [Minsterio de Trabajo, Empleo y Seguridad Social en base al SIPA](https://www.argentina.gob.ar/trabajo/estadisticas){target=”_blank”}, se obitiene la cantidad de **trabajadores registrados en el sector "Hoteles y Restaurantes"**;
 
 -   Información proveniente del INDEC en base al [Estimador mensual de actividad económica (EMAE)](https://www.indec.gob.ar/indec/web/Nivel4-Tema-3-9-48) nos permite elaborar la **variación interanual de la actividad económica en el sector de "Hoteles y Restaurantes" y en el total de la economía**;
 
