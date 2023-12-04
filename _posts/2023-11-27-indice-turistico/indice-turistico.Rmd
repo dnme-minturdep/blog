@@ -16,11 +16,11 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # Introducción
 
-Desde la Dirección Nacional de Mercados y Estadística (DNMyE) se avanzó en la elaboración y publicación de una nueva herramienta para la medición y el análisis del turismo en las localidades del país. En una primera instancia, se presentó el Documento de Trabajo N°8: [Clasificación de localidades según nivel de desarrollo turístico](https://tableros.yvera.tur.ar/recursos/biblioteca/DT8_clasificacion_localidades.pdf) con una propuesta de clasificación del desarrollo turístico en base a la cantidad de plazas, dato que surge del Padrón Único Nacional de Alojamiento (PUNA). A fines de profundizar el análisis, mejorar la calidad de la información y consolidar un instrumento de gestión se diseñó una nueva propuesta metodológica, la cual se describe a continuación.
+Desde la Dirección Nacional de Mercados y Estadística (DNMyE) se avanzó en la elaboración y publicación de una nueva herramienta para la medición y el análisis del turismo en las localidades del país. En una primera instancia, se presentó el Documento de Trabajo N°8: [Clasificación de localidades según nivel de desarrollo turístico](https://tableros.yvera.tur.ar/recursos/biblioteca/DT8_clasificacion_localidades.pdf){target=”_blank”} con una propuesta de clasificación del desarrollo turístico en base a la cantidad de plazas, dato que surge del Padrón Único Nacional de Alojamiento (PUNA). A fines de profundizar el análisis, mejorar la calidad de la información y consolidar un instrumento de gestión se diseñó una nueva propuesta metodológica, la cual se describe a continuación.
 
 # Índice Turístico de Localidades 
 
-El nuevo Índice Turístico de Localidades (ITL), cuya metodología y resultados se encuentran desarrollados en el [Documento de Trabajo N°13](), contempla una serie de indicadores, elaborados a partir de diversas fuentes, que permiten caracterizar la actividad turística de un destino con un enfoque multidimensional. 
+El nuevo Índice Turístico de Localidades (ITL), cuya metodología y resultados se encuentran desarrollados en el [Documento de Trabajo N°13](https://tableros.yvera.tur.ar/recursos/biblioteca/indice_turistico.pdf){target=”_blank”}, contempla una serie de indicadores, elaborados a partir de diversas fuentes, que permiten caracterizar la actividad turística de un destino con un enfoque multidimensional. 
 
 En su primera versión, el índice de plazas sirvió como aproximación para la clasificación de localidades en tres categorías: **Emergentes**, **En desarrollo** y **Consolidadas**. A partir de la nueva propuesta, el ITL contempla más información que permite afinar esta clasificación.
 
@@ -129,7 +129,7 @@ knitr::include_graphics("mapa_itl.png")
 ```
 
 
-Para saber más sobre las fuentes de datos, los detalles metodológicos, la forma de cálculo y otros resultados visite el documento publicado en la [Biblioteca del SINTA](https://biblioteca.yvera.tur.ar/).
+Para saber más sobre las fuentes de datos, los detalles metodológicos, la forma de cálculo y otros resultados visite el documento publicado en la [Biblioteca del SINTA](https://biblioteca.yvera.tur.ar/){target=”_blank”}.
 
 
 ::: {.infobox}
