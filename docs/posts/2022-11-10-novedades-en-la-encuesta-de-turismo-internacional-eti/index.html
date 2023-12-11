@@ -87,18 +87,18 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-<title>BITÁCORA: Novedades en la Encuesta de Turismo Internacional (ETI)</title>
+<title>BITÁCORA: Novedades en la Enucesta de Turismo Internacional (ETI)</title>
 
 <meta property="description" itemprop="description" content="Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)"/>
 
 <link rel="icon" type="image/vnd.microsoft.icon" href="../../favicon.ico"/>
 
 <!--  https://schema.org/Article -->
-<meta property="article:published" itemprop="datePublished" content="2022-11-11"/>
-<meta property="article:created" itemprop="dateCreated" content="2022-11-11"/>
+<meta property="article:published" itemprop="datePublished" content="2022-11-10"/>
+<meta property="article:created" itemprop="dateCreated" content="2022-11-10"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="BITÁCORA: Novedades en la Encuesta de Turismo Internacional (ETI)"/>
+<meta property="og:title" content="BITÁCORA: Novedades en la Enucesta de Turismo Internacional (ETI)"/>
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)"/>
 <meta property="og:locale" content="en_US"/>
@@ -106,14 +106,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="BITÁCORA: Novedades en la Encuesta de Turismo Internacional (ETI)"/>
+<meta property="twitter:title" content="BITÁCORA: Novedades en la Enucesta de Turismo Internacional (ETI)"/>
 <meta property="twitter:description" content="Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)"/>
 
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output","preview","draft"]}},"value":[{"type":"character","attributes":{},"value":["Novedades en la Encuesta de Turismo Internacional (ETI)"]},{"type":"character","attributes":{},"value":["Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)"]},{"type":"character","attributes":{},"value":["2022-11-11"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["ti.png"]},{"type":"logical","attributes":{},"value":[false]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","date","output","preview","draft"]}},"value":[{"type":"character","attributes":{},"value":["Novedades en la Enucesta de Turismo Internacional (ETI)"]},{"type":"character","attributes":{},"value":["Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)"]},{"type":"character","attributes":{},"value":["2022-11-10"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["ti.png"]},{"type":"logical","attributes":{},"value":[false]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -468,6 +468,265 @@ d-title {
 <link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
 <link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
 <script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<script src="../../site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
+<script src="../../site_libs/fuse-6.4.1/fuse.min.js"></script>
+
+<script type="application/javascript">
+
+function getMeta(metaName) {
+  var metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
+    }
+  }
+  return '';
+}
+
+function offsetURL(url) {
+  var offset = getMeta('distill:offset');
+  return offset ? offset + '/' + url : url;
+}
+
+function createFuseIndex() {
+
+  // create fuse index
+  var options = {
+    keys: [
+      { name: 'title', weight: 20 },
+      { name: 'categories', weight: 15 },
+      { name: 'description', weight: 10 },
+      { name: 'contents', weight: 5 },
+    ],
+    ignoreLocation: true,
+    threshold: 0
+  };
+  var fuse = new window.Fuse([], options);
+
+  // fetch the main search.json
+  return fetch(offsetURL('search.json'))
+    .then(function(response) {
+      if (response.status == 200) {
+        return response.json().then(function(json) {
+          // index main articles
+          json.articles.forEach(function(article) {
+            fuse.add(article);
+          });
+          // download collections and index their articles
+          return Promise.all(json.collections.map(function(collection) {
+            return fetch(offsetURL(collection)).then(function(response) {
+              if (response.status === 200) {
+                return response.json().then(function(articles) {
+                  articles.forEach(function(article) {
+                    fuse.add(article);
+                  });
+                })
+              } else {
+                return Promise.reject(
+                  new Error('Unexpected status from search index request: ' +
+                            response.status)
+                );
+              }
+            });
+          })).then(function() {
+            return fuse;
+          });
+        });
+
+      } else {
+        return Promise.reject(
+          new Error('Unexpected status from search index request: ' +
+                      response.status)
+        );
+      }
+    });
+}
+
+window.document.addEventListener("DOMContentLoaded", function (event) {
+
+  // get search element (bail if we don't have one)
+  var searchEl = window.document.getElementById('distill-search');
+  if (!searchEl)
+    return;
+
+  createFuseIndex()
+    .then(function(fuse) {
+
+      // make search box visible
+      searchEl.classList.remove('hidden');
+
+      // initialize autocomplete
+      var options = {
+        autoselect: true,
+        hint: false,
+        minLength: 2,
+      };
+      window.autocomplete(searchEl, options, [{
+        source: function(query, callback) {
+          const searchOptions = {
+            isCaseSensitive: false,
+            shouldSort: true,
+            minMatchCharLength: 2,
+            limit: 10,
+          };
+          var results = fuse.search(query, searchOptions);
+          callback(results
+            .map(function(result) { return result.item; })
+          );
+        },
+        templates: {
+          suggestion: function(suggestion) {
+            var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
+              ? `<img src="${offsetURL(suggestion.preview)}"</img>`
+              : '';
+            var html = `
+              <div class="search-item">
+                <h3>${suggestion.title}</h3>
+                <div class="search-item-description">
+                  ${suggestion.description || ''}
+                </div>
+                <div class="search-item-preview">
+                  ${img}
+                </div>
+              </div>
+            `;
+            return html;
+          }
+        }
+      }]).on('autocomplete:selected', function(event, suggestion) {
+        window.location.href = offsetURL(suggestion.path);
+      });
+      // remove inline display style on autocompleter (we want to
+      // manage responsive display via css)
+      $('.algolia-autocomplete').css("display", "");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+});
+
+</script>
+
+<style type="text/css">
+
+.nav-search {
+  font-size: x-small;
+}
+
+/* Algolioa Autocomplete */
+
+.algolia-autocomplete {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: sub;
+  background-color: white;
+  color: black;
+  padding: 6px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border-radius: 6px;
+  border: 1px #0F2E3D solid;
+  width: 180px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-nav .algolia-autocomplete {
+    display: none;
+    visibility: hidden;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete {
+    display: inline-block;
+    visibility: visible;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
+    margin-left: 0;
+    width: 400px;
+    max-height: 400px;
+  }
+}
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 90%;
+  outline: none;
+  border: none;
+}
+
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 550px;
+  max-height: 70vh;
+  overflow-x: visible;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 3px;
+  margin-left: -150px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #999;
+  border-top: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 5px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
+  display: inline-block;
+  overflow: hidden;
+  height: 2.8em;
+  width: 80%;
+  margin-right: 4%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
+  display: inline-block;
+  width: 15%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
+  height: 3em;
+  width: auto;
+  display: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
+  display: initial;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #eee;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
+}
+
+</style>
+
+
 <!--/radix_placeholder_navigation_in_header-->
   <!--radix_placeholder_distill-->
 
@@ -1835,6 +2094,11 @@ html {
 }
 
 
+a {
+  
+  --target: '_blank'
+}
+
 
 /*-- WEBSITE HEADER + FOOTER --*/
 /* These properties only apply to Distill sites and blogs  */
@@ -1938,6 +2202,14 @@ body {
   line-height: 12px;
   text-align: left;
 }
+
+.infobox {
+  padding: 1em 1em 1em 1em;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+
 </style>
 <!--/radix_placeholder_site_in_header-->
 
@@ -1949,7 +2221,7 @@ body {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Novedades en la Encuesta de Turismo Internacional (ETI)","description":"Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)","authors":[],"publishedDate":"2022-11-11T00:00:00.000-03:00"}
+{"title":"Novedades en la Enucesta de Turismo Internacional (ETI)","description":"Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)","authors":[],"publishedDate":"2022-11-10T00:00:00.000-03:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1961,6 +2233,7 @@ body {
 <img src="../../sinta.png" alt="Logo"/>
 </a>
 <a href="../../index.html" class="title">BITÁCORA</a>
+<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
 </div>
 <div class="nav-right">
 <div class="nav-dropdown">
@@ -1991,7 +2264,7 @@ SINTA
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Novedades en la Encuesta de Turismo Internacional (ETI)</h1>
+<h1>Novedades en la Enucesta de Turismo Internacional (ETI)</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 <p><p>Resultado de trabajo conjunto con el Instituto Nacional de Estadística y Censos (INDEC)</p></p>
@@ -1999,7 +2272,7 @@ SINTA
 
 
 <div class="d-article">
-<p>En el día de ayer publicamos los datos correspondientes al mes de septiembre 2022 del turismo internacional para el total nacional, por todos los medios de transporte utilizados (aéreos, fluviales, marítimos y terrestres). A su vez, también el INDEC publicó la Encuesta de Turismo Internacional (MINTURDEP-INDEC) con datos de septiembre y del tercer trimestre del año para los pasos relevados (Ezeiza, Aerop. J. Newbery, Aerop. de Córdoba, Aerop. de Mendoza, Cristo Redentor y Puerto de Buenos Aires)</p>
+<p>En el día de hoy publicamos los datos correspondientes al mes de septiembre 2022 del turismo internacional para el total nacional, por todos los medios de transporte utilizados (aéreos, fluviales, marítimos y terrestres). A su vez, también el INDEC publicó la Encuesta de Turismo Internacional (MINTURDEP-INDEC) con datos de septiembre y del tercer trimestre del año para los pasos relevados (Ezeiza, Aerop. J. Newbery, Aerop. de Córdoba, Aerop. de Mendoza, Cristo Redentor y Puerto de Buenos Aires)</p>
 <h2 id="novedades">Novedades</h2>
 <p>Hasta ahora en el informe de prensa de la ETI se publicaban los datos del turismo internacional correspondientes a los pasos fronterizos relevados por la encuesta y el movimiento del total de la vía aérea. Nosotros, por otro lado, publicamos los datos del total país por todas las vías. Esto muchas veces generaba confusiones o malas interpretaciones entre ambos números publicados. Por ello, <strong>se decidió incluir los datos del total nacional en el informe de prensa de la ETI</strong> y así mejorar la interpretación de la información comunicada.</p>
 <div class="layout-chunk" data-layout="l-body">
