@@ -6,7 +6,7 @@ navbar:
   logo:
     image: sinta.png
     href: https://www.yvera.tur.ar/sinta/
-  search: false
+  search: true
   right:
     - text: "SINTA"
       menu:

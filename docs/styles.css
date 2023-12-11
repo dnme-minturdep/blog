@@ -35,6 +35,11 @@ html {
 }
 
 
+a {
+  
+  --target: '_blank'
+}
+
 
 /*-- WEBSITE HEADER + FOOTER --*/
 /* These properties only apply to Distill sites and blogs  */
@@ -138,3 +143,10 @@ body {
   line-height: 12px;
   text-align: left;
 }
+
+.infobox {
+  padding: 1em 1em 1em 1em;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
