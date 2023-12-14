@@ -24,6 +24,18 @@
     "input_file": {}
   },
   {
+    "path": "posts/2023-12-13-tablero-ti-gasto/",
+    "title": "Nueva versión del Tablero de Turismo Internacional",
+    "description": "Gasto turístico y serie histórica completa",
+    "author": [],
+    "date": "2023-12-07",
+    "categories": [],
+    "contents": "\n💻 TABLERO: Turismo Internacional\nEl tablero de TURISMO INTERNACIONAL presenta las estimaciones de turismo receptivo y emisivo de la Argentina. Esta nueva versión incorpora tres novedades. Por un lado, una nueva pestaña con la serie histórica completa incluyendo gasto turístico, gasto promedio diario, gasto por viaje, pernoctaciones, estadía y viajes. Por otro lado, en las pestañas receptivo y emisivo, se incluye la serie histórica completa de viajes, con los distintos niveles de apertura disponibles según los años. Además, en la presentación se incluye de manera destacada el último dato mensual y acumulado anual.\nNOVEDADES\nÚLTIMOS DATOS\nLa primera pestaña presenta el contenido de toda la aplicación. Como novedad, se destacan los últimos datos mensuales y acumulado anual y sus respectivas variaciones, de turismo receptivo y emisivo.\n\n\n\nSERIE HISTÓRICA\nEsta nueva pestaña presenta la serie histórica trimestral de turismo receptivo y emisivo de viajes, gasto en dólares y pernoctaciones de turistas y excursionistas, incluyendo los indicadores de estadía media, gasto promedio por viaje y gasto promedio diario. Pueden visualizarse en forma de gráfico o tabla.\n\n\n\nAsimismo, se puden realizar aperturas por país, tipo de visitante y trimestre.\n\n\n\nEMISIVO / RECEPTIVO\nLas pestañas por tipo de turismo (emisivo o receptivo) permiten acceder a las estimaciones de los viajes de los turistas y de los excursionistas (aquellos visitantes que no pernoctan en el destino). Una caja de selección al comienzo de los respectivos módulos de FILTRO permite seleccionar la opción de preferencia. Por otro lado, está la posibilidad de seleccionar las aperturas dentro de los módulos de VISUALIZACIÓN.\nLa novedad es que la serie ya no está solamente desde 2016, sino desde que se tienen registros, es decir, 1990. Los primeros años no hay datos por trimestre ni por medio de transporte, pero al avanzar en el tiempo, hay cada vez más variables disponibles.\n\n\n\nPara el turismo receptivo, desde 2001 se presentan datos a nivel mensual.\n\n\n\nPERFIL RECEPTIVO\nAl igual que en la anterior versión, esta pestaña permite caracterizar el perfil del turismo receptivo por los pasos de Ezeiza y Aeroparque, a partir de la Encuesta de Turismo Internacional (ETI). Se pueden analizar algunas características de los turistas (país de residencia, tipo de alojamiento principal en el país, motivo de viaje), así como conocer los destinos (localidades, provincias) que han visitado en la Argentina y el gasto turístico -a nivel trimestral- que han realizado durante sus viajes en el país.\nEncuesta de Turismo Internacional (ETI)\n📊 Datos Abiertos\n📚 Metodología\n📑 Reportes\n\nSe puede acceder a la plataforma desde la página del SINTA o directamente desde la página: https://tableros.yvera.tur.ar/turismo_internacional/\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2023-12-13-tablero-ti-gasto/distill-preview.png",
+    "last_modified": "2023-12-13T18:13:17-03:00",
+    "input_file": "tablero_ti_con_gasto.knit.md"
+  },
+  {
     "path": "posts/2023-11-27-indice-turistico/",
     "title": "Índice Turístico de Localidades",
     "description": "Una propuesta metodológica para la medición de la actividad turística en localidades de Argentina",
