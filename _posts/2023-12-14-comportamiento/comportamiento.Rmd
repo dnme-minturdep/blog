@@ -1,0 +1,80 @@
+---
+title: "Comportamiento turístico de las personas, años 2021-2022"
+descripción: "Publicación de informes anuales con estimaciones sobre comportamiento turístico de las personas en base a la Encuesta de Viajes y Turismo de los Hogares (EVyTH)"
+date: 2023-12-14
+output:
+  distill::distill_article:
+    self_contained: false
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+source('graf_tabl.R', encoding = 'UTF-8')
+```
+
+<aside>💻 [**Informes**: EVyTH](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth/informes-tecnicos)</aside>
+
+# Presentación
+
+La Dirección Nacional de Mercados y Estadística (DNMyE) retoma la publicación anual de datos sobre el comportamiento turístico de las personas de los años 2021 y 2022. 
+
+El informe analiza las estimaciones de la proporción de personas residentes en los grandes aglomerados urbanos del país, de un año o más de edad, que realizaron al menos un viaje con pernocte. La información se desprende de un módulo especial de la EVyTH cuyo relevamiento se realiza entre los meses de Febrero y Mayo de cada año y recolecta información sobre la realización de viajes con pernocte, destino (Argentina o Exterior) y motivos de no viaje del año anterior[^1].
+
+ [^1]:Por ejemplo, el relevamiento realizado en 2023 obtiene una base de datos con ventana de observación en 2022.
+
+*Los gráficos presentados en este post son interactivos. Para visualizar el dato pasar el cursor del mouse sobre cada columna*
+
+
+# Resultados
+
+Entre los principales resultados que se presentan en el informe, se puede observar la evolución de la proporción de personas que realizaron al menos un viaje en el año 2021/2022. Los datos tanto de 2021 como de 2022, muestran una mejoría respecto al 2020[^2], aunque aún no se recuperan los valores previos a la pandemia de covid.
+
+[^2]:En el año 2020 se dispusieron por decreto medidas de emergencia sanitaria para contener la propagación del virus COVID-19 que restringían las salidas de la población. Estas medidas se mantuvieron desde Marzo de 2020 hasta el 31 de Diciembre de 2021.
+
+**Porcentaje de población residente en grandes aglomerados urbanos, de un año y más, que realizó al menos un viaje con pernocte. Años 2006, 2010 - `r anio_actual`.**
+
+```{r}
+g1
+```
+
+Los datos se presentan desagregados por sexo, rango etario, región de origen de las personas, quintil de ingresos, y máximo nivel educativo alcanzado, lo que permite aproximar el análisis de viajes realizados, destino de los viajes o motivo de no viaje según variables socioeconómicas.
+
+Los resultados demuestran que los quintiles más bajos no alcanzaron a recuperar los valores previos a la pandemia, como sí lo hizo el quintil más alto.
+
+**Porcentaje de población residente en grandes aglomerados urbanos, de un año y más, que realizó al menos un viaje con pernocte, según ingreso per cápita familiar. Años 2006, 2010-`r anio_actual`.**
+
+```{r}
+g3bb
+```
+
+
+Entre los principales motivos de no viaje en 2022 pondera la falta de dinero con un 49,2%, frente al 36,4% de 2021 cuando recién se estaba activando el turismo post pandemia y explica el aumento en la declaración de "otros motivos" que llegó a 19,4% en 2021, frente a 1,1% en 2022.
+
+**Distribución porcentual de población residente en grandes aglomerados urbanos, de un año y más, que no realizaron viajes con pernocte, según motivo principal por el que no viajaron. Años 2010 - 2022.**
+
+```{r}
+gt2
+```
+
+Entre algunos de los cambios que se presentan en esta edición, se incluyen más gráficos y una presentación de las tablas de anexo divididas en más partes con el fin de obtener una mejor visualización del dato.
+
+
+# Recursos disponibles
+
+
+Para más información de la EVYTH se pueden consultar los siguientes recursos:
+
+📊 [EVyTH, Datos abiertos](https://datos.yvera.gob.ar/dataset/encuesta-viajes-turismo-hogares-evyth)\
+
+📊 [EVyTH, Informes técnicos](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth/informes-tecnicos)
+
+🔗 [Sistema de Información Turística de Argentina (SINTA)](https://www.yvera.tur.ar/sinta/)
+
+
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
