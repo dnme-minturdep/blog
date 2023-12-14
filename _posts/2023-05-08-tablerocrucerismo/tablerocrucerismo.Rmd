@@ -9,7 +9,7 @@ output:
 draft: false
 ---
 
-<aside>💻 [**TABLERO**: Crucerismo](https://tableros.yvera.tur.ar/tablero_crucerismo/)</aside>
+<aside>💻 [**TABLERO**: Crucerismo](https://tableros.yvera.tur.ar/crucerismo/)</aside>
 
 El aplicativo se presenta como herramienta alternativa de navegación de los datos que ya fueron presentados en el [**Documento de Trabajo N°9: "Crucerismo Marítimo en la Argentina"**](https://tableros.yvera.tur.ar/recursos/biblioteca/dt9_cruceros.pdf) elaborado por la Dirección Nacional de Mercados y Estadística (DNMyE). El aplicativo web contiene visualizaciones gráficas y tablas con funciones interactivas que posibilitan un mejor análisis y comparación del dato, al permitir hacer selecciones de categorías, comparar etiquetas, seleccionar parte del dataset con selectores/menús específicos, filtrar o buscar un campo en la tabla, o descargar la información de las mismas en formato xlsx o csv.
 
@@ -63,7 +63,7 @@ knitr::include_graphics("x5.png")
 
 </aside>
 
-Se puede acceder a la plataforma desde la [página del SINTA](https://www.yvera.tur.ar/sinta/) o directamente desde la página: <https://tableros.yvera.tur.ar/tablero_crucerismo/>
+Se puede acceder a la plataforma desde la [página del SINTA](https://www.yvera.tur.ar/sinta/) o directamente desde la página: <https://tableros.yvera.tur.ar/crucerismo/>
 
 ::: infobox
 Para recibir las novedades del SINTA escribile al bot de Telegram de la DNMyE <a href='https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/' target='_blank'>*SintIA*</a>: <a href='https://t.me/RDatinaBot' target='_blank'>@RDatinaBot</a> 🤖

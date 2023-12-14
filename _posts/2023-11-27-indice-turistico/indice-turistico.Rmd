@@ -1,0 +1,138 @@
+---
+title: "Índice Turístico de Localidades"
+description: |
+  Una propuesta metodológica para la medición de la actividad turística en localidades de Argentina
+date: 2023-11-27
+output:
+  distill::distill_article:
+    self_contained: false
+draft: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introducción
+
+Desde la Dirección Nacional de Mercados y Estadística (DNMyE) se avanzó en la elaboración y publicación de una nueva herramienta para la medición y el análisis del turismo en las localidades del país. En una primera instancia, se presentó el Documento de Trabajo N°8: [Clasificación de localidades según nivel de desarrollo turístico](https://tableros.yvera.tur.ar/recursos/biblioteca/DT8_clasificacion_localidades.pdf){target=”_blank”} con una propuesta de clasificación del desarrollo turístico en base a la cantidad de plazas, dato que surge del Padrón Único Nacional de Alojamiento (PUNA). A fines de profundizar el análisis, mejorar la calidad de la información y consolidar un instrumento de gestión se diseñó una nueva propuesta metodológica, la cual se describe a continuación.
+
+# Índice Turístico de Localidades 
+
+El nuevo Índice Turístico de Localidades (ITL), cuya metodología y resultados se encuentran desarrollados en el [Documento de Trabajo N°13](https://tableros.yvera.tur.ar/recursos/biblioteca/indice_turistico.pdf){target=”_blank”}, contempla una serie de indicadores, elaborados a partir de diversas fuentes, que permiten caracterizar la actividad turística de un destino con un enfoque multidimensional. 
+
+En su primera versión, el índice de plazas sirvió como aproximación para la clasificación de localidades en tres categorías: **Emergentes**, **En desarrollo** y **Consolidadas**. A partir de la nueva propuesta, el ITL contempla más información que permite afinar esta clasificación.
+
+Se considera que la medición de la actividad turística a nivel de localidades es una tarea difícil, en tanto requiere de la disponibilidad de datos de calidad y con una cobertura geográfica y temporal acorde. Por esto, se realizó un proceso de exploración, revisión, limpieza, procesamiento y normalización de fuentes de datos que permitieran cumplir con lo mencionado. Es así, que se eligieron los siguientes indicadores, agrupados en dimensiones relevantes para el turismo, para la construcción del ITL:
+
+### Dimensión: Oferta
+
+- Cantidad de plazas
+
+- Cantidad de establecimientos de alojamiento
+
+- Cantidad de empresas registradas vinculadas a ramas características del turismo (RCT)
+
+### Dimensión: Demanda
+
+- Cantidad de pasajeros que transitaron por la terminal de ómnibus
+
+### Dimensión: Conectividad Aérea
+
+- Conectividad de cabotaje
+
+- Conectividad internacional
+
+### Dimensión: Economía
+
+- Proporción de puestos de trabajo en RCT
+
+### Dimensión: Estacionalidad
+
+- Estacionalidad de la demanda
+
+### Fuentes de datos
+
+Estos ocho indicadores seleccionados para representar el caracter multidimensional del turismo surgen, principalmente, de las siguientes fuentes de datos:
+
+- Administración Nacional de Aviación Civil (ANAC)
+
+- Comisión Nacional de Regulación del Transporte (CNRT)
+
+- Padrón Único Nacional de Alojamiento (PUNA)
+
+- Centro de Estudios para la Producción - Ministerio de Economía (CEPXXI)
+
+- Base de Asentamientos Humanos de la República Argentina (BAHRA)
+
+# Algunos resultados
+
+La elaboración del ITL permitió clasificar a más de 1200 localidades del país. De acuerdo al cálculo realizado la distribución por categoría de desarrollo quedó de la siguiente manera, destacándose una gran cantidad de lugares pequeños con poca actividad turística:
+
+```{r}
+library(tidyverse)
+library(herramientas)
+library(comunicacion)
+library(gt)
+library(sf)
+
+indice <- readRDS("/srv/DataDNMYE/capas_sig/indice_turistico.rds")
+
+indice %>% 
+  st_drop_geometry() %>% 
+  group_by(clasificacionIndice80) %>% 
+  summarise(n = n(),
+            corte = max(indice_turismo)) %>% 
+  arrange(corte) %>% 
+  mutate(porcentaje = n/sum(n),
+         corte = row_number(),
+          corte = case_when(corte == 1 ~ "Hasta 44,2",
+                           corte == 2 ~ "De 44,3 a 59,19",
+                           TRUE ~ "Más de 59,19")) %>% 
+  gt() %>% 
+  cols_label(clasificacionIndice80 = "Clasificación",
+             n = "Localidades",
+             corte = "ITL",
+             porcentaje = "% del total") %>% 
+  fmt_number(columns = n, decimals = 0, sep_mark = ".") %>% 
+  fmt_percent(columns = porcentaje, decimals = 0, dec_mark = ",", sep_mark = ".") %>% 
+  gt_theme_dnmye() %>% 
+  tab_header(title = "Clasificación según ITL")
+```
+
+Por otra parte, el *ranking* de localidades quedó encabezado por Ciudad de Buenos Aires, San Carlos de Bariloche y Mar del Plata, seguidos de otros destinos tradicionales y ciudades capitales.
+
+```{r}
+indice %>% 
+  st_drop_geometry() %>% 
+  slice_max(indice_turismo, n = 15) %>%
+  mutate(ranking = row_number()) %>% 
+  select(ranking, localidad, indice_turismo) %>% 
+  mutate(across(where(is.character), toupper)) %>% 
+  gt() %>% 
+  cols_label(localidad = "Localidad",
+             ranking = "Ranking",
+             indice_turismo = "ITL") %>% 
+    fmt_number(columns = 1, decimals = 0) %>% 
+  gt_theme_dnmye() %>% 
+  cols_align(columns = localidad, align = "left") %>% 
+  cols_align(columns = ranking, align = "center") %>% 
+  tab_header(title = "Top 15 localidades según ITL. Año 2022") %>% 
+  tab_options(table.font.size = 11)
+```
+
+Por último, la elaboración del ITL implicó la georreferenciación y el trabajo con datos espaciales, lo cual permite visualizar la distribución territorial del mismo, como se ve en el siguiente mapa:
+
+```{r}
+knitr::include_graphics("mapa_itl.png")
+```
+
+
+Para saber más sobre las fuentes de datos, los detalles metodológicos, la forma de cálculo y otros resultados visite el documento publicado en la [Biblioteca del SINTA](https://biblioteca.yvera.tur.ar/){target=”_blank”}.
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href='https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/' target='_blank'>*SintIA*</a>: <a href='https://t.me/RDatinaBot' target='_blank'>@RDatinaBot</a> 🤖
+:::
+   

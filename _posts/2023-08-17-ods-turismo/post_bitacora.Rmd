@@ -1,0 +1,69 @@
+---
+title: "El turismo en los Objetivos de Desarrollo Sostenible"
+description: |
+  La DNMyE publica un documento de trabajo que describe el aporte del turismo
+  al cumplimiento de los Objetivos de Desarrollo Sostenible, acompañado de un tablero de seguimiento de los
+  indicadores propuestos para evaluar su desempeño 
+preview: tablero_ods.png
+date: 
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+En 2015, la Organización de las Naciones Unidas (ONU), aprobó una [resolución](https://documents-dds-ny.un.org/doc/UNDOC/GEN/N15/291/93/PDF/N1529193.pdf) que establece una **Agenda 2030 para el Desarrollo Sostenible**, que consiste en un conjunto de **Objetivos de Desarrollo Sostenible (ODS)** a alcanzarse en 15 años. Estos contemplan metas de reducción de la pobreza, la promoción de la salud y el bienestar de la población, la educación inclusiva y de calidad, la igualdad de género, el acceso a energía asequible y sostenible, el empleo y el trabajo decente, la industrialización
+sostenible y la producción y consumo responsables, entre las más destacadas. Los ODS cuentan, además, 
+con 169 metas específicas asociadas a indicadores que permiten evaluar su cumplimiento.
+
+El turismo es una actividad que puede influir en el cumplimiento de los ODS de múltiples maneras. Además de la inclusión del turismo en 3 metas específicas dentro de la resolución original, la [**Organización Mundial del Turismo (OMT)**](https://tourism4sdgs.org/) profundiza en el aporte que esta actividad puede realizar a todos los ODS. En nuestro país, el [**Plan Argentina Productiva 2030 (AP2030)**](https://www.argentina.gob.ar/produccion/argentina-productiva-2030) tiene a los ODS como marco para cada una de las misiones que lo conforman. En particular, la [**Misión 11: Potenciar la actividad turística para el desarrollo territorial sustentable a partir de la gran biodiversidad local**](https://tableros.yvera.tur.ar/recursos/biblioteca/mision_11.pdf) propone un conjunto de proyectos con el norte de cumplir una serie de metas, 
+muchas de ellas ligadas a los ODS.
+
+```{r}
+knitr::include_graphics("objetivos-01.png")
+```
+
+
+
+# Documento de trabajo
+
+El [Documento de Trabajo N°12: El Turismo en los Objetivos de Desarrollo Sostenible](https://tableros.yvera.tur.ar/recursos/biblioteca/dt_turismo_ods.pdf), aborda los ODS en el marco del turismo. En una primera sección, puntualiza cada uno de los objetivos, destacando el aporte que el turismo puede hacer para alcanzarlos, de acuerdo a los lineamientos de la OMT y a los desafíos de su implementación en nuestro país. Esa sección, por otra parte, comenta la aplicación para Argentina del marco ODS en la misión ligada al turismo del plan AP2030. La segunda sección se compone de una propuesta de indicadores relacionados con el turismo, que permitan evaluar la evolución de los ODS con una periodicidad anual. Se detallan además, las fuentes de datos utilizadas. En particular, los siete indicadores propuestos toman como base a dos productos de publicación frecuente de la DNMyE: la [Cuenta Satélite de Turismo de Argentina (CST-A)](https://www.yvera.tur.ar/sinta/informe/info/cuenta-satelite-de-turismo), elaborada en conjunto con el INDEC, y la [Encuesta de Viajes y Turismo de los Hogares (EVYyTH)](https://www.yvera.tur.ar/sinta/informe/info/encuesta-de-viajes-y-turismo-de-los-hogares-evyth). Los indicadores buscan reflejar, por un lado, el impacto del turismo en la economía Argentina, en términos de PIB y de empleo (incluyendo su grado de informalidad) y, por otro, el grado de acceso a las prácticas turísticas y su distribución en relación con 
+los ingresos de los hogares. El documento describe las fuentes de datos utilizadas y muestra las series de tiempo de los indicadores elaborados, desde el inicio de la publicación de cada fuente hasta el último año disponible.
+Por último, el documento concluye con un resumen de su contenido e invita a visitar un nuevo producto de la 
+DNMyE que lo acompaña: el [**tablero de indicadores ODS**](https://tableros.yvera.tur.ar/tablero_ODS/).
+
+# Tablero interactivo
+
+El tablero de indicadores ODS es la herramienta que permitirá el seguimiento a lo largo del tiempo de 
+los indicadores elaborados. La primera visualización que provee es un resumen de los indicadores para 
+el último período disponible. La siguiente pestaña permite visualizar, de manera interactiva, las series
+de tiempo de cada uno de los indicadores:
+
+-   Puestos de trabajo en industrias turísticas
+-   Tasa de informalidad del empleo turístico
+-   PIB turístico respecto del PIB total
+-   Propensión a viajar
+-   Índice de Gini de viajes turísticos totales, de viajes turísticos de ocio y de gasto turístico
+
+Por último, la pestaña **Metodología** describe brevemente las fuentes utilizadas y los indicadores elaborados,
+invitando a leer el Documento de Trabajo a quienes quieran profundizar en el tema.
+
+```{r}
+knitr::include_graphics("tablero_ods_series.png")
+```
+
+
+
+Accedé a los recursos de *Turismo en los ODS:*
+
+-   [Documento de Trabajo N°12: El turismo en los Objetivos de Desarrollo Sostenible](https://tableros.yvera.tur.ar/recursos/biblioteca/dt_turismo_ods.pdf)
+-   [Tablero Interactivo: Indicadores ODS](https://tableros.yvera.tur.ar/tablero_ODS.html)
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::

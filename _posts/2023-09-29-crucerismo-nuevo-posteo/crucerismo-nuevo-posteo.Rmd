@@ -1,0 +1,243 @@
+---
+title: "Crucerismo Marítimo en la Argentina"
+description: |
+  Publicación del Informe de Crucerismo Marítimo en la Argentina con información de la última temporada.
+date: 2023-09-29
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r}
+
+options(scipen = 9999)
+
+library(readxl)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(haven)
+library(janitor)
+library(lubridate)
+library(glue)
+library(data.table)
+library(comunicacion)
+library(ggplot2)
+library(ggrepel)
+library(ggtext)
+library(gt)
+library(sf)
+library(leaflet)
+library(plotly)
+
+```
+
+
+```{r}
+
+#Se levanta la base de cruceristas y de cruceros
+
+
+filtro_fecha <- as.Date("2023-04-30") #Solo modificar último año de la temporada
+
+
+cruceristas <- read_rds(glue("/srv/DataDNMYE/cruceros/entradas/cruceristas_total.rds"))  %>%
+  filter(tipo_pax=="Pasajeros" & fecha_final<=filtro_fecha & temporada !="21/22") %>% 
+  mutate(crucero=case_when(crucero=="MsC Magnifica"~"MSC Magnifica",
+                            crucero=="Msc Armonia"~"MSC Armonia",
+                           crucero=="Msc Seaview"~"MSC Seaview",
+                           crucero=="Msc Preziosa"~"MSC Preziosa",
+                            TRUE~crucero))#correcciones de nombres sobre algunos cruceros de MSC
+
+cruceros <- read_rds(glue("/srv/DataDNMYE/cruceros/entradas/base_cruceros_total.rds"))  %>%
+  filter(fecha_final<=filtro_fecha  & temporada !="21/22") %>%
+  mutate(crucero_2=case_when(crucero !="Sin datos"~crucero,
+                             TRUE~id_vehi)) %>% 
+  mutate(crucero=case_when(crucero=="MsC Magnifica"~"MSC Magnifica",
+                           crucero=="Msc Armonia"~"MSC Armonia",
+                           crucero=="Msc Seaview"~"MSC Seaview",
+                           crucero=="Msc Preziosa"~"MSC Preziosa",
+                            TRUE~crucero))#correcciones de nombres sobre algunos cruceros de MSC
+
+
+
+#Se carga la base del INFUETUR
+
+tdf <- readxl::read_xlsx("/srv/DataDNMYE/cruceros/entradas/serie_historica_tdf.xlsx")
+
+
+```
+
+
+
+# PRESENTACIÓN
+
+Se presenta el segundo informe de Crucerismo Marítimo en la Argentina con datos de la última temporada de cruceros (septiembre 2022 a abril 2023) ([el primer informe refería a la temporada 2019/2020](https://tableros.yvera.tur.ar/recursos/biblioteca/dt9_cruceros.pdf)).
+
+La información publicada surge como un sub-producto de los procesamientos realizados para elaborar las estimaciones de Turismo Internacional en la Argentina. Para eso, de la totalidad de los pasos internacionales del país, se realiza una selección de los tres puertos de cruceros argentinos: Puerto de la Ciudad de Buenos Aires, Puerto Madryn y Ushuaia y se aplican los procesamientos necesarios que permiten identificar a los cruceristas dentro de la totalidad de los movimientos de fronteras registrados por la _Dirección Nacional de Migraciones_.  
+
+# PRINCIPALES RESULTADOS
+
+La estructura de este nuevo informe es muy similar a la que se puede observar en el de la temporada 19/20, destacándose, en primera instancia, dos ejes temáticos principales:
+
+- **Volumen y perfil de los cruceristas:** 
+
+Este informe nos permite monitorear la evolución del crucerismo en nuestro país. De esta manera, se aprecia cómo **en la última temporada la actividad volvió a mostrar valores pre-pandémicos**, superando a la temporada 2019/2020 (y con valores levemente inferiores a los de la temporada 2018/19):
+
+
+```{r out.height= "80%", out.width="100%"}
+
+### Gráfico de evolución de cruceristas POR TEMPORADA
+
+
+cruceristas_anio_total <- cruceristas %>%
+  filter(tipo_pax=="Pasajeros") %>% 
+  group_by(temporada) %>% 
+  summarise(cruceristas=sum(crucerista)) %>% 
+  mutate(residencia="Total")
+
+
+
+cruceristas_anio <- cruceristas %>%
+  filter(tipo_pax=="Pasajeros") %>% 
+  group_by(temporada,residencia) %>% 
+  summarise(cruceristas=sum(crucerista)) %>%
+  rbind(cruceristas_anio_total) %>% 
+  mutate(cruceristas=round(cruceristas/1000,1)) %>% 
+  arrange(temporada)
+   
+
+#Gráfico
+
+ggplot(data=cruceristas_anio%>% mutate(residencia=factor(residencia,levels = c("Total","Residentes","No residentes"))) ,aes(x=temporada,y=cruceristas,color=residencia,label=cruceristas))+
+  geom_text(hjust=1.5)+
+  geom_point(size=4, alpha = 0.9)+
+  geom_hline(yintercept = 0, color = "black")+
+  scale_color_manual(values = c("Residentes" = dnmye_colores("cian"),
+                                "No residentes" = dnmye_colores("rosa"),
+                                "Total" = dnmye_colores("gris oscuro")))+
+  labs(title = "Cruceristas (en miles) por temporada, según condición de residencia",
+       subtitle = "Temporadas 15/16 - 2022/23",
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a DNM.") +
+  theme(text = element_text(family = "Encode Sans Normal"),
+        plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro"),size=8),
+        plot.title=element_text(hjust = 0,face = "bold",size=10),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        panel.grid.major.y =  element_line (colour = dnmye_colores("gris oscuro"),
+                                            size = 0.1,
+                                            linetype = 1),
+        panel.grid.major.x =  element_line (colour = dnmye_colores("gris oscuro"),
+                                            size = 0.1,
+                                            linetype = 1),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 90)) +
+  scale_y_continuous(breaks=seq(0, max(cruceristas_anio$cruceristas+10),50))+
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.ticks.y =element_blank())
+
+
+rm(cruceristas_anio)
+
+```   
+
+
+Además, en los diferentes apartados presentados, la información se desagrega **por puerto de ingreso, residencia, género y edad de los cruceristas.**
+
+
+- **Información vinculada a las embarcaciones:**
+
+En este bloque la información se focaliza en las embarcaciones: principales características de las mismas (tipo de embarcación, tamaño, camas disponibles, cantidad de tripulantes); la distribución de los cruceristas por tipo de embarcación, crucero y compañía naviera; y la tasa de ocupación en camas.
+
+# NUEVO ANEXO CON INFORMACIÓN PROVISTA POR EL INSTITUTO FUEGUINO DE TURISMO (INFUETUR)
+
+Dado que la información se elabora en base a datos provistos por la _Dirección Nacional de Migraciones_, no se registran movimientos internos de cruceros (ya que no suponen un traspaso de fronteras internacionales), los cuales tienen mayor peso en el puerto de Ushuaia que en los otros dos puertos, ya que en la capital fueguina es elevado el volumen de cruceros que visitan al Sector Antártico Argentino.
+
+Con el fin de visibilizar el fenómeno de los cruceros que realizan movimientos internos, como novedad en este informe, se agregan estadísticas del crucerismo en el puerto de Ushuaia generadas por el _INFUETUR_ a través de la _Dirección de Planificación y Desarrollo Turístico_ en base a datos elaborados por el _equipo de investigación de Turismo Antártico, de la Universidad Nacional de Tierra del Fuego, Antártida e Islas del Atlántico Sur_.
+
+En esta sección del informe se observa cómo, en el Puerto de Ushuaia, **en la última temporada se registró el valor más elevado de cruceristas de las últimas siete temporadas**. También se aprecia que los cruceros que realizaron viajes "Antárticos" hicieron el mayor aporte al volumen total de cruceristas:
+
+
+```{r}
+
+
+# Cruceristas por temporada: insumo
+
+pax_temp <- tdf %>% 
+  select(1,starts_with("pax")) %>% 
+  pivot_longer(cols=c(2:5),
+               names_to = "tipo_viaje",
+               values_to="cruceristas") %>% 
+  #filter(tipo_viaje !="viajes_total") %>% 
+  mutate(tipo_viaje=case_when(tipo_viaje=="pax_ant"~"Antártico",
+                              tipo_viaje=="pax_reg"~"Regional",
+                              tipo_viaje=="pax_inter"~"Internacional",
+                              tipo_viaje=="pax_total"~"Total")) %>% 
+  mutate(cruceristas=round(cruceristas/1000,1))
+
+
+
+#Gráfico en ggplot:
+
+ggplot(data = pax_temp, aes(y=cruceristas,x=anio,label=cruceristas,fill=tipo_viaje,group=tipo_viaje))+
+  geom_bar(stat='identity',position="dodge")+
+  geom_label(fill="white",size=2.5, position=position_dodge(width=0.9),vjust=0.25)+
+  theme_minimal()+
+  scale_fill_manual(values = c("Antártico" = dnmye_colores("rosa"),
+                               "Regional" = dnmye_colores("cian"),
+                               "Internacional" = dnmye_colores("naranja"),
+                               "Total" = dnmye_colores("gris oscuro")))+
+  labs(title = "Cantidad de cruceristas (en miles) por temporada en el Puerto de Ushuaia, \nsegún tipo de viaje",
+       subtitle = "Temporadas 2015/16 - 2022/23",
+       x = "",
+       y = "",
+       colour="",
+       caption = "Fuente: DNMyE en base a INFUETUR")+
+  theme(plot.caption  = element_text(hjust = 0),
+        plot.subtitle=element_text(colour = dnmye_colores("gris oscuro"),size = 8),
+        axis.title.y = element_text(colour = dnmye_colores("gris oscuro")),
+        plot.title=element_text(hjust = 0,face="bold",size = 10),
+        panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "bottom")+
+  scale_y_continuous(breaks=seq(0,250,50))
+
+
+
+
+
+```
+
+
+Dentro de este apartado **también se podrán apreciar datos vinculados a la evolución de los cruceros registrados y la cantidad de recaladas por temporada**.
+
+El informe se encuentra disponible en https://biblioteca.yvera.tur.ar/, **y se puede acceder al mismo a través del siguiente [link](https://tableros.yvera.tur.ar/recursos/biblioteca/informe_cruceros_22_23.pdf).**
+
+# NUEVO DATASET EN EL PORTAL DE DATOS ABIERTOS
+
+**La información también se presenta en el [Tablero Interactivo de Crucerismo Marítimo en la Argentina](https://tableros.yvera.tur.ar/crucerismo/)**, con datos disponibles hasta la temporada 19/20 y **proximamente se actualizarán con los valores de la última temporada**.
+
+Además, se creo un nuevo dataset de **[Crucerismo Marítimo en la Argentina](https://datos.yvera.gob.ar/dataset/crucerismo-maritimo)**, en el cual se pueden descargar recursos en formato _csv_ que **refieren al volumen de cruceristas por temporada, mes, puerto, edad, género, condición de residencia, país de residencia y crucero.** 
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
+
+
+
+
+
+ 

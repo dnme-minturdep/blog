@@ -1,0 +1,431 @@
+---
+title: "Actualización de los datos abiertos de Previaje"
+description: "Publicación de los recursos correspondientes a la cuarta edición del programa, que tuvo vigencia durante fines de mayo y junio 2023" 
+date: 
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,out.width = '100%', fig.align = 'center')
+library(tidyverse)
+library(herramientas)
+library(ggtext)
+library(comunicacion)
+library(lubridate)
+library(glue)
+library(directlabels)
+```
+
+
+El programa de preventa turística que reintegra el 50% del gasto en servicios turísticos 
+dentro del país tuvo una [cuarta edición](https://previaje2023.gob.ar/), con el foco puesto en impulsar la actividad en los períodos de menor demanda. El beneficio fue otorgado para aquellos viajes realizados entre el 24 de mayo y el 30 de junio, con la posibilidad de gastar la devolución hasta el 31 de octubre. El tope de la devolución fue de \$70.000 para el gasto en agencias de viajes, alojamiento, vuelos y ómnibus de larga distancia, mientras que para el resto de los prestadores fue de \$5.000 en total. El reintegro para personas afiliadas al PAMI se elevó al 70%, al igual que en las dos ediciones pasadas.
+
+En este marco, la Dirección Nacional de Mercados y Estadística publica los recursos que surgen del proceso de carga de viajes y comprobantes y del gasto del reintegro para esta edición, como lo hiciera [para las tres ediciones previas](https://bitacora.yvera.tur.ar/posts/2023-02-16-previaje_data_abierta/). Los recursos están publicados en el [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/):
+
+
+<aside>
+
+***Datos Abiertos de Previaje***
+
+📊 [Recursos](https://datos.yvera.gob.ar/dataset/previaje)\
+
+</aside>
+
+1. Cantidad de comprobantes y monto total por fecha de carga y rama de actividad del prestador (según el Clasificador de Actividades Económicas -CLAE- de AFIP a 6 dígitos)
+2. Cantidad de prestadores y establecimientos inscriptos por rama de actividad (CLAE a 6 dígitos)
+3. Cantidad de viajes y viajeros por mes de inicio, provincia de origen y provincia de destino
+4. Cantidad de personas beneficiarias por provincia de residencia, grupos de edad y género 
+5. Cantidad de operaciones y monto total por fecha, perteneciente al consumo del crédito
+
+
+Es importante remarcar que el proceso de publicación de datos a partir de registros administrativos requiere una serie de procedimientos de consistencia, limpieza y 
+anonimización, característicos de fuentes de datos que no están inicialmente diseñadas 
+para su uso estadístico. Estos procesos están en constante mejora por lo que, en esta oportunidad, también se revisaron los datos de las tres ediciones anteriores. Por otra parte, 
+la difusión de los principales resultados (beneficiarios, viajeros, monto consumido) que se realiza mientras el programa se está llevando adelante, no cuenta con esta instancia de preparación, por lo que puede haber diferencias entre esa difusión y los datos aquí publicados.
+Como fuera mencionado en la publicación anterior, los datos son publicados de manera agregada y totalmente anónima, de manera que no sea posible identificar a las personas beneficiarias ni sus viajes. En este sentido, fueron eliminados aquellos registros de personas beneficiarias que agrupaban menos de 3 observaciones.
+
+# Algunos resultados
+
+Los meses de mayo y junio son, históricamente, los de menor demanda turística. En promedio,
+la cantidad de viajeros hospedados en hoteles y parahoteles para esos meses representa alrededor del 60% en comparación con el mes de enero. Existe, además, una gran heterogeneidad al interior de los destinos, algunos de ellos con actividad casi exclusivamente en temporada alta, y otros que presentan una variabilidad menor.
+
+Los datos de Previaje 4 muestran que, más allá de las diferentes magnitudes, algunos de los destinos más elegidos en esta edición son distintos a aquellos visitados en Previaje 2, que resulta de interés para la comparación por su mayor preponderancia en la temporada de verano de 2022.
+
+```{r}
+pv_viajes <- read_file_srv("/srv/DataDNMYE/previaje/data_abierta/viajes_origen_destino_mes.csv")
+
+pv_destinos <- pv_viajes %>%
+  group_by(edicion,provincia_destino) %>% 
+  summarise(viajes = sum(viajes),
+            viajeros = sum(viajeros)) %>% 
+ group_by(edicion) %>% 
+  arrange(-viajes) %>% 
+  mutate(rank = 1:n()) %>% 
+  ungroup() %>% 
+  mutate(provincia_destino = case_when(provincia_destino == "Ciudad Autónoma de Buenos Aires" ~ "CABA",
+                                       provincia_destino == "Tierra del Fuego, Antártida e Islas del Atlántico Sur" ~ "Tierra del Fuego",
+                                       TRUE ~ provincia_destino))
+
+graf_rank_pv2_pv4 <- ggplot(pv_destinos %>% filter(edicion %in% c("previaje 2","previaje 4")),
+                            aes(reorder(edicion,-rank), -rank, group=provincia_destino,color = provincia_destino)) +
+  geom_point(size = 2) +
+  #geom_line()+
+  geom_text(data = pv_destinos %>% filter(edicion == "previaje 2"),
+            aes(#x = anio - .1, 
+              label = provincia_destino),
+            size = 3.5, hjust = 1.1) +
+  # geom_text(data = pv_destinos %>% filter(edicion == "previaje 3"),
+  #           aes(#x = anio - .1, 
+  #             label = provincia_destino),
+  #           size = 3.5, hjust = 1.1) +
+  geom_text(data = pv_destinos %>% filter(edicion == "previaje 4"),
+            aes(#x = anio - .1, 
+              label = provincia_destino),
+            size = 3.5, hjust = -.1) +
+  ggbump::geom_bump(size = 1.8, smooth = 8, alpha = 0.9)+
+  labs(title = "Ranking de viajes por provincia",
+       subtitle = "",
+       y = "",
+       x = NULL,
+       caption = "") +
+  #scale_y_continuous(labels = scales::percent_format()) +
+  comunicacion::scale_color_dnmye() +
+  scale_x_discrete(position = "top")+
+  coord_cartesian(clip="off")+
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        plot.title = element_markdown(size = 19, face = "bold"),
+        plot.subtitle = element_text(size = 16, face = "bold", color = "grey"),
+        plot.caption = element_markdown(size = 14),
+        axis.text.x = element_text(size = 16, vjust = 5),
+        #axis.text.y = element_text(size = 5),
+        axis.text.y = element_blank()
+  ) 
+graf_rank_pv2_pv4   
+
+pv_destinos_part <- pv_destinos %>% 
+  group_by(edicion) %>% 
+  mutate(part_viajes = viajes/sum(viajes),
+         part_acum=cumsum(part_viajes))
+```
+
+Destacaron, en esta edición, las provincias de Salta y Misiones como las más elegidas. La provincia de Buenos Aires, que fue la más elegida durante Previaje 2 -con la Costa Atlántica como principal atractivo- desciende al tercer lugar. La Ciudad de Buenos Aires fue otro de los distritos que aumentó su participación. Resalta también Santiago del Estero, que pasa del puesto 16 al 8, con las Termas de Río Hondo dentro de sus actividades más destacadas.
+
+De la comparación con la segunda edición, la de mayor volumen, puede resaltarse también que, en Previaje 4, la participación de cada provincia en los viajes fue más equitativa: las 3 
+más elegidas en 2022 representaron el 43% de los viajes (Buenos Aires - 18,8%-, Río Negro - 15,9%- y Córdoba - 8,6%-), mientras que en Previaje 4 sumaron el 31% (Salta - 10,9%-, Misiones -9,9%- y Buenos Aires - 9,8%-).
+
+Para poner en contexto la importancia de la cuarta edición del programa, puede analizarse una fuente alternativa de datos: aquellos que provienen de la Encuesta de Ocupación Hotelera (EOH), para viajeros residentes en nuestro país. De allí surge que el mes de junio de este año mostró un récord histórico en términos de viajeros hospedados y pernoctaciones para ese mes. Con respecto al mismo mes, pero del año 2019 (prepandemia), en junio 2023 los viajeros crecieron un 11% y las pernoctaciones lo hicieron en un 14%.
+
+```{r}
+eoh_viajeros_res <- read_csv("http://datos.yvera.gob.ar/dataset/93db331e-6970-4d74-8589-c1223ac9c282/resource/d1624c27-4b0d-4b73-b0f8-e7db5c56386f/download/viajeros-hospedados-residentes-y-no-residentes.csv") %>% 
+  filter(origen_viajeros == "Residentes") %>% 
+  mutate(valor = viajeros,
+         indicador = "viajeros_eoh")
+
+eoh_pernoc_res <- read_csv("http://datos.yvera.gob.ar/dataset/93db331e-6970-4d74-8589-c1223ac9c282/resource/86098160-840e-4191-a0fc-b3923bf2b0b0/download/pernoctes-residentes-y-no-residentes.csv") %>% 
+  filter(origen_pernoctes == "Residentes") %>% 
+  mutate(valor = pernoctes,
+         indicador = "pernoctes_eoh")
+
+
+eoh_res <- bind_rows(eoh_viajeros_res,eoh_pernoc_res)
+
+eoh_res_mes <- eoh_res %>% 
+  mutate(anio = year(indice_tiempo),
+         mes = month(indice_tiempo)) %>% 
+  group_by(anio,indicador) %>% 
+  mutate(part_anio = valor/sum(valor)) %>% 
+  ungroup() %>% 
+  mutate(mes = as.Date(glue("2020-{substr(indice_tiempo,6,7)}-01")))
+
+
+stats_nivel <- eoh_res_mes %>%
+  filter(anio < 2020 & anio >= 2007) %>%
+  group_by(mes, indicador) %>% 
+  mutate(max = max(valor),
+         min=min(valor),
+         avg = mean(valor))
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+grafico_estacionalidad_nivel_viajeros <-  eoh_res_mes%>% 
+  filter(anio == 2023 & indicador=="viajeros_eoh") %>% 
+  ggplot(., aes(x=mes,y=valor,group=as.factor(anio),color=as.factor(anio)))+
+  geom_ribbon(data= stats_nivel %>% filter(indicador=="viajeros_eoh"),aes(x = mes, ymax = max, ymin = min),color="lightgrey",alpha = 0.1,fill = "grey")+
+  scale_color_manual(values=c(comunicacion::dnmye_colores(5),
+                              comunicacion::dnmye_colores(3)))+
+  #geom_point()+
+  geom_text(data = eoh_res_mes %>% filter(anio == max(anio) & mes=="2020-06-01" & indicador=="viajeros_eoh"),
+            aes(label=anio),
+            vjust=-.5)+
+  geom_line(data= stats_nivel %>% filter(indicador=="viajeros_eoh"),aes(x=mes,y=avg),color=comunicacion::dnmye_colores(1))+
+  geom_point(data= stats_nivel %>% filter(indicador=="viajeros_eoh"),aes(x=mes,y=avg),color=comunicacion::dnmye_colores(1))+
+  geom_line()+
+  geom_point()+
+  #scale_x_continuous(labels = scales::date_format(format = "%b"))+
+  scale_y_continuous(labels = scales::number_format(scale=1/1e+6))+
+  labs(x="",y="",title="Viajeros y pernoctes de residentes alojados en hoteles y parahoteles",
+       subtitle = "Viajeros (millones)",
+       caption="")+
+  annotate("curve", x = as.Date("2020-08-01"), xend=as.Date("2020-09-01"),yend=pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-09-01")&
+                                                                                                         stats_nivel$indicador == "viajeros_eoh","max"]))*1.05,
+           y =pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-08-01") &
+                                        stats_nivel$indicador == "viajeros_eoh","max"])) ,
+           curvature = -.3,
+           color = "grey") +
+  annotate(geom = "text",
+           x = as.Date("2020-09-01"),
+           y = pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-09-01") & 
+                                         stats_nivel$indicador=="viajeros_eoh","max"]))*1.06,
+           label = "Rango 2007-2019" ,
+           hjust = "left", size = 3,
+           color = "grey")+
+  annotate("curve", x = as.Date("2020-02-01"), xend=as.Date("2020-03-01"),yend=pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-02-01") &
+                                                                                                         stats_nivel$indicador=="viajeros_eoh","avg"]))*1.15,
+           y =pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-02-01") &
+                                        stats_nivel$indicador=="viajeros_eoh","avg"])) ,
+           curvature = -.3,
+           color = comunicacion::dnmye_colores(1)) +
+  annotate(geom = "text",
+           x = as.Date("2020-03-01"),
+           y = pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-02-01") &
+                                         stats_nivel$indicador == "viajeros_eoh","avg"]))*1.15,
+           label = "Promedio 2007-2019" ,
+           hjust = "left", size = 3,
+           color = comunicacion::dnmye_colores(1))+
+  #facet_wrap(~indicador,scales="free_y")+
+  scale_x_date(date_breaks = "1 month",
+               date_labels = "%b"
+               #expand = c(0,2)
+  )+
+  theme_minimal()+
+  coord_cartesian(clip = "off")+
+  theme(legend.position = "none",
+        plot.subtitle  = element_markdown(),
+        axis.text.x   = element_text(size = 8),
+        axis.text.y   = element_text(size = 8),
+        text = element_text(family = "Encode Sans"),
+        panel.grid.minor = element_blank()
+  )
+
+grafico_estacionalidad_nivel_pernoctes <-  eoh_res_mes%>% 
+  filter(anio == 2023 & indicador=="pernoctes_eoh") %>% 
+  ggplot(., aes(x=mes,y=valor,group=as.factor(anio),color=as.factor(anio)))+
+  geom_ribbon(data= stats_nivel %>% filter(indicador=="pernoctes_eoh"),aes(x = mes, ymax = max, ymin = min),color="lightgrey",alpha = 0.1,fill = "grey")+
+  scale_color_manual(values=c(comunicacion::dnmye_colores(5),
+                              comunicacion::dnmye_colores(3)))+
+  #geom_point()+
+  #geom_dl(aes(label = anio), method = list(dl.combine( "last.points")), cex = 0.8)+ 
+  geom_line(data= stats_nivel %>% filter(indicador=="pernoctes_eoh"),aes(x=mes,y=avg),color=comunicacion::dnmye_colores(1))+
+  geom_point(data= stats_nivel %>% filter(indicador=="pernoctes_eoh"),aes(x=mes,y=avg),color=comunicacion::dnmye_colores(1))+
+  geom_line()+
+  geom_point()+
+  #scale_x_continuous(labels = scales::date_format(format = "%b"))+
+  scale_y_continuous(labels = scales::number_format(scale=1/1e+6))+
+  labs(x="",y="",title="",
+       subtitle = "Pernoctaciones (millones)",
+       caption="Fuente: DNMyE en base a EOH")+
+  # annotate("curve", x = as.Date("2020-08-01"), xend=as.Date("2020-09-01"),yend=pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-08-01")&
+  #                                                                                                        stats_nivel$indicador == "pernoctes_eoh","max"]))*1.15,
+  #          y =pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-08-01") &
+  #                                       stats_nivel$indicador == "pernoctes_eoh","max"])) ,
+  #          curvature = -.3,
+  #          color = "grey") +
+  # annotate(geom = "text",
+  #          x = as.Date("2020-09-01"),
+  #          y = pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-09-01") & 
+  #                                        stats_nivel$indicador=="pernoctes_eoh","max"]*1.15)),
+  #          label = "Rango 2007-2019" ,
+  #          hjust = "left", size = 3,
+  #          color = "grey")+
+  # annotate("curve", x = as.Date("2020-02-01"), xend=as.Date("2020-03-01"),yend=pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-02-01") &
+  #                                                                                                        stats_nivel$indicador=="pernoctes_eoh","avg"]))*1.15,
+  #          y =pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-02-01") &
+  #                                       stats_nivel$indicador=="pernoctes_eoh","avg"])) ,
+  #          curvature = -.3,
+  #          color = comunicacion::dnmye_colores(1)) +
+  # annotate(geom = "text",
+  #          x = as.Date("2020-03-01"),
+  #          y = pull(unique(stats_nivel[stats_nivel$mes == as.Date("2020-02-01") &
+  #                                        stats_nivel$indicador == "pernoctes_eoh","avg"]))*1.15,
+  #          label = "Promedio 2007-2019" ,
+  #          hjust = "left", size = 3,
+  #          color = comunicacion::dnmye_colores(1))+
+  #facet_wrap(~indicador,scales="free_y")+
+  scale_x_date(date_breaks = "1 month",
+               date_labels = "%b"
+               #expand = c(0,2)
+  )+
+  theme_minimal()+
+  coord_cartesian(clip = "off")+
+  theme(legend.position = "none",
+        plot.subtitle  = element_markdown(),
+        axis.text.x   = element_text(size = 8),
+        axis.text.y   = element_text(size = 8),
+        text = element_text(family = "Encode Sans"),
+        panel.grid.minor = element_blank()
+  )
+
+
+cowplot::plot_grid(grafico_estacionalidad_nivel_viajeros,grafico_estacionalidad_nivel_pernoctes,ncol = 2)
+
+```
+
+Otro de los recursos de Previaje disponibles es el de los beneficiarios por tramos de edad. Es posible identificar, en estos datos, la creciente participación de las personas beneficiarias de 60 años y más, en coincidencia con la incorporación de un mayor beneficio para personas afiliadas al PAMI a partir de la segunda edición. En temporada baja, además, suele incrementarse la participación de este grupo de edad.
+
+```{r}
+pv_beneficiarios <- read_file_srv("previaje/data_abierta/personas_beneficiarias.csv")
+
+pv_beneficiarios_edicion <- pv_beneficiarios %>% 
+  group_by(edicion,tramo_edad) %>% 
+  summarise(personas = sum(personas_beneficiarias)) %>% 
+  group_by(edicion) %>% 
+  mutate(part_personas = personas/sum(personas)) %>% 
+  ungroup()
+
+pv_beneficiarios_edicion %>% 
+  ggplot(aes(x=edicion,y=part_personas,group=tramo_edad,color=tramo_edad))+
+  geom_line()+
+  geom_point()+
+  scale_color_dnmye()+
+  scale_y_continuous(labels = scales::percent_format())+
+  geom_dl(aes(label = tramo_edad), method = list(dl.combine( "last.points"), cex = .8,hjust=-0.05))+
+  coord_cartesian(clip="off")+
+  theme_minimal()+
+  theme(legend.position = "none")+
+  labs(x="",y="",title = "Previaje: Participación de personas beneficiarias por grupo de edad")
+
+```
+
+Este recurso se completa, además, con la agregación por provincia de residencia y por género de las personas beneficiarias. La combinación de la provincia de origen de las personas beneficiarias con los destinos de sus viajes nos permite ilustrar una característica distintiva del programa en particular y de la actividad turística en general: su fuerte redistribución geográfica, desde los principales centros urbanos hacia múltiples destinos con menor actividad económica. 
+
+```{r}
+library(geoAr)
+library(sf)
+
+mapa_argentina <-  geoAr::get_geo("ARGENTINA","provincia") %>% 
+  geoAr::add_geo_codes() %>% 
+  select(provincia = name_iso) %>% 
+  mutate(provincia = ifelse(provincia == "Ciudad Autónoma de Buenos Aires" ,"CABA",provincia))
+
+
+pv_beneficiarios_provincia <- pv_beneficiarios %>%
+  group_by(edicion,provincia) %>% 
+  summarise(personas = sum(personas_beneficiarias)) %>% 
+ group_by(edicion) %>% 
+  arrange(-personas) %>% 
+  mutate(part_personas = personas/sum(personas)) %>% 
+  ungroup() %>% 
+  mutate(provincia = case_when(provincia == "Ciudad Autónoma de Buenos Aires" ~ "CABA",
+                                       provincia == "Tierra del Fuego, Antártida e Islas del Atlántico Sur" ~ "Tierra del Fuego",
+                                       TRUE ~ provincia)) %>% 
+  left_join(pv_destinos_part,by=c("edicion",c("provincia"="provincia_destino"))) %>% 
+  left_join(mapa_argentina)%>% 
+  st_as_sf() %>% 
+  filter(edicion == "previaje 4") %>% 
+  mutate(part_personas = 100*part_personas,
+         part_viajes = 100*part_viajes)
+
+```
+
+```{r}
+library(cowplot)
+benef_origen <- pv_beneficiarios_provincia %>% 
+  ggplot()+
+  geom_sf(aes(fill=part_personas))+
+  theme_void()+
+  #scale_color_manual(values = c(dnmye_colores(5),dnmye_colores(4)))+
+ #scale_size_area(guide = "none")+
+  labs(title = "Residencia de las personas beneficiarias y destinos de los viajes",subtitle = "Residencia")+
+  theme(legend.position = "none",
+        strip.placement = "outside",
+        strip.text = element_text(family = "Encode Sans",size = 12,vjust = 1))+
+scale_fill_dnmye(discrete = F, limits = c(0,
+                                            40),
+                   #palette = "dicotomica", 
+                   reverse = T,guide=F) 
+
+viajes_destino <- pv_beneficiarios_provincia %>% 
+  ggplot()+
+  geom_sf(aes(fill=part_viajes))+
+  theme_void()+
+  scale_fill_dnmye(discrete = F, limits = c(0,
+                                            40),
+                   #palette = "dicotomica", 
+                   reverse = T,
+                   name="Participación (%)") +
+  labs(title = "",subtitle = "Destino")+
+  theme(legend.position = "right",
+        strip.placement = "outside",
+        strip.text = element_text(family = "Encode Sans",size = 12,vjust = 1))
+
+
+
+
+caba <- pv_beneficiarios_provincia %>% 
+  filter(str_detect(provincia,"CABA"))
+
+caba_mapa <- caba %>% 
+  ggplot() +
+  geom_sf(aes(fill =part_personas )) +
+  scale_fill_dnmye(discrete = F, limits = c(0,
+                                            40),
+                   #palette = "dicotomica", 
+                   reverse = T) +
+  theme_void() +
+  theme(legend.position = "none")
+
+caba_mapa_destino <-  caba %>% 
+  ggplot() +
+  geom_sf(aes(fill =part_viajes )) +
+  scale_fill_dnmye(discrete = F, limits = c(0,
+                                            40),
+                   #palette = "dicotomica", 
+                   reverse = T) +
+  theme_void() +
+  theme(legend.position = "none")
+
+benef_origen_2 <-  benef_origen %>% 
+   ggdraw() +
+  draw_plot(caba_mapa,
+    x = .65, 
+    y = 0.52,
+    width = 0.08, 
+    height = 0.08) 
+
+viajes_destino_2 <- viajes_destino %>% ggdraw() +
+  draw_plot(caba_mapa_destino,
+    x = .48, 
+    y = 0.52,
+    width = 0.08, 
+    height = 0.08)
+
+cowplot::plot_grid(benef_origen_2,viajes_destino_2)
+```
+
+# Recursos disponibles
+
+Los datos abiertos de Previaje forman parte de un conjunto de recursos de [turismo interno](https://datos.yvera.gob.ar/dataset?groups=turismo-interno) publicados en [datos.yvera.gob.ar](datos.yvera.gob.ar), que incluye turismo social, la Encuesta de Viajes y Turismo de los Hogares y los datos que provienen del Certificado Único Habilitante para Circulación (CUHC) - Verano. 
+
+🔗 [Sistema de Información Turística de Argentina (SINTA)](https://www.yvera.tur.ar/sinta/)
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
+
+
