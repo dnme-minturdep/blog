@@ -18,7 +18,7 @@ source('graf_tabl.R', encoding = 'UTF-8')
 
 # Presentación
 
-La Dirección Nacional de Mercados y Estadística (DNMyE) retoma la publicación anual de datos sobre comportamiento turístico de las personas de los años 2021 y 2022. 
+La Dirección Nacional de Mercados y Estadística (DNMyE) retoma la publicación anual de datos sobre el comportamiento turístico de las personas de los años 2021 y 2022. 
 
 El informe analiza las estimaciones de la proporción de personas residentes en los grandes aglomerados urbanos del país, de un año o más de edad, que realizaron al menos un viaje con pernocte. La información se desprende de un módulo especial de la EVyTH cuyo relevamiento se realiza entre los meses de Febrero y Mayo de cada año y recolecta información sobre la realización de viajes con pernocte, destino (Argentina o Exterior) y motivos de no viaje del año anterior[^1].
 
