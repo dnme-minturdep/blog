@@ -2,7 +2,7 @@
 title: "Nueva versión del Tablero de Turismo Internacional"
 description: |
   Gasto turístico y serie histórica completa 
-date: 2023-12-07
+date: 2023-12-13
 output:
   distill::distill_article:
     self_contained: true
