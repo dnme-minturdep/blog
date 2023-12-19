@@ -5,7 +5,7 @@ description: |
   al cumplimiento de los Objetivos de Desarrollo Sostenible, acompañado de un tablero de seguimiento de los
   indicadores propuestos para evaluar su desempeño 
 preview: tablero_ods.png
-date: 
+date: '2023-08-17'
 output:
   distill::distill_article:
     self_contained: true
@@ -61,7 +61,7 @@ knitr::include_graphics("tablero_ods_series.png")
 Accedé a los recursos de *Turismo en los ODS:*
 
 -   [Documento de Trabajo N°12: El turismo en los Objetivos de Desarrollo Sostenible](https://tableros.yvera.tur.ar/recursos/biblioteca/dt_turismo_ods.pdf)
--   [Tablero Interactivo: Indicadores ODS](https://tableros.yvera.tur.ar/tablero_ODS.html)
+-   [Tablero Interactivo: Indicadores ODS](https://tableros.yvera.tur.ar/tablero_ODS)
 
 
 ::: {.infobox}
