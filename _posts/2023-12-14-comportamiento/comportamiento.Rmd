@@ -1,11 +1,13 @@
 ---
 title: "Comportamiento turístico de las personas, años 2021-2022"
-descripción: "Publicación de informes anuales con estimaciones sobre comportamiento turístico de las personas en base a la Encuesta de Viajes y Turismo de los Hogares (EVyTH)"
+description: "Publicación de informes anuales con estimaciones sobre comportamiento turístico de las personas en base a la Encuesta de Viajes y Turismo de los Hogares (EVyTH)"
 date: 2023-12-14
 output:
   distill::distill_article:
     self_contained: false
 draft: false
+preview: "imag1.PNG"
+
 ---
 
 ```{r setup, include=FALSE}

@@ -52,7 +52,6 @@ t1<-b_evyth_ct %>% #tabla general
 
 #plotly
 
-rm(g1)
 g1<- t1%>%
   filter(al_menos_un_viaje ==  "Si") %>% 
   plot_ly(
