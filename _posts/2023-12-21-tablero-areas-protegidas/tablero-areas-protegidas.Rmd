@@ -6,7 +6,7 @@ date: 2023-12-21
 output:
   distill::distill_article:
     self_contained: false
-draft: true
+draft: false
 ---
 
 
@@ -32,7 +32,7 @@ knitr::include_graphics("resumen.png")
 
 **TABLERO**
 
-La segunda pestaña permite visualizar las visitas filtrando por **año, mes, categoría de Área Protegida (Nacionales y Provinciales[^1]), regiones turísticas y provincias donde se ubican las distintas áreas, así como por área protegida**. Asimsmo, se puede seleccionar distintas opciones de visualización de la información en forma de tabla de manera tal que los usuarios puedan descargar sus propios procesamientos.
+La segunda pestaña permite visualizar las visitas filtrando por **año, mes, categoría de Área Protegida (Nacionales y Provinciales[^1]), regiones turísticas y provincias donde se ubican las distintas áreas, así como por área protegida**. Asimismo, se puede seleccionar distintas opciones de visualización de la información en forma de tabla de manera tal que los usuarios puedan descargar sus propios procesamientos.
 
 [^1]: Incluye información de 5 Áreas Naturales Protegidas del Chubut y 1 Parque Provincial de San Juan.
 
