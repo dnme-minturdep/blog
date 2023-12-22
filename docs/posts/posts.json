@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2023-12-21-tablero-areas-protegidas/",
+    "title": "Tablero Areas Protegidas",
+    "description": "Áreas Protegidas Nacionales y Provinciales",
+    "author": [],
+    "date": "2023-12-21",
+    "categories": [],
+    "contents": "\r\nEl Tablero de Áreas Protegidas, presenta información (de manera agregada y desagregada) sobre visitas, condición de residencia, mes, año, región y provincia donde se ubica cada área protegida tanto nacionales como provinciales.\r\nRESUMEN\r\nLa pestaña presenta la evolución de las visitas en las áreas protegidas nacionales desde el año 2008 al presente y un mapa que permite ver la ubicación tanto de las áreas nacionales que registran información de visitas como de las que aún no registran.\r\n\r\n\r\n\r\nTABLERO\r\nLa segunda pestaña permite visualizar las visitas filtrando por año, mes, categoría de Área Protegida (Nacionales y Provinciales1), regiones turísticas y provincias donde se ubican las distintas áreas, así como por área protegida. Asimismo, se puede seleccionar distintas opciones de visualización de la información en forma de tabla de manera tal que los usuarios puedan descargar sus propios procesamientos.\r\n\r\n\r\n\r\nMETODOLOGÍA\r\nEn esta pestaña se aclaran cuestiones conceptuales sobre los datos, definición de las variables y fuentes de información.\r\nSe puede acceder a la plataforma desde la página del SINTA o directamente desde la página: https://tableros.yvera.tur.ar/tablero_areas_protegidas/\r\n\r\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\r\n\r\n\r\nIncluye información de 5 Áreas Naturales Protegidas del Chubut y 1 Parque Provincial de San Juan.↩︎\r\n",
+    "preview": "posts/2023-12-21-tablero-areas-protegidas/resumen.png",
+    "last_modified": "2023-12-21T15:03:04-03:00",
+    "input_file": "tablero-areas-protegidas.knit.md"
+  },
+  {
     "path": "posts/2023-12-14-comportamiento/",
     "title": "Comportamiento turístico de las personas, años 2021-2022",
     "description": "Publicación de informes anuales con estimaciones sobre comportamiento turístico de las personas en base a la Encuesta de Viajes y Turismo de los Hogares (EVyTH)",
