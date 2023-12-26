@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2023-12-26-actualizacion-del-monitor-de-provincias/",
+    "title": "Actualización del Monitor de Provincias",
+    "description": "Publicación de los principales indicadores de turismo a nivel provincial hasta el año 2022.",
+    "author": [],
+    "date": "2023-12-26",
+    "categories": [],
+    "contents": "\nResumen\nEl sitio del Monitor de Turismo en las Provincias constituye una herramienta para la consulta de la última información disponible relacionada al turismo en la Argentina, con una mirada a nivel provincial. De esta forma, se sistematiza una serie de indicadores relevantes para el análisis de la actividad turística con una perspectiva federal.\nTodos los indicadores publicados en el sitio fueron actualizados hasta el año 2022, último período con el que se cuenta con información completa para las seis fuentes de datos utilizadas:\nTurismo Interno a partir de la Encuesta de Viajes y Turismo de los Hogares (EVyTH).\nTurismo Receptivo estimado mediante registros de la Dirección Nacional de Migraciones (DNM).\nPadrón de Alojamientos de la oferta hotelera y parahotelera proveniente del Padrón Único Nacional de Alojamientos (PUNA).\nÁreas Protegidas Nacionales a partir de información de la Administración de Parques Nacionales (APN).\nConectividad Aérea proveniente de los registros de la Administración Nacional de Aviación Civil (ANAC).\nEmpresas Turísticas correspondiente a empresas de las Ramas Características del Turismo (RCT) en base a datos de la Administración Federal de Ingresos Públicos (AFIP).\nConsulta de datos\nLos indicadores se encuentran organizados en secciones separadas para su consulta. Desde el menú “Indicadores por provincia” se puede navegar a la página de interés y filtrar los datos por provincia. En primera instancia, se visualiza una tabla con el resumen de los datos pertenecientes a cada tema para la provincia seleccionada. La tabla además permite consultar datos de toda la serie disponible.\n\nEn segunda instancia, se presentan distintos tipos de gráficos interactivos acordes a los indicadores que se muestran. En el siguiente ejemplo se puede visualizar la distribución de empresas turísticas por departamento de la provincia de Mendoza, con la posibilidad de filtrar por rama turística (Alojamiento, Transporte, etc).\n\nEl sitio también presenta una sección de Metodología, donde se detallan aspectos conceptuales y metodológicos de las distintas fuentes de datos, así como del cálculo de los indicadores.\nVisite el monitor en: https://provincias.yvera.tur.ar/\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2023-12-26-actualizacion-del-monitor-de-provincias/monitor2.png",
+    "last_modified": "2023-12-26T11:00:23-03:00",
+    "input_file": "actualizacion-del-monitor-de-provincias.knit.md"
+  },
+  {
     "path": "posts/2023-12-21-tablero-areas-protegidas/",
     "title": "Tablero Areas Protegidas",
     "description": "Áreas Protegidas Nacionales y Provinciales",
