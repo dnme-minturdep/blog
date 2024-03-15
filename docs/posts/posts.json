@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2024-03-15-dut-cnrt/",
+    "title": "Conectividad Terrestre",
+    "description": "Apertura de datos de Servicios de Turismo de la CNRT.",
+    "author": [],
+    "date": "2024-03-15",
+    "categories": [],
+    "contents": "\nA partir de la colaboración con la Comisión Nacional de Regulación del Transporte, dependiente de la Secretaría de Transporte de la Nación (CNRT), la Dirección Nacional de Mercados y Estadística (DNMYE) pone a disposición una serie de nuevos datos sobre Servicios de Turismo para el análisis del mercado del transporte automotor y el flujo de personas al interior el país.\nSegún la Resolución SGT Nº73/17, los servicios de Turismo Nacional son aquellos que se efectúa a fin de atender un servicio de transporte automotor integrado en una programación turística, como complemento a una actividad de tal naturaleza, trasladando a un contingente y expresamente identificando las personas que lo componen, conforme a un contrato celebrado a tal efecto. Los mismos tienen plena libertad de entrada, salida y fijación de precios y no pueden realizar tráficos que compitan con los servicios públicos.\nEste nuevo conjunto de datos se suman al Tablero de Conectividad Terrestre Interurbana, el cual reúne (de manera agregada y desagregada) información sobre prestadores, fecha de viajes, orígenes, destinos, asientos y pasajeros de servicios regulares de jurisdicción nacional, y se pueden encontrar de manera abierta y desgregada en el portal de datos abiertos del (SINTA)\nDe esta manera, a partir de este aporte, se facilita el estudio sobre qué líneas y rutas terrestres resultan potencialmente más relevantes para el desarrollo de los destinos regionales.\n\n\n\nReferencias\nDocumento de Trabajo\nTablero\nDatos Abiertos\nCNRT\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2024-03-15-dut-cnrt/dut-cnrt_files/figure-html5/unnamed-chunk-1-1.png",
+    "last_modified": "2024-03-15T12:43:35-03:00",
+    "input_file": "dut-cnrt.knit.md"
+  },
+  {
     "path": "posts/2023-12-26-actualizacion-del-monitor-de-provincias/",
     "title": "Actualización del Monitor de Provincias",
     "description": "Publicación de los principales indicadores de turismo a nivel provincial hasta el año 2022.",
