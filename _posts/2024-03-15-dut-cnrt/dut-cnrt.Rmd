@@ -71,7 +71,7 @@ cnrt %>%
        y = "",
        x = "",
        color = "", 
-       caption = "Fuente: MINTURDEP en base a información de CNRT.")+
+       caption = "Fuente: DNMyE en base a información de CNRT.")+
   scale_x_date(date_breaks = "3 month", 
                date_labels = "%b-%y")+
   theme_minimal() +
