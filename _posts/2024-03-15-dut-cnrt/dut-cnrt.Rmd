@@ -1,0 +1,99 @@
+---
+title: "Conectividad Terrestre"
+description: "Apertura de datos de Servicios de Turismo de la CNRT."
+date: 2024-03-15
+output:
+  distill::distill_article:
+    self_contained: false
+draft: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+A partir de la colaboración con la [Comisión Nacional de Regulación del Transporte, dependiente de la Secretaría de Transporte de la Nación (CNRT)](https://www.argentina.gob.ar/transporte/cnrt), la **Dirección Nacional de Mercados y Estadística (DNMYE)** pone a disposición una serie de nuevos datos sobre **Servicios de Turismo** para el análisis del mercado del transporte automotor y el flujo de personas al interior el país.
+
+Según la [Resolución SGT Nº73/17](https://www.argentina.gob.ar/normativa/nacional/279544/actualizacion), los servicios de Turismo Nacional son aquellos que se efectúa a fin de atender un servicio de transporte automotor integrado en una programación turística, como complemento a una actividad de tal naturaleza, trasladando a un contingente y expresamente identificando las personas que lo componen, conforme a un contrato celebrado a tal efecto. Los mismos tienen plena libertad de entrada, salida y fijación de precios y no pueden realizar tráficos que compitan con los servicios públicos.
+
+Este nuevo conjunto de datos se suman al [Tablero de Conectividad Terrestre Interurbana](https://tableros.yvera.tur.ar/conectividad_terrestre/), el cual reúne (de manera agregada y desagregada) información sobre **prestadores, fecha de viajes, orígenes, destinos, asientos y pasajeros** de servicios regulares de jurisdicción nacional, y se pueden encontrar de manera [abierta y desgregada](https://datos.yvera.gob.ar/dataset/conectividad-terrestre-interurbana){target="_blank"} en el [portal de datos abiertos](https://datos.yvera.gob.ar/){target="_blank"} del [(SINTA)](https://www.yvera.tur.ar/sinta/){target="_blank"}
+
+De esta manera, a partir de este aporte, se facilita el estudio sobre qué líneas y rutas terrestres resultan potencialmente más relevantes para el desarrollo de los destinos regionales.
+
+```{r}
+library(tidyverse)
+library(herramientas)
+library(lubridate)
+library(comunicacion)
+options(scipen = 999)
+
+
+cnrt <- read_file_srv(ruta = "cnrt/base_de_trabajo/dut/cnrt_dut_tot_final.parquet") %>% 
+  filter(fecha_fin >= dmy("01/04/2019")) %>% 
+  filter(fecha_fin < dmy("01/02/2024")) %>% 
+  mutate(anio_fin = year(fecha_fin),
+         mes_fin = month(fecha_fin))
+
+cnrt %>% 
+  group_by(anio_fin, mes_fin) %>% 
+ summarise(asientos = sum(cantidad_asientos, na.rm = T),
+            pasajeros = sum(pasajeros, na.rm = T)) %>% 
+  ungroup() %>% 
+  # complete(anio_fin,
+  #          mes_fin = seq(1,12,1),
+  #          fill = list(asientos = 0,
+  #                      pasajeros = 0)) %>%
+  mutate(fecha = lubridate::my(paste0(mes_fin,
+                                      "-",
+                                      anio_fin))) %>% 
+    ggplot()+
+  geom_line(aes(x = fecha,
+                y = pasajeros,
+                color = "Pasajeros",
+                group = 1))+
+  geom_line(aes(x = fecha,
+                y = asientos,
+                color = "Asientos",
+                group = 1))+
+  geom_point(aes(x = fecha,
+                 y = pasajeros,
+                 color = "Pasajeros",))+
+  geom_point(aes(x = fecha,
+                 y = asientos,
+                 color = "Asientos"))+
+  scale_color_manual(values = c("Pasajeros" = dnmye_colores("cian"),
+                                "Asientos" = dnmye_colores("rosa")))+
+  scale_y_continuous(limits = c(0, 2000000),
+                     breaks = seq(0, 2000000, 500000),
+                     labels = function(x) format(x, big.mark = "."))+
+  labs(title = "Servicios de Turismo",
+       y = "",
+       x = "",
+       color = "", 
+       caption = "Fuente: MINTURDEP en base a información de CNRT.")+
+  scale_x_date(date_breaks = "3 month", 
+               date_labels = "%b-%y")+
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 45,
+                                   hjust = 1, 
+                                   vjust = 1)) +
+  guides(color = guide_legend(nrow = 1))
+  
+```
+
+# Referencias
+
++ **[Documento de Trabajo](https://tableros.yvera.tur.ar/recursos/biblioteca/conectividad_terrestre.pdf)**
+
++ **[Tablero](https://tableros.yvera.tur.ar/conectividad_terrestre/)**
+
++ **[Datos Abiertos](https://datos.yvera.gob.ar/dataset/conectividad-terrestre-interurbana)**
+
++ **[CNRT](https://www.argentina.gob.ar/transporte/cnrt/estadisticas)**
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
