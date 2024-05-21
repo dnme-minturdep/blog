@@ -58,7 +58,7 @@ La información se presenta en cuatro solapas:
 
 ### Resumen:
 
-* En esta primera pantalla se ofrece un resumen de los datos más relevantes de la EOH para el último més publicado y los datos acumulados anuales, junto con un **mapa interactivo** con datos desagregados por región y localidad de viajeros, pernoctaciones, estadías promedio y tasas de ocupación en plazas.
+* En esta primera pantalla se ofrece un resumen de los datos más relevantes de la EOH para el último mes publicado y los datos acumulados anuales, junto con un **mapa interactivo** con datos desagregados por región y localidad de viajeros, pernoctaciones, estadías promedio y tasas de ocupación en plazas.
 
 
 ```{r eval=FALSE}
