@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2024-07-16-nuevo-reporte-de-conectividad-terrestre/",
+    "title": "Nuevo reporte de Conectividad Terrestre",
+    "description": "Publicación del Informe de Conectividad Terrestre de la Argentina, con información turística del mercado de buses de media y larga distancia.",
+    "author": [],
+    "date": "2024-07-16",
+    "categories": [],
+    "contents": "\nA partir de la colaboración con la Comisión Nacional de Regulación del Transporte (CNRT), dependiente de la Secretaría de Transporte de la Nación, la Dirección Nacional de Mercados y Estadística (DNMYE) pone a disposición un nuevo reporte mensual para el análisis del mercado del transporte automotor interurbano y el flujo de personas al interior el país.\nDicho informe proyecta de manera sintética información actualizada de servicios regulares de jurisdicción nacional entre dos cabeceras de origen y destino interurbano realizados por micros de media y larga distancia de empresas de transporte automotor registradas correspondientes al mes previo a la fecha de publicación. Los datos sobre los cuales se construye, pueden encontrarse de manera abierta y desgregada en el portal de datos abiertos del Sistema de Información Turística de la Argentina (SINTA)\nEste nuevo recurso se complementa con el Tablero de Conectividad Terrestre Interurbana, el cual reúne (de manera agregada y desagregada) información sobre viajes, fechas, orígenes, destinos, asientos y pasajeros de servicios regulares de jurisdicción nacional. En conjunto, ambos recursos facilitan el estudio de los ejes y rutas terrestres que resultan relevantes para el desarrollo de los destinos regionales y ciudades pequeñas y medianas del país.\n\n\n\nReferencias\nDocumento de Trabajo\nTablero\nDatos Abiertos\nCNRT\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2024-07-16-nuevo-reporte-de-conectividad-terrestre/distill-preview.png",
+    "last_modified": "2024-07-16T14:15:26-03:00",
+    "input_file": "nuevo-reporte-de-conectividad-terrestre.knit.md"
+  },
+  {
     "path": "posts/2024-03-26-tablero-eoh/",
     "title": "Tablero de la Encuesta de Ocupación Hotelera",
     "description": "Publicación  del tablero interactivo del relevamiento",
