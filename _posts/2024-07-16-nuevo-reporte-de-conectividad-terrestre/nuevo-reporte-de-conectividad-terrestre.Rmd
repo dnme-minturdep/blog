@@ -1,0 +1,99 @@
+---
+title: "Nuevo reporte de Conectividad Terrestre"
+description: |
+  Publicación del Informe de Conectividad Terrestre de la Argentina, con información turística del mercado de buses de media y larga distancia.
+date: 2024-07-16
+output:
+  distill::distill_article:
+    self_contained: true
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message = F, warning = F, 
+                      fig.align = 'left', fig.width = 10, fig.height = 6)
+```
+
+A partir de la colaboración con la [Comisión Nacional de Regulación del Transporte (CNRT), dependiente de la Secretaría de Transporte de la Nación](https://www.argentina.gob.ar/transporte/cnrt), la Dirección Nacional de Mercados y Estadística (DNMYE) pone a disposición un nuevo **[reporte mensual](https://tableros.yvera.tur.ar/conectividad_terrestre.html)** para el análisis del mercado del transporte automotor interurbano y el flujo de personas al interior el país.
+
+Dicho informe proyecta de manera sintética **información actualizada de servicios regulares de jurisdicción nacional entre dos cabeceras de origen y destino interurbano realizados por micros de media y larga distancia de empresas de transporte automotor registradas** correspondientes al mes previo a la fecha de publicación. Los datos sobre los cuales se construye, pueden encontrarse de manera [abierta y desgregada](https://datos.yvera.gob.ar/dataset/conectividad-terrestre-interurbana){target="_blank"} en el [portal de datos abiertos](https://datos.yvera.gob.ar/){target="_blank"} del [Sistema de Información Turística de la Argentina (SINTA)](https://www.yvera.tur.ar/sinta/){target="_blank"}
+
+Este nuevo recurso se complementa con el [Tablero de Conectividad Terrestre Interurbana](https://tableros.yvera.tur.ar/conectividad_terrestre/), el cual reúne (de manera agregada y desagregada) información sobre **viajes, fechas, orígenes, destinos, asientos y pasajeros** de servicios regulares de jurisdicción nacional. En conjunto, ambos recursos facilitan el estudio de los ejes y rutas terrestres que resultan relevantes para el desarrollo de los destinos regionales y ciudades pequeñas y medianas del país.
+
+```{r}
+library(tidyverse)
+library(comunicacion)
+library(lubridate)
+library(herramientas)
+library(treemapify)
+options(scipen = 999)
+
+# Base Actual
+base_total <- read_file_srv("cnrt/base_de_trabajo/base_final/cnrt_total_historica_2024-01-01_a_2024-06-30.parquet") 
+
+# Generamos base - pasajeros
+base_total_treemap <- base_total %>% 
+  filter(mes == month(max(fecha))) %>%
+  group_by(provincia_destino, localidad_destino) %>% 
+  summarise(total = sum(pasajeros, na.rm = T)) %>% 
+  mutate(total_acum = sum(total, na.rm = T),
+         pct = total/total_acum,
+         localidad_destino = case_when(pct < 0.05 ~ "Otras Localidades",
+                                       T ~ localidad_destino)) %>% 
+  ungroup() %>% 
+  group_by(provincia_destino, localidad_destino) %>% 
+  summarise(total = sum(total))
+
+# library(treemap)
+# treemap(base_total_treemap,
+#         index = c("provincia_destino",
+#                   "localidad_destino"),
+#         vSize = "total",
+#         type = "index",
+#         title = "Pasajeros por destino",
+#         border.col = "black",
+#         border.lwds = c(7,2),
+#         bg.labels = 0,
+#         fontsize.labels=c(0,10),
+#         palette = paletteer::paletteer_d("khroma::soil"))
+
+
+ggplot(base_total_treemap,
+       aes(area = total,
+                   fill = provincia_destino,
+                   subgroup = provincia_destino,
+                   label = paste(localidad_destino,
+                                 paste(round(total/1000, 0), "mil"),
+                                 sep = "\n"))) +
+  geom_treemap(place = "centre",
+               start = "topleft",
+               color = "black") +
+  geom_treemap_text(place = "centre",
+                    size = 15,
+                    start = "topleft") +
+  geom_treemap_subgroup_border(colour = "black",
+                               start = "topleft") +
+  paletteer::scale_fill_paletteer_d("khroma::soil") +
+  labs(title = "Cantidad de pasajeros por destino",
+       subtitle = "Servicios regulares por provincia - Junio",
+       caption = 'Nota: "Otras localidades" incluye todos aquellos destinos que no superan el 5% de los pasajeros provinciales.') +
+  theme(legend.position = "none")
+
+
+
+```
+
+# Referencias
+
++ **[Documento de Trabajo](https://tableros.yvera.tur.ar/recursos/biblioteca/conectividad_terrestre.pdf)**
+
++ **[Tablero](https://tableros.yvera.tur.ar/conectividad_terrestre/)**
+
++ **[Datos Abiertos](https://datos.yvera.gob.ar/dataset/conectividad-terrestre-interurbana)**
+
++ **[CNRT](https://www.argentina.gob.ar/transporte/cnrt/estadisticas)**
+
+
+::: {.infobox}
+Para recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE <a href=‘https://bitacora.yvera.tur.ar/posts/2022-09-08-sintia/’ target=‘_blank’>*SintIA*</a>: <a href=‘https://t.me/RDatinaBot’ target=‘_blank’>@RDatinaBot</a> 🤖
+:::
