@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2024-08-27-la-subsecretara-de-turismo-particip-del-simposio-de-datos-de-la-universidad-torcuato-di-tella/",
+    "title": "La Subsecretaría de Turismo participó del simposio de datos de la Universidad Torcuato di Tella",
+    "description": "El debate se desarrolló en torno a la generación de datos de calidad, la gestión eficiente de la información, el rol de la innovación y las oportunidades que generan las nuevas tecnologías.",
+    "author": [],
+    "date": "2024-08-27",
+    "categories": [],
+    "contents": "\n\n\n\nLa Subsecretaría de Turismo de la Nación, a través el equipo de la Dirección Nacional de Mercados y Estadísticas (DNMyE), participó de la tercera Clínica de Datos de la Universidad Torcuato di Tella.\nDicho evento, dirigido a alumnos de las maestrías de Economía Urbana y de Políticas Públicas, reunió a especialistas de los sectores privado y público, la academia y la sociedad civil, en torno al uso de datos e inteligencia artificial.\nEl equipo de la Subsecretaría expuso sobre el trabajo realizado en el Sistema Información Turística de la Argentina (SINTA), recientemente premiado por la ONU Turismo como buena práctica de digitalización en turismo; la importancia y oportunidades del uso de datos en la gestión pública y en el diseño de políticas públicas; y el rol de la innovación en el manejo de la información en el sector turístico nacional.\nSe utilizó como caso de estudio los desarrollos en el área de información de conectividad aérea, los cuales abarcan el intercambio de información con la Administración de Aviación Civil (ANAC), el procesamiento y el análisis de los datos, así como la generación de visualizaciones y productos de difusión como el documento de trabajo, el tablero y el reporte de conectividad.\nEsta actividad se enmarca en el trabajo activo de la apertura de información, de la difusión de conocimiento de calidad y herramientas turísticas innovadoras.\nEn esta línea, también se realizará una mesa técnica federal con los entes provinciales de turismo, a fin de poner en común los sistemas estadísticos actuales; identificar las principales limitaciones u obstáculos para la producción de datos de calidad; dar a conocer circuitos de comunicación y difusión de la información; plantear nuevas instancias de colaboración e intercambio; e identificar las principales temáticas de interés y los desafíos para su medición.\nReferencias\nAccedé a los recursos de conectividad aérea publicados por la DNMyE:\nDocumento de Trabajo\nTablero\nReporte\nDatos Abiertos\nANAC\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2024-08-27-la-subsecretara-de-turismo-particip-del-simposio-de-datos-de-la-universidad-torcuato-di-tella/distill-preview.png",
+    "last_modified": "2024-08-28T13:58:42-03:00",
+    "input_file": "la-subsecretara-de-turismo-particip-del-simposio-de-datos-de-la-universidad-torcuato-di-tella.knit.md"
+  },
+  {
     "path": "posts/2024-07-16-nuevo-reporte-de-conectividad-terrestre/",
     "title": "Nuevo reporte de Conectividad Terrestre",
     "description": "Publicación del Informe de Conectividad Terrestre de la Argentina, con información turística del mercado de buses de media y larga distancia.",
