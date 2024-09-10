@@ -1,5 +1,17 @@
 [
   {
+    "path": "posts/2024-09-10-encuentro-de-equipos-tcnicos-estadsticos-de-todo-el-pas/",
+    "title": "Encuentro de equipos técnicos estadísticos de todo el país",
+    "description": "De la jornada de trabajo participaron organismos de estadística de los distintos niveles de gobierno en torno a la producción de información de calidad en el sector turístico.",
+    "author": [],
+    "date": "2024-09-10",
+    "categories": [],
+    "contents": "\n\n\n\nLa Subsecretaría de Turismo de la Nación, a través del equipo de la Dirección Nacional de Mercados y Estadística (DNMyE), lideró una mesa técnica de estadística con equipos provinciales y locales en torno a los principales desafíos que enfrentan a la hora de generar información de calidad para la toma de decisiones del sector turístico.\nParticiparon más de 80 referentes del área miembros de 19 provincias y 14 gobiernos locales. El encuentro, que se realizó virtualmente, tuvo como objetivo poner en común los sistemas estadísticos actuales; identificar las principales limitaciones u obstáculos para la producción de datos de calidad; dar a conocer circuitos de comunicación y difusión de la información; plantear nuevas instancias de colaboración e intercambio; e identificar las principales temáticas de interés y los desafíos para la medición de indicadores.\nLa jornada de trabajo comenzó con la presentación del equipo de Nación y la puesta en común de los principales retos expresados por equipos técnicos subnacionales a la hora de trabajar en sus proyectos propios.\nLuego, los participantes se dividieron en mesas de trabajo donde debatieron y pusieron en común sus problemas en torno a la generación de estadísticas, sus casos de innovación y la manera en la que se adaptan a las principales tendencias tecnológicas.\nSe finalizó con la presentación DATATUR, la plataforma web para el intercambio y la gestión de datos del turismo entre organismos, y el de Sistema Información Turística de la Argentina (SINTA).\nEsta jornada de trabajo tuvo como fin ser el puntapié inicial para una serie de reuniones especiales entre la DNMyE y los diversos equipos de trabajo subnacionales con el fin de coordinar esfuerzos, compartir soluciones y fortalecer el sistema estadístico nacional.\nReferencias\nAccedé a los recursos publicados por la DNMyE:\nDATATUR\nSINTA\n\nPara recibir las novedades del SINTA escribíle al bot de Telegram de la DNMyE SintIA: @RDatinaBot 🤖\n\n\n\n\n",
+    "preview": "posts/2024-09-10-encuentro-de-equipos-tcnicos-estadsticos-de-todo-el-pas/distill-preview.png",
+    "last_modified": "2024-09-10T12:44:04-03:00",
+    "input_file": "encuentro-de-equipos-tcnicos-estadsticos-de-todo-el-pas.knit.md"
+  },
+  {
     "path": "posts/2024-08-27-la-subsecretara-de-turismo-particip-del-simposio-de-datos-de-la-universidad-torcuato-di-tella/",
     "title": "La Subsecretaría de Turismo participó del simposio de datos de la Universidad Torcuato di Tella",
     "description": "El debate se desarrolló en torno a la generación de datos de calidad, la gestión eficiente de la información, el rol de la innovación y las oportunidades que generan las nuevas tecnologías.",
